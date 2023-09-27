@@ -1,4 +1,4 @@
-# ** Battle for Weakness project**
+# **Battle for Weakness project**
 
 ## **Members**
 
