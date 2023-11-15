@@ -1,6 +1,8 @@
 package ru.nsu.fit.battle_fw;
 
-public class Card {
+import java.io.Serializable;
+
+public class Card implements Serializable {
     private String name; // Название карты
     private int attack; // Сила атаки карты
     private int health; // Здоровье карты
