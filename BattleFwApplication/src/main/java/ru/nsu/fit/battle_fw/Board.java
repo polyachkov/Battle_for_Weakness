@@ -1,9 +1,37 @@
 package ru.nsu.fit.battle_fw;
 
-public class Board {
+import java.io.Serializable;
+
+public class Board implements Serializable {
     private int rows; // Количество строк на игровом поле
     private int columns; // Количество столбцов на игровом поле
     private Card[][] cards; // Массив карт, представляющих поле
+
+    public Board() {}
+
+    public int getRows() {
+        return rows;
+    }
+
+    public void setRows(int rows) {
+        this.rows = rows;
+    }
+
+    public int getColumns() {
+        return columns;
+    }
+
+    public void setColumns(int columns) {
+        this.columns = columns;
+    }
+
+    public Card[][] getCards() {
+        return cards;
+    }
+
+    public void setCards(Card[][] cards) {
+        this.cards = cards;
+    }
 
     public Board(int rows, int columns) {
         this.rows = rows;
