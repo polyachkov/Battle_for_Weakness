@@ -7,15 +7,15 @@ public class Card implements Serializable {
     private int attack; // Сила атаки карты
     private int health; // Здоровье карты
     private int cost; // Стоимость карты
-
     private int evasion; // Уклонение карты
-
-    private int attack_speed; // Скорость атаки карты
-
+    private Speed attack_speed; // Скорость атаки карты
     private int movement_speed; // Скорость передвижения карты
+    private boolean ability; //Некоторая способность карты
+
+
 
     public Card(String name, int attack, int health, int cost,
-                int evasion, int attack_speed, int movement_speed) {
+                int evasion, Speed attack_speed, int movement_speed, boolean ability) {
         this.name = name;
         this.attack = attack;
         this.health = health;
@@ -23,6 +23,7 @@ public class Card implements Serializable {
         this.evasion = evasion;
         this.attack_speed = attack_speed;
         this.movement_speed = movement_speed;
+        this.ability = ability;
     }
 
     // Геттеры и сеттеры для свойств карты
@@ -46,11 +47,15 @@ public class Card implements Serializable {
         return evasion;
     }
 
-    public int getAttackSpeed() {
+    public Speed getAttackSpeed() {
         return attack_speed;
     }
 
     public int getMovementSpeed() {
         return movement_speed;
+    }
+
+    public boolean getAbility() {
+        return ability;
     }
 }
