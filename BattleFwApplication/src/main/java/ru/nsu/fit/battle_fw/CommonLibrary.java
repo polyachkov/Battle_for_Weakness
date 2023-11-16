@@ -2,9 +2,11 @@ package ru.nsu.fit.battle_fw;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
-public class CommonLibrary implements Serializable {
+public class CommonLibrary extends Library implements Serializable {
     private String fraction;
     private List<Card> card_list = new ArrayList<>();
 
@@ -23,13 +25,13 @@ public class CommonLibrary implements Serializable {
     public void setCard_list(List<Card> card_list) {
         this.card_list = card_list;
     }
+    public CommonLibrary(){
 
-    public CommonLibrary(){}
+    }
 
     public CommonLibrary(String fraction) {
         this.fraction = fraction;
-        for (int i = 0; i < 10; i++) {
-            card_list.add(new Card("Kobold", 1 + i, i + 2, 0, i, i, i));
-        }
+        card_list = new CardList(this.fraction).getCard_list();
+        Collections.shuffle(this.card_list);
     }
 }
