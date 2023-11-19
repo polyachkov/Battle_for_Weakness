@@ -1,0 +1,43 @@
+<mat-toolbar class="toolBarBackground">
+  <span class="nameOfGame">Battle For Weakness</span>
+  <div class="containerTool mx-auto">
+    <button
+      (click)="pageContentService.handleChangeContent(Pages.MAIN_PAGE)"
+      class="btn menuBtn"
+    >
+      Main Page
+    </button>
+    <button
+      (click)="pageContentService.handleChangeContent(Pages.GAME_PAGE)"
+      class="menuBtn"
+    >
+      Game
+    </button>
+    <button
+      (click)="pageContentService.handleChangeContent(Pages.THIRD_PAGE)"
+      class="menuBtn"
+    >
+      Third
+    </button>
+
+    <button
+      (click)="pageContentService.handleChangeContent(Pages.DEVELOPERS_PAGE)"
+      class="menuBtn"
+    >
+      Developers
+    </button>
+  </div>
+  <div class="accountPlace">
+    <button
+      (click)="pageContentService.handleChangeContent(Pages.THIRD_PAGE)"
+      class="accountName"
+    >
+      <img
+        class="accountPicture"
+        src="../assets/Photoes/profilePhoto.jpg"
+        alt="YourPicture"
+      />
+      <span class="accountNameText">AccountName</span>
+    </button>
+  </div>
+</mat-toolbar>

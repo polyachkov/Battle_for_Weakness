@@ -1,0 +1,24 @@
+<div class="statistics">
+  <div class="header">
+    <div><strong>Статистика </strong></div>
+  </div>
+
+  <!-- (click)="gameControlService.handleGameEnded()"
+  (click)="gameControlService.handleChangeContent(GamePhases.PREPARING)" -->
+
+  <div class="closeButton">
+    <div
+      class="close"
+      (click)="gameControlService.handleGameEnded()"
+      (click)="gameControlService.handleChangeContent(GamePhases.PREPARING)"
+    >
+      +
+    </div>
+  </div>
+  <ul class="list">
+    <li class="elementOfList">Итог игры</li>
+    <li class="elementOfList">Выбор фракции</li>
+    <li class="elementOfList">Продолжительность игры</li>
+    <li class="elementOfList">Количество потраченных денег</li>
+  </ul>
+</div>

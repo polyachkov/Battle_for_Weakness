@@ -1,0 +1,19 @@
+<div class="background">
+  <ng-container [ngSwitch]="pageContentService.currentPage">
+    <div *ngSwitchCase="Pages.MAIN_PAGE">
+      <app-first-page></app-first-page>
+    </div>
+
+    <div *ngSwitchCase="Pages.GAME_PAGE">
+      <app-game-page></app-game-page>
+    </div>
+
+    <div *ngSwitchCase="Pages.THIRD_PAGE">
+      <app-third-page></app-third-page>
+    </div>
+
+    <div *ngSwitchCase="Pages.DEVELOPERS_PAGE">
+      <app-developers-page></app-developers-page>
+    </div>
+  </ng-container>
+</div>

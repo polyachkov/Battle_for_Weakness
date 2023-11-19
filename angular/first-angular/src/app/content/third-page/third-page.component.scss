@@ -1,0 +1,66 @@
+.background {
+  width: 70%;
+  padding-top: 64px;
+  margin-right: auto;
+  margin-left: auto;
+  background-color: white;
+}
+
+.container {
+  overflow-y: auto;
+  text-align: center;
+  width: 100%;
+}
+
+.rules-header {
+  font-weight: bold;
+  align-items: center;
+  font-size: 32px;
+  font-family: Roboto, sans-serif;
+  line-height: 32px;
+  margin-bottom: 1.5rem;
+  padding-top: 1rem;
+}
+
+.sub-rules {
+  font-size: 16px;
+  display: flex;
+  margin-right: auto;
+  margin-left: auto;
+  background-color: white;
+  margin-bottom: 1.5rem;
+}
+
+.rules-header-second {
+  font-weight: bold;
+  align-items: center;
+  font-size: 24px;
+  font-family: Roboto, sans-serif;
+  line-height: 32px;
+  margin-bottom: 1.5rem;
+}
+
+.paragraph {
+  text-indent: 20px;
+}
+
+p {
+  margin: 0;
+  padding: 0;
+}
+
+.map-photo {
+  height: 15rem;
+  width: 10rem;
+  &:hover {
+    height: 18rem;
+    width: 12rem;
+    border: 0.3rem solid;
+    border-color: black;
+  }
+}
+
+.map-container {
+  display: flex;
+  justify-content: center;
+}

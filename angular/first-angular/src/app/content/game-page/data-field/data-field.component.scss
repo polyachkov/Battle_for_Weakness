@@ -1,0 +1,435 @@
+.background {
+  background-color: bisque;
+  width: 100%;
+  height: calc(100% - 64px);
+}
+
+.container {
+  display: flex;
+  width: 100%;
+  background-color: white;
+}
+
+.interface {
+  width: 100%;
+  height: 5rem;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 10rem;
+  padding-right: 5rem;
+  background: linear-gradient(rgb(205, 233, 158), rgb(240, 149, 165));
+}
+
+.giveUpField {
+  display: flex;
+  align-items: center;
+  padding-right: 3rem;
+  background: linear-gradient(rgb(205, 233, 158), rgb(240, 149, 165));
+}
+
+.fraction-name {
+  caret-color: transparent;
+  font-family: Josefin Sans;
+  font-size: 3rem;
+}
+
+.resources {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.heart {
+  width: 3.2rem;
+  height: 3.2rem;
+}
+
+$coin-diameter: 60px;
+$coin-thickness: 4px;
+$coin-color: #e8d0bb;
+$coin-front: "../../../../assets/Photoes/coin.png";
+$coin-back: "../../../../assets/Photoes/coin.png";
+$edge-faces: 80;
+$edge-face-length: 3.14 * $coin-diameter/$edge-faces;
+$turn-time: 6s;
+
+.coin {
+  position: relative;
+  width: $coin-diameter;
+  height: $coin-diameter;
+  margin: 50px auto;
+  transform-style: preserve-3d;
+  animation: rotate3d $turn-time linear infinite;
+  transition: all 0.3s;
+}
+
+.coin__front,
+.coin__back {
+  position: absolute;
+  width: $coin-diameter;
+  height: $coin-diameter;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: $coin-color;
+
+  &:after {
+    content: "";
+    position: absolute;
+    left: -$coin-diameter/2;
+    bottom: 100%;
+    display: block;
+    height: $coin-diameter/1.5;
+    width: $coin-diameter * 2;
+    background: #fff;
+    opacity: 0.3;
+    animation: shine linear $turn-time/2 infinite;
+  }
+}
+
+.coin__front {
+  background-image: url($coin-front);
+  background-size: cover;
+  transform: translateZ($coin-thickness/2);
+}
+.coin__back {
+  background-image: url($coin-back);
+  background-size: cover;
+  transform: translateZ(-$coin-thickness/2) rotateY(180deg);
+}
+
+.coin__edge {
+  @for $i from 1 through $edge-faces {
+    div:nth-child(#{$i}) {
+      position: absolute;
+      height: $edge-face-length;
+      width: $coin-thickness;
+      background: darken(
+        $coin-color,
+        (($i - $edge-faces/2) * ($i - $edge-faces/2)) /
+          ($edge-faces * $edge-faces/4) *
+          100 *
+          0.7
+      );
+      transform: translateY(#{$coin-diameter/2-$edge-face-length/2})
+        translateX(#{$coin-diameter/2-$coin-thickness/2})
+        rotateZ(360deg / $edge-faces * $i + 90)
+        translateX(#{$coin-diameter/2})
+        rotateY(90deg);
+    }
+  }
+}
+
+.coin__shadow {
+  position: absolute;
+  width: $coin-diameter;
+  height: $coin-thickness;
+  border-radius: 50%;
+  background: #000;
+  box-shadow: 0 0 $coin-thickness * 5 $coin-thickness * 5 #000;
+  opacity: 0.125;
+  transform: rotateX(90deg) translateZ(-$coin-diameter * 1.1) scale(0.5);
+}
+
+@keyframes rotate3d {
+  0% {
+    transform: perspective(1000px) rotateY(0deg);
+  }
+
+  100% {
+    transform: perspective(1000px) rotateY(360deg);
+  }
+}
+
+@keyframes shine {
+  0%,
+  15% {
+    transform: translateY($coin-diameter * 2) rotate(-40deg);
+  }
+  50% {
+    transform: translateY(-$coin-diameter) rotate(-40deg);
+  }
+}
+
+.countOfSmth {
+  font-family: serif, Monotype Corsiva;
+  font-size: 3rem;
+  caret-color: transparent;
+}
+
+.fa {
+  font-size: 19px;
+  width: 20px;
+}
+
+.btn-slide {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+  caret-color: transparent;
+  height: 50px;
+  width: 260px;
+  line-height: 50px;
+  padding: 0px;
+  border-radius: 25px;
+  box-shadow: 0 10px 20px -8px rgba(0, 0, 0, 0.7);
+  background: linear-gradient(135deg, #e570e7 0%, #79f1fc 100%);
+}
+
+.btn-slide:active {
+  box-shadow: 0 8px 16px -8px rgba(0, 0, 0, 0.7);
+  -webkit-transform: scale(0.98);
+  transform: scale(0.96);
+}
+
+.btn-slide:hover {
+  background: linear-gradient(-135deg, #e570e7 0%, #79f1fc 100%);
+}
+
+.btn-slide span.circle {
+  display: block;
+  background-color: #fff;
+  color: #e570e7;
+  position: absolute;
+  margin: 5px;
+  height: 40px;
+  width: 40px;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  transition: all 1.5s ease;
+}
+
+.btn-slide:hover span.circle {
+  left: 100%;
+  margin-left: -45px;
+  background-color: #fff;
+  color: #79f1fc;
+}
+
+.btn-slide span.title {
+  font-family: "Nunito Sans";
+  caret-color: transparent;
+  position: absolute;
+  left: 85px;
+  font-size: 20px;
+  letter-spacing: 1px;
+  color: #fff;
+  transition: all 1.5s linear;
+}
+
+.btn-slide span.title-hover {
+  opacity: 0;
+}
+.btn-slide:hover span.title {
+  opacity: 0;
+}
+.btn-slide:hover span.title-hover {
+  opacity: 1;
+  left: 20px;
+}
+
+@media (max-width: 540px) {
+  h1 {
+    font-size: 36px;
+  }
+  p {
+    font-size: 20px;
+  }
+
+  .btn-slide {
+    width: 240px;
+  }
+}
+
+.map {
+  margin-top: 5px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  height: calc(100% - 6rem - 80px);
+}
+
+.wrapper {
+  display: flex;
+  justify-content: space-around;
+}
+
+.hand {
+  position: relative;
+  display: inline-flex;
+  text-align: justify;
+  align-self: center;
+  max-width: 60rem;
+  height: 3rem;
+  max-height: 15rem;
+  border: 1px solid black;
+}
+
+.decks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  width: 25%;
+  height: 100%;
+  margin: 2rem;
+}
+
+.opponentsDecks {
+  align-self: center;
+  flex-wrap: wrap-reverse;
+}
+
+.opponentsDeck {
+  background-color: purple;
+}
+
+.myDecks {
+  align-self: center;
+}
+
+.myDeck {
+  background-color: green;
+}
+
+.deck {
+  border: 1px solid black;
+  height: 20vh;
+  width: 40%;
+}
+
+.myHand {
+  height: 100% !important;
+}
+
+.myCards {
+  overflow-y: hidden;
+  flex-grow: 1;
+  z-index: 10;
+  width: 6rem;
+  max-width: 15rem;
+  &:hover {
+    border: none;
+    overflow-y: unset;
+    transform: translate3d(0px, -200px, 0px);
+    width: 100%;
+    margin: 0;
+  }
+  &:active {
+    border: none;
+    overflow-y: unset;
+    transform: translate3d(0px, -200px, 0px);
+    width: 100%;
+    height: 100%;
+    margin: 0;
+  }
+}
+
+.opponentsCards {
+  caret-color: transparent;
+  z-index: 10;
+  width: 6rem;
+  max-width: 15rem;
+  border: 1px solid black;
+}
+
+.field {
+  display: flex;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 50%;
+}
+
+.row {
+  display: flex;
+  gap: 5px;
+  &:not(:last-child) {
+    margin-bottom: 5px;
+  }
+}
+
+.cardField {
+  caret-color: transparent;
+  border-radius: 5px;
+  width: 3.8rem;
+  height: 3.8rem;
+  &:hover {
+    box-shadow: inset 0 0 0 12px #53ea93;
+  }
+}
+
+.yellowCircle {
+  caret-color: transparent;
+  background-color: yellow;
+  border-radius: 100%;
+  border: 1px solid black;
+}
+
+.blueSquare {
+  caret-color: transparent;
+  background-color: rgb(129, 129, 248);
+  border: 1px solid black;
+}
+
+.redSquare {
+  caret-color: transparent;
+  background-color: rgb(250, 173, 145);
+  border: 1px solid black;
+}
+
+.whiteSquare {
+  caret-color: transparent;
+  background-color: white;
+  border: 1px solid black;
+}
+
+.endTurnButtonField {
+  position: absolute;
+  right: 1.2rem;
+  top: 6rem;
+}
+
+.endTurnButton {
+  font-size: 14px;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  height: 3rem;
+  width: 8rem;
+  background: linear-gradient(to bottom right, blue, pink);
+  &:focus {
+    animation: effect 0.4s 1;
+  }
+}
+
+.image {
+  width: 100%;
+}
+
+@keyframes effect {
+  0% {
+    transform: translateX(0px) rotate(0deg);
+  }
+
+  20% {
+    transform: translateX(-4px) rotate(-4deg);
+  }
+
+  40% {
+    transform: translateX(-2px) rotate(-2deg);
+  }
+
+  60% {
+    transform: translateX(4px) rotate(4deg);
+  }
+
+  80% {
+    transform: translateX(2px) rotate(2deg);
+  }
+
+  100% {
+    transform: translateX(0px) rotate(0deg);
+  }
+}

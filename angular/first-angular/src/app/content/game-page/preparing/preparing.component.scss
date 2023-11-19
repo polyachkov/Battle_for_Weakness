@@ -1,0 +1,228 @@
+@import url("https://fonts.googleapis.com/css2?family=Rosarivo:ital@1&display=swap");
+
+.background {
+  background-color: bisque;
+  width: 100%;
+  height: calc(100% - 64px);
+  padding-top: 64px;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+$openSans: "Open Sans", Helvetica, Arial, sans-serif;
+body {
+  background: #333;
+  font-family: $openSans;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-radius: 30px;
+}
+
+$cyan: #0505a9;
+$dark: #ffffff;
+$borderW: 2px;
+
+.blob-btn {
+  $numOfBlobs: 4;
+  z-index: 1;
+  position: relative;
+  padding: 20px 46px;
+  margin-bottom: 30px;
+  text-align: center;
+  text-transform: uppercase;
+  color: $cyan;
+  width: 20rem;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: transparent;
+  outline: none;
+  border: none;
+  transition: color 0.5s;
+  cursor: pointer;
+  border-radius: 30px;
+
+  &:before {
+    content: "";
+    z-index: 1;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border: $borderW solid $cyan;
+    border-radius: 30px;
+  }
+
+  &:after {
+    content: "";
+    z-index: -2;
+    position: absolute;
+    left: $borderW * 1.5;
+    top: $borderW * 1.5;
+    width: 100%;
+    height: 100%;
+
+    transition: all 0.3s 0.2s;
+    border-radius: 30px;
+  }
+
+  &:hover {
+    color: $dark;
+    border-radius: 30px;
+
+    &:after {
+      transition: all 0.3s;
+      left: 0;
+      top: 0;
+      border-radius: 30px;
+    }
+  }
+
+  &__inner {
+    z-index: -1;
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 30px;
+    background: #ffffff;
+  }
+
+  // additional container created, because in FF blobs are breaking overflow:hidden of element with svg gooey filter
+  &__blobs {
+    position: relative;
+    display: block;
+    height: 100%;
+    filter: url("#goo");
+  }
+
+  &__blob {
+    position: absolute;
+    top: $borderW;
+    width: 100% / $numOfBlobs;
+    height: 100%;
+    background: $cyan;
+    border-radius: 100%;
+    transform: translate3d(0, 150%, 0) scale(1.7);
+    transition: transform 0.45s;
+
+    @supports (filter: url("#goo")) {
+      transform: translate3d(0, 150%, 0) scale(1.4);
+    }
+
+    @for $i from 1 through $numOfBlobs {
+      &:nth-child(#{$i}) {
+        left: ($i - 1) * (120% / $numOfBlobs);
+        transition-delay: ($i - 1) * 0.08s;
+      }
+    }
+
+    .blob-btn:hover & {
+      transform: translateZ(0) scale(1.7);
+
+      @supports (filter: url("#goo")) {
+        transform: translateZ(0) scale(1.4);
+      }
+    }
+  }
+}
+
+.choice {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.fractionImg {
+  width: 20rem;
+}
+
+.fractionCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 20rem;
+  background-color: lightgray;
+  text-align: center;
+  font-size: 4rem;
+  font-family: "Rosarivo", cursive;
+  display: flex;
+  flex-direction: column;
+  caret-color: transparent;
+  box-shadow: 0px 25px 20px -20px rgba(0, 0, 0, 0.45),
+    25px 0 20px -20px rgba(0, 0, 0, 0.45);
+  border-radius: 1rem;
+  &:hover {
+    box-shadow: 0 0 0 12px #53ea93;
+  }
+}
+
+.activeFraction {
+  background-color: white;
+}
+
+.exampleButton {
+  position: fixed;
+  left: 3rem;
+  top: 5rem;
+  background-color: red;
+  border-radius: 5px;
+  height: 60px;
+  width: 100px;
+  &:hover {
+    font-size: 18px;
+    height: 70px;
+    width: 120px;
+  }
+}
+
+.loadCircle {
+  visibility: hidden;
+  position: absolute;
+  animation: spinning 3s infinite linear;
+}
+.loadImg {
+  height: 80px;
+  width: 80px;
+}
+
+@keyframes spinning {
+  0% {
+    transform: rotate(0);
+  }
+  13% {
+    transform: rotate(45deg);
+  }
+  25% {
+    transform: rotate(90deg);
+  }
+  38% {
+    transform: rotate(135deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  63% {
+    transform: rotate(225deg);
+  }
+  75% {
+    transform: rotate(270deg);
+  }
+  88% {
+    transform: rotate(315deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,106 @@
+.nameOfGame {
+  color: white;
+  caret-color: transparent;
+  cursor: default;
+}
+
+.containerTool {
+  margin-left: 3rem;
+  button {
+    background-color: #81d4fa;
+  }
+  button:hover {
+    border: 1rem;
+  }
+  button:active {
+    border: 1rem;
+    background-color: bisque !important;
+  }
+}
+.toolBarBackground {
+  position: absolute;
+  background-color: rgb(77, 77, 245);
+}
+
+.menuBtn {
+  color: black;
+  font-weight: 600;
+  width: 5rem;
+  height: 2.5rem;
+}
+
+.accountPlace {
+  position: absolute;
+  max-width: 20rem;
+  width: 100%;
+  height: 2.5rem;
+  margin-top: -0.3rem;
+  right: 3rem;
+}
+.accountPicture {
+  width: 30px;
+  height: 30px;
+  caret-color: transparent;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+.accountName {
+  background-color: rgba($color: #81d4fa, $alpha: 0.7);
+  position: absolute;
+  display: flex;
+  align-items: center;
+  max-width: 15rem;
+  font-weight: 600;
+  width: 100%;
+  height: 2.5rem;
+  right: 1rem;
+  margin-top: 0.15rem;
+
+  .accountNameText {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  &:hover,
+  &:active {
+    border: 1rem;
+  }
+
+  &:active {
+    background-color: rgb(246, 72, 72);
+  }
+}
+
+@media (max-width: 700px) {
+  .nameOfGame {
+    display: none;
+  }
+}
+
+@media (max-width: 830px) {
+  .accountNameText {
+    display: none;
+  }
+
+  .accountPlace {
+    max-width: 40px !important ;
+  }
+
+  .accountPicture {
+    right: 0rem;
+  }
+
+  .accountName {
+    right: 0rem;
+    max-width: 40px;
+    max-height: 40px;
+    border-radius: 50%;
+    border: 0px;
+    background-color: rgb(77, 77, 245);
+
+    &:active {
+      border: 3px;
+    }
+  }
+}
