@@ -19,7 +19,7 @@ import {
 export class DataFieldComponent {
   GamePhases = GamePhases;
 
-  myHand: number[] = [1, 2, 2, 2, 1];
+  myHand: number[] = [1, 2, 2, 2, 1, 1, 2, 2, 1];
   opponentsHand: number[] = [1, 1, 1];
   currentCard: number = 0;
 
@@ -83,8 +83,9 @@ export class DataFieldComponent {
   }
 
   dropCard(row: number, cell: number) {
-    // this.field[row][cell] = this.currentCard;
-    this.field = this.field1;
+    this.field[row][cell] = this.currentCard;
+    // this.field = this.field1;
+    this.currentCard = 0;
   }
 
   noReturnPredicate() {

@@ -1,44 +1,43 @@
-.background {
-  background-color: bisque;
-  width: 100%;
-  height: calc(100% - 64px);
-}
-
 .container {
   display: flex;
   width: 100%;
-  background-color: white;
+  height: 100%;
 }
 
-.interface {
-  width: 100%;
+.myInterface,
+.opponentsInterface {
+  position: absolute;
+  width: 20%;
   height: 5rem;
-  margin: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-left: 10rem;
-  padding-right: 5rem;
-  background: linear-gradient(rgb(205, 233, 158), rgb(240, 149, 165));
+  padding-left: 2rem;
+  padding-right: 2rem;
+  background: linear-gradient(to right, rgb(233, 99, 15), bisque);
 }
 
 .giveUpField {
+  z-index: 20;
+  position: absolute;
+  top: 2rem;
+  right: 1rem;
   display: flex;
   align-items: center;
   padding-right: 3rem;
-  background: linear-gradient(rgb(205, 233, 158), rgb(240, 149, 165));
 }
 
 .fraction-name {
   caret-color: transparent;
   font-family: Josefin Sans;
-  font-size: 3rem;
+  font-size: 2.5rem;
 }
 
-.resources {
+.health,
+.money {
+  height: 5rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
 }
 
 .heart {
@@ -152,7 +151,8 @@ $turn-time: 6s;
   }
 }
 
-.countOfSmth {
+.countOfMoney,
+.countOfHeart {
   font-family: serif, Monotype Corsiva;
   font-size: 3rem;
   caret-color: transparent;
@@ -244,27 +244,17 @@ $turn-time: 6s;
 }
 
 .map {
-  margin-top: 5px;
+  overflow-y: hidden;
+  margin-top: 3rem;
   display: flex;
   justify-content: center;
   flex-direction: column;
-  height: calc(100% - 6rem - 80px);
+  height: 130%;
 }
 
 .wrapper {
   display: flex;
   justify-content: space-around;
-}
-
-.hand {
-  position: relative;
-  display: inline-flex;
-  text-align: justify;
-  align-self: center;
-  max-width: 60rem;
-  height: 3rem;
-  max-height: 15rem;
-  border: 1px solid black;
 }
 
 .decks {
@@ -300,31 +290,36 @@ $turn-time: 6s;
   width: 40%;
 }
 
-.myHand {
-  height: 100% !important;
+.hand {
+  position: relative;
+  display: inline-flex;
+  text-align: justify;
+  align-self: center;
+  max-width: 40rem;
+  height: 3rem;
+  max-height: 15rem;
+  border: 1px solid black;
+  &:hover {
+    overflow-y: unset;
+  }
 }
 
 .myCards {
-  overflow-y: hidden;
   flex-grow: 1;
-  z-index: 10;
   width: 6rem;
-  max-width: 15rem;
+  height: 3rem;
+  max-width: 13rem;
   &:hover {
+    z-index: 10;
     border: none;
-    overflow-y: unset;
-    transform: translate3d(0px, -200px, 0px);
+    transform: translate(0px, -150px);
     width: 100%;
     margin: 0;
   }
-  &:active {
-    border: none;
-    overflow-y: unset;
-    transform: translate3d(0px, -200px, 0px);
-    width: 100%;
-    height: 100%;
-    margin: 0;
-  }
+}
+
+.image {
+  width: 100%;
 }
 
 .opponentsCards {
@@ -389,8 +384,8 @@ $turn-time: 6s;
 
 .endTurnButtonField {
   position: absolute;
-  right: 1.2rem;
-  top: 6rem;
+  right: 2rem;
+  bottom: 2rem;
 }
 
 .endTurnButton {
@@ -402,10 +397,6 @@ $turn-time: 6s;
   &:focus {
     animation: effect 0.4s 1;
   }
-}
-
-.image {
-  width: 100%;
 }
 
 @keyframes effect {

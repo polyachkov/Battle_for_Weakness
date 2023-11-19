@@ -9,7 +9,8 @@ import { Turn } from '../content/game-page/data-field/constants';
 export class GameControlService {
   currentPhase: GamePhases = GamePhases.PREPARING;
 
-  selectedFraction: Fractions | null = null;
+  mySelectedFraction: Fractions | null = null;
+  opponentSelectedFraction: string = 'Swamp';
 
   gameState: GameState = 0;
 
@@ -54,7 +55,7 @@ export class GameControlService {
   turnTitle = 'End the Turn';
 
   handleFractionChoice(fractionName: Fractions) {
-    this.selectedFraction = fractionName;
+    this.mySelectedFraction = fractionName;
   }
 
   changeSecondPlayerState() {
