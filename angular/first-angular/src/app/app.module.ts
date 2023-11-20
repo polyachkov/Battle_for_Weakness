@@ -20,6 +20,9 @@ import { DataFieldComponent } from './content/game-page/data-field/data-field.co
 import { PreparingComponent } from './content/game-page/preparing/preparing.component';
 import { GameOverComponent } from './content/game-page/game-over/game-over.component';
 import { FieldCardRendererComponent } from './content/game-page/data-field/field-card-renderer/field-card-renderer.component';
+import { AuthorizationPageComponent } from './content/authorization-page/authorization-page.component';
+import { AccountCreatingComponent } from './content/authorization-page/account-creating/account-creating.component';
+import { AccountSettingsComponent } from './content/authorization-page/account-settings/account-settings.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +37,9 @@ import { FieldCardRendererComponent } from './content/game-page/data-field/field
     PreparingComponent,
     GameOverComponent,
     FieldCardRendererComponent,
+    AuthorizationPageComponent,
+    AccountCreatingComponent,
+    AccountSettingsComponent,
   ],
   imports: [
     BrowserModule,

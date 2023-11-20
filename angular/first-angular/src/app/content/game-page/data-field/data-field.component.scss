@@ -1,7 +1,11 @@
+.background {
+  width: 100%;
+  height: 100%;
+}
+
 .container {
   display: flex;
   width: 100%;
-  height: 100%;
 }
 
 .myInterface,
@@ -244,6 +248,7 @@ $turn-time: 6s;
 }
 
 .map {
+  height: 100%;
   overflow-y: hidden;
   display: flex;
   justify-content: center;
@@ -334,7 +339,32 @@ $turn-time: 6s;
   margin-bottom: 0.5rem;
   justify-content: center;
   flex-wrap: wrap;
-  width: 50%;
+  width: 70%;
+}
+
+.yellowCircle {
+  caret-color: transparent;
+  background-color: yellow;
+  border-radius: 100%;
+  border: 1px solid black;
+}
+
+.blueSquare {
+  caret-color: transparent;
+  background-color: rgb(129, 129, 248);
+  border: 1px solid black;
+}
+
+.redSquare {
+  caret-color: transparent;
+  background-color: rgb(250, 173, 145);
+  border: 1px solid black;
+}
+
+.whiteSquare {
+  caret-color: transparent;
+  background-color: white;
+  border: 1px solid black;
 }
 
 .row {

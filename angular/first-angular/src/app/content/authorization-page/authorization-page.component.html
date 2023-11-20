@@ -1,0 +1,8 @@
+<ng-container [ngSwitch]="pageContentService.isGuest">
+  <div *ngSwitchCase="IsGuest.NOT_GUEST">
+    <app-account-settings></app-account-settings>
+  </div>
+  <div *ngSwitchCase="IsGuest.GUEST">
+    <app-account-creating></app-account-creating>
+  </div>
+</ng-container>

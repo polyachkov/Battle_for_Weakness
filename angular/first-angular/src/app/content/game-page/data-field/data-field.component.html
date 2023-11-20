@@ -1,111 +1,115 @@
-<div class="container">
-  <div [ngStyle]="{ top: '0' }" class="opponentsInterface">
-    <div class="fraction-name">
-      {{ gameControlService.opponentSelectedFraction }}
-    </div>
-    <div class="health">
-      <img
-        class="heart"
-        src="../../../../assets/Photoes/hearth.png"
-        alt="hearths"
-      />
-      <div class="countOfHeart">3</div>
-    </div>
-  </div>
-</div>
-<div class="container">
-  <div [ngStyle]="{ bottom: '0' }" class="myInterface">
-    <div class="fraction-name">{{ gameControlService.mySelectedFraction }}</div>
-    <div class="money">
-      <div class="coin">
-        <div class="coin__front"></div>
-        <div class="coin__edge"></div>
-        <div class="coin__back"></div>
-        <div class="coin__shadow"></div>
+<div class="background">
+  <div class="container">
+    <div [ngStyle]="{ top: '0' }" class="opponentsInterface">
+      <div class="fraction-name">
+        {{ gameControlService.opponentSelectedFraction }}
       </div>
-      <div class="countOfMoney">10</div>
-    </div>
-    <div class="health">
-      <img
-        class="heart"
-        src="../../../../assets/Photoes/hearth.png"
-        alt="hearths"
-      />
-      <div class="countOfHeart">3</div>
+      <div class="health">
+        <img
+          class="heart"
+          src="../../../../assets/Photoes/hearth.png"
+          alt="hearths"
+        />
+        <div class="countOfHeart">3</div>
+      </div>
     </div>
   </div>
-</div>
-
-<div class="giveUpField">
-  <a
-    (click)="gameControlService.handleChangeContent(GamePhases.FINISH_GAME)"
-    class="btn-slide"
-  >
-    <span class="circle">
-      <i class="fa-solid fa-film"></i>
-    </span>
-
-    <span class="title">Give up</span>
-    <span class="title title-hover">Оффнуть с позором</span>
-  </a>
-</div>
-
-<div class="endTurnButtonField">
-  <button (click)="gameControlService.handleTurn()" class="endTurnButton">
-    {{ gameControlService.turnTitle }}
-  </button>
-</div>
-<div class="map">
-  <div class="hand">
-    <div class="opponentsCards" *ngFor="let item of opponentsHand"></div>
-  </div>
-  <div class="wrapper">
-    <div class="opponentsDecks decks">
-      <div class="deck odeck1 opponentsDeck"></div>
-      <div class="deck odeck2 opponentsDeck"></div>
-      <div class="deck odeck3 opponentsDeck"></div>
-      <div class="deck odeck4 opponentsDeck"></div>
-      <div class="deck odeck5 opponentsDeck"></div>
+  <div class="container">
+    <div [ngStyle]="{ bottom: '0' }" class="myInterface">
+      <div class="fraction-name">
+        {{ gameControlService.mySelectedFraction }}
+      </div>
+      <div class="money">
+        <div class="coin">
+          <div class="coin__front"></div>
+          <div class="coin__edge"></div>
+          <div class="coin__back"></div>
+          <div class="coin__shadow"></div>
+        </div>
+        <div class="countOfMoney">10</div>
+      </div>
+      <div class="health">
+        <img
+          class="heart"
+          src="../../../../assets/Photoes/hearth.png"
+          alt="hearths"
+        />
+        <div class="countOfHeart">3</div>
+      </div>
     </div>
-    <div class="field">
-      <div class="row" *ngFor="let row of field; let rowIndex = index">
-        <div
-          [ngClass]="getRowColor(rowIndex)"
-          *ngFor="let cell of row; let cellIndex = index"
-        >
+  </div>
+
+  <div class="giveUpField">
+    <a
+      (click)="gameControlService.handleChangeContent(GamePhases.FINISH_GAME)"
+      class="btn-slide"
+    >
+      <span class="circle">
+        <i class="fa-solid fa-film"></i>
+      </span>
+
+      <span class="title">Give up</span>
+      <span class="title title-hover">Оффнуть с позором</span>
+    </a>
+  </div>
+
+  <div class="endTurnButtonField">
+    <button (click)="gameControlService.handleTurn()" class="endTurnButton">
+      {{ gameControlService.turnTitle }}
+    </button>
+  </div>
+  <div class="map">
+    <div class="hand">
+      <div class="opponentsCards" *ngFor="let item of opponentsHand"></div>
+    </div>
+    <div class="wrapper">
+      <div class="opponentsDecks decks">
+        <div class="deck odeck1 opponentsDeck"></div>
+        <div class="deck odeck2 opponentsDeck"></div>
+        <div class="deck odeck3 opponentsDeck"></div>
+        <div class="deck odeck4 opponentsDeck"></div>
+        <div class="deck odeck5 opponentsDeck"></div>
+      </div>
+      <div class="field">
+        <div class="row" *ngFor="let row of field; let rowIndex = index">
           <div
-            class="cardField"
-            cdkDropList
-            (mousedown)="pickCard(rowIndex, cellIndex, cell)"
-            (mouseup)="dropCard(rowIndex, cellIndex)"
+            [ngClass]="getRowColor(rowIndex)"
+            *ngFor="let cell of row; let cellIndex = index"
           >
-            <img
-              cdkDrag
-              class="image"
-              [src]="getCardImageUrl(rowIndex, cell)"
-              alt=""
-            />
+            <div
+              class="cardField"
+              cdkDropList
+              (mousedown)="pickCard(rowIndex, cellIndex, cell)"
+              (mouseup)="dropCard(rowIndex, cellIndex)"
+            >
+              <img
+                cdkDrag
+                class="image"
+                [src]="getCardImageUrl(rowIndex, cell)"
+                alt=""
+              />
+            </div>
           </div>
         </div>
       </div>
+      <div class="myDecks decks">
+        <div class="deck mdeck1 myDeck"></div>
+        <div class="deck mdeck2 myDeck"></div>
+        <div class="deck mdeck3 myDeck"></div>
+        <div class="deck mdeck4 myDeck"></div>
+        <div class="deck mdeck5 myDeck"></div>
+      </div>
     </div>
-    <div class="myDecks decks">
-      <div class="deck mdeck1 myDeck"></div>
-      <div class="deck mdeck2 myDeck"></div>
-      <div class="deck mdeck3 myDeck"></div>
-      <div class="deck mdeck4 myDeck"></div>
-      <div class="deck mdeck5 myDeck"></div>
-    </div>
-  </div>
-  <div class="hand" cdkDropList [cdkDropListData]="myHand">
-    <!-- [cdkDropListEnterPredicate]="noReturnPredicate" -->
-    <div
-      class="myCards"
-      *ngFor="let item of myHand"
-      cdkDrag
-      (mousedown)="pickCardByHand(item)"
-    >
-      <img class="image" [src]="idHandPictures[item]" alt="" />
+    <div class="hand" cdkDropList [cdkDropListData]="myHand">
+      <!-- [cdkDropListEnterPredicate]="noReturnPredicate" -->
+      <div
+        class="myCards"
+        *ngFor="let item of myHand"
+        cdkDrag
+        (mousedown)="pickCardByHand(item)"
+      >
+        <img class="image" [src]="idHandPictures[item]" alt="" />
+      </div>
     </div>
   </div>
 </div>
