@@ -19,7 +19,7 @@ import {
 export class DataFieldComponent {
   GamePhases = GamePhases;
 
-  myHand: number[] = [1, 2, 2, 2, 1, 1, 2, 2, 1];
+  myHand: number[] = [1, 2, 2, 2, 1];
   opponentsHand: number[] = [1, 1, 1];
   currentCard: number = 0;
 
