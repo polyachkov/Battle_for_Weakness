@@ -6,7 +6,7 @@ import java.util.List;
 
 import static ru.nsu.fit.battle_fw.Speed.*;
 
-public class CardList implements Serializable {
+public class CommonCardList implements Serializable {
     private List<Card> card_list = new ArrayList<>();
 
     public List<Card> getCard_list() {
@@ -17,9 +17,12 @@ public class CardList implements Serializable {
         this.card_list = card_list;
     }
 
-    public CardList(String fraction) {
+    public CommonCardList(String fraction) {
         if (fraction.equals("Mountains")) {
             createMountains();
+        }
+        if (fraction.equals("Swamp")) {
+            createSwamp();
         }
     }
     private void createMountains() {
@@ -74,5 +77,8 @@ public class CardList implements Serializable {
 
         card_list.add(new Card("The richest", 1, 1,
                 0, 0, Slow, 1, true));
+    }
+    public void createSwamp() {
+
     }
 }
