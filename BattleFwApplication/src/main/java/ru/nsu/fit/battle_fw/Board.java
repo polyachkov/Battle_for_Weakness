@@ -1,5 +1,7 @@
 package ru.nsu.fit.battle_fw;
 
+import ru.nsu.fit.battle_fw.elders.Card;
+
 import java.io.Serializable;
 
 public class Board implements Serializable {

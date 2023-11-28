@@ -1,14 +1,14 @@
-package ru.nsu.fit.battle_fw;
+package ru.nsu.fit.battle_fw.elders;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class CommonLibrary extends Library implements Serializable {
+public class RareLibrary extends Library implements Serializable {
     private String fraction;
     private List<Card> card_list = new ArrayList<>();
-    private boolean locked = false;
+    private boolean locked = true;
 
     public boolean isLocked() {
         return locked;
@@ -33,13 +33,13 @@ public class CommonLibrary extends Library implements Serializable {
     public void setCard_list(List<Card> card_list) {
         this.card_list = card_list;
     }
-    public CommonLibrary() {
+    public RareLibrary() {
 
     }
 
-    public CommonLibrary(String fraction) {
+    public RareLibrary(String fraction) {
         this.fraction = fraction;
-        card_list = new CommonCardList(this.fraction).getCard_list();
+        card_list = new RareCardList(this.fraction).getCard_list();
         Collections.shuffle(this.card_list);
     }
 }

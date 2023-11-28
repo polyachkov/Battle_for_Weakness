@@ -1,6 +1,6 @@
-package nsu.ru.BattleForWeakness.repo;
+package ru.nsu.fit.battle_fw.database.repo;
 
-import nsu.ru.BattleForWeakness.model.Person;
+import ru.nsu.fit.battle_fw.database.model.Person;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
