@@ -2,12 +2,12 @@
   <h1><strong>Battle For Weakness</strong></h1>
 
   <div class="data">
-    <input type="text" placeholder="passwordData " />
-    <input type="password" placeholder="loginData" />
+    <input type="text" [(ngModel)]="loginData" />
+    <input type="password" [(ngModel)]="passwordData" />
   </div>
   <button (click)="getData()">Войти</button>
 
-  <span>{{ passwordData }}{{ loginData }}</span>
+  <span>{{ displayPassword }}{{ displayLogin }}</span>
 </div>
 <div class="aboveCenter">
   User name: <input type="text" [(ngModel)]="value" />

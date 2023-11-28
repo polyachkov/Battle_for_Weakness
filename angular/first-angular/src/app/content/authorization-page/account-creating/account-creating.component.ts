@@ -7,17 +7,22 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./account-creating.component.scss'],
 })
 export class AccountCreatingComponent {
-  passwordData = '';
-  loginData = '';
   value: string = '';
   response: any;
+
   answer: any;
+
+  loginData: string = '';
+  passwordData: string = '';
+
+  displayPassword: string = '';
+  displayLogin: string = '';
 
   constructor(private http: HttpClient) {}
 
   getData() {
-    this.passwordData = 'You are ';
-    this.loginData = ' my hero!';
+    this.displayPassword = this.loginData;
+    this.displayLogin = this.passwordData;
   }
   search() {
     this.http
