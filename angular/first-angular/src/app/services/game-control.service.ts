@@ -93,4 +93,11 @@ export class GameControlService {
       this.turn = 0;
     }
   }
+  // const requestUrl = "https://jsonplaceholder.typicode.com/users";
+
+  // const xhr = new XMLHttpRequest();
+
+  // xhr.open("GET", requestUrl);
+
+  // xhr.send;
 }

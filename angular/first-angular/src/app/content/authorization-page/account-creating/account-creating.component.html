@@ -2,10 +2,15 @@
   <h1><strong>Battle For Weakness</strong></h1>
 
   <div class="data">
-    <input type="text" placeholder="Введите логин" />
-    <input type="password" placeholder="Введите пароль" />
+    <input type="text" placeholder="passwordData " />
+    <input type="password" placeholder="loginData" />
   </div>
   <button (click)="getData()">Войти</button>
 
   <span>{{ passwordData }}{{ loginData }}</span>
+</div>
+<div class="aboveCenter">
+  User name: <input type="text" [(ngModel)]="value" />
+  <button (click)="search()">Search</button>
+  <div *ngIf="response">{{ answer }}</div>
 </div>

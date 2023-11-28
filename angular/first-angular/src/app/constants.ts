@@ -12,8 +12,8 @@ export enum GamePhases {
 }
 
 export enum IsGuest {
-  NOT_GUEST,
-  GUEST,
+  NOT_GUEST = 'NOT_GUEST',
+  GUEST = 'GUEST',
 }
 
 export enum GameState {

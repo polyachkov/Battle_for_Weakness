@@ -23,6 +23,8 @@ import { FieldCardRendererComponent } from './content/game-page/data-field/field
 import { AuthorizationPageComponent } from './content/authorization-page/authorization-page.component';
 import { AccountCreatingComponent } from './content/authorization-page/account-creating/account-creating.component';
 import { AccountSettingsComponent } from './content/authorization-page/account-settings/account-settings.component';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -52,6 +54,8 @@ import { AccountSettingsComponent } from './content/authorization-page/account-s
     MatCardModule,
     MatButtonModule,
     DragDropModule,
+    HttpClientModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
