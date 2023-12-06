@@ -1,4 +1,6 @@
-package ru.nsu.fit.battle_fw;
+package ru.nsu.fit.battle_fw.elders;
+
+import ru.nsu.fit.battle_fw.Board;
 
 import java.io.Serializable;
 

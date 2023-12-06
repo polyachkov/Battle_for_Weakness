@@ -1,10 +1,10 @@
-package ru.nsu.fit.battle_fw;
+package ru.nsu.fit.battle_fw.elders;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.nsu.fit.battle_fw.Speed.*;
+import static ru.nsu.fit.battle_fw.elders.Speed.*;
 
 public class UncommonCardList implements Serializable {
     private List<Card> card_list = new ArrayList<>();

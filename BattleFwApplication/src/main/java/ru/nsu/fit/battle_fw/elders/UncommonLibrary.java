@@ -1,11 +1,11 @@
-package ru.nsu.fit.battle_fw;
+package ru.nsu.fit.battle_fw.elders;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class EpicLibrary extends Library implements Serializable {
+public class UncommonLibrary extends Library implements Serializable {
     private String fraction;
     private List<Card> card_list = new ArrayList<>();
     private boolean locked = true;
@@ -17,6 +17,7 @@ public class EpicLibrary extends Library implements Serializable {
     public void setLocked(boolean locked) {
         this.locked = locked;
     }
+
 
     public String getFraction() {
         return fraction;
@@ -33,13 +34,13 @@ public class EpicLibrary extends Library implements Serializable {
     public void setCard_list(List<Card> card_list) {
         this.card_list = card_list;
     }
-    public EpicLibrary() {
+    public UncommonLibrary() {
 
     }
 
-    public EpicLibrary(String fraction) {
+    public UncommonLibrary(String fraction) {
         this.fraction = fraction;
-        card_list = new EpicCardList(this.fraction).getCard_list();
+        card_list = new UncommonCardList(this.fraction).getCard_list();
         Collections.shuffle(this.card_list);
     }
 }
