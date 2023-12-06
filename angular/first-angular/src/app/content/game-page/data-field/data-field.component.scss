@@ -296,7 +296,6 @@ $turn-time: 6s;
 .hand {
   position: relative;
   display: inline-flex;
-
   align-self: center;
   max-width: 40rem;
   height: 3rem;
@@ -373,6 +372,15 @@ $turn-time: 6s;
   &:not(:last-child) {
     margin-bottom: 5px;
   }
+}
+
+.picture {
+  z-index: 50;
+  position: absolute;
+  right: 150px;
+  top: 30%;
+  width: 200px;
+  height: 200px;
 }
 
 .cardField {

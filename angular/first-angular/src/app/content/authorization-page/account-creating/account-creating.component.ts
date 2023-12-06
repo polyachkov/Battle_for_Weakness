@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { inputProp } from './constants';
 
 @Component({
   selector: 'app-account-creating',
@@ -12,6 +13,16 @@ export class AccountCreatingComponent {
 
   answer: any;
 
+  inputProps = [
+    inputProp.EMAIL,
+    inputProp.LOGIN,
+    inputProp.PASSWORD,
+    inputProp.PASSWORD_AGAIN,
+  ];
+
+  valueProps = ['', '', '', ''];
+
+  emailData: string = '';
   loginData: string = '';
   passwordData: string = '';
 

@@ -1,13 +1,21 @@
 <div class="wrapper">
-  <h1><strong>Battle For Weakness</strong></h1>
+  <h1 class="header"><strong>Battle For Weakness</strong></h1>
+  <h2 class="header"><strong>Registration</strong></h2>
 
-  <div class="data">
-    <input type="text" [(ngModel)]="loginData" />
-    <input type="password" [(ngModel)]="passwordData" />
+  <div *ngFor="let item of [0, 1, 2, 3]; let rowIndex = index">
+    <div class="nameOfInput">{{ inputProps[item] }}</div>
+    <div class="myInput">
+      <input
+        [(ngModel)]="valueProps[item]"
+        type="{{ rowIndex === 0 || rowIndex === 1 ? 'text' : 'password' }}"
+      />
+    </div>
   </div>
-  <button (click)="getData()">Войти</button>
-
-  <span>{{ displayPassword }}{{ displayLogin }}</span>
+  {{ displayPassword }}
+  <div class="loginDiv">
+    <button class="loginButton" (click)="getData()">Войти</button>
+  </div>
+  {{ displayLogin }}
 </div>
 <div class="aboveCenter">
   User name: <input type="text" [(ngModel)]="value" />

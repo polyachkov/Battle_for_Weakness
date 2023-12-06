@@ -1,9 +1,10 @@
-import { Component, numberAttribute } from '@angular/core';
+import { Component } from '@angular/core';
 import { GamePhases } from 'src/app/constants';
 import { GameControlService } from 'src/app/services/game-control.service';
 
 import {
   DynamicObject,
+  field10,
   idCommonFieldPictures,
   idHandPictures,
   idMoneyCollectorPictures,
@@ -22,39 +23,21 @@ export class DataFieldComponent {
   myHand: number[] = [1, 2, 2, 2, 1];
   opponentsHand: number[] = [1, 1, 1];
   currentCard: number = 0;
-
-  field: number[][] = [
-    [0, 0, 1, 1, 0, 0, 0, 0],
-    [0, 1, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-  ];
-  field1: number[][] = [
-    [0, 0, 1, 1, 0, 0, 0, 0],
-    [0, 1, 1, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-  ];
+  isClicked: boolean = false;
+  cardPos: number[] = [-1, -1];
 
   idHandPictures = idHandPictures;
   idMoneyCollectorPictures = idMoneyCollectorPictures;
   idCommonFieldPictures = idCommonFieldPictures;
   idOppsFieldPictures = idOppsFieldPictures;
   idMyFieldPictures = idMyFieldPictures;
+  field10 = field10;
 
   constructor(public gameControlService: GameControlService) {}
 
-  getCardImageUrl(index: number, cell: number) {
+  getCardImageUrl(row: number, cell: number) {
     let url = '';
-    switch (index) {
+    switch (row) {
       case 0:
       case 7:
         url = idMoneyCollectorPictures[cell];
@@ -83,8 +66,10 @@ export class DataFieldComponent {
   }
 
   dropCard(row: number, cell: number) {
-    this.field[row][cell] = this.currentCard;
-    // this.field = this.field1;
+    if (this.currentCard === 0) {
+      return;
+    }
+    this.field10[row][cell].name = this.currentCard;
     this.currentCard = 0;
   }
 
@@ -113,5 +98,21 @@ export class DataFieldComponent {
         break;
     }
     return rowColorObj;
+  }
+
+  determine(row: number, cell: number) {
+    if (field10[row][cell].name === 0) {
+      return;
+    }
+    this.cardPos = [row, cell];
+    this.isClicked = true;
+    console.log(this.cardPos, ' ', field10[row][cell].name);
+  }
+
+  showExplain() {
+    let url = '';
+    let imgNum = field10[this.cardPos[0]][this.cardPos[1]].name;
+    url = idMoneyCollectorPictures[imgNum];
+    return url;
   }
 }
