@@ -1,9 +1,5 @@
 <div class="background">
-  <div *ngIf="isClicked !== false">
-    <span>
-      <img class="picture" [src]="showExplain()" alt="" />
-    </span>
-  </div>
+  <app-modal *ngIf="gameControlService.isShowModal"></app-modal>
   <div class="container">
     <div [ngStyle]="{ top: '0' }" class="opponentsInterface">
       <div class="fraction-name">
@@ -76,7 +72,7 @@
         <div class="deck odeck5 opponentsDeck"></div>
       </div>
       <div class="field">
-        <div class="row" *ngFor="let row of field10; let rowIndex = index">
+        <div class="row" *ngFor="let row of field; let rowIndex = index">
           <div
             [ngClass]="getRowColor(rowIndex)"
             *ngFor="let cell of row; let cellIndex = index"
@@ -84,14 +80,14 @@
             <div
               class="cardField"
               cdkDropList
-              (click)="determine(rowIndex, cellIndex)"
+              (click)="gameControlService.determineCard(rowIndex, cellIndex)"
               (mousedown)="pickCard(rowIndex, cellIndex, cell.name)"
               (mouseup)="dropCard(rowIndex, cellIndex)"
             >
               <img
                 cdkDrag
                 class="image"
-                [src]="getCardImageUrl(rowIndex, cell.name)"
+                [src]="gameControlService.getCardImageUrl(rowIndex, cell.name)"
                 alt=""
               />
             </div>

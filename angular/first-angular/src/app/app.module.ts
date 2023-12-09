@@ -19,12 +19,12 @@ import { DevelopersPageComponent } from './content/developers-page/developers-pa
 import { DataFieldComponent } from './content/game-page/data-field/data-field.component';
 import { PreparingComponent } from './content/game-page/preparing/preparing.component';
 import { GameOverComponent } from './content/game-page/game-over/game-over.component';
-import { FieldCardRendererComponent } from './content/game-page/data-field/field-card-renderer/field-card-renderer.component';
 import { AuthorizationPageComponent } from './content/authorization-page/authorization-page.component';
 import { AccountCreatingComponent } from './content/authorization-page/account-creating/account-creating.component';
 import { AccountSettingsComponent } from './content/authorization-page/account-settings/account-settings.component';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { ModalComponent } from './content/game-page/data-field/modal/modal.component';
 
 @NgModule({
   declarations: [
@@ -38,10 +38,10 @@ import { FormsModule } from '@angular/forms';
     DataFieldComponent,
     PreparingComponent,
     GameOverComponent,
-    FieldCardRendererComponent,
     AuthorizationPageComponent,
     AccountCreatingComponent,
     AccountSettingsComponent,
+    ModalComponent,
   ],
   imports: [
     BrowserModule,
