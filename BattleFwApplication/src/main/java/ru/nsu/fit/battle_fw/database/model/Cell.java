@@ -5,19 +5,19 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "field", schema = "public")
-public class Field {
+@Table(name = "cell", schema = "public")
+public class Cell {
     @Id
-    @Column(name = "id_field")
-    @SequenceGenerator(name = "fieldsIdSeq", sequenceName = "field_id_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fieldsIdSeq")
+    @Column(name = "id_cell")
+    @SequenceGenerator(name = "cellsIdSeq", sequenceName = "cell_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cellsIdSeq")
     private Integer id_field;
 
     @Column(name = "id_game")
     private Integer id_game;
 
-    @Column(name = "field_num")
-    private Integer field_num;
+    @Column(name = "cell_num")
+    private Integer cell_num;
 
     @Column(name = "id_card")
     private Integer id_card;
@@ -38,12 +38,12 @@ public class Field {
         this.id_game = id_game;
     }
 
-    public Integer getField_num() {
-        return field_num;
+    public Integer getCell_num() {
+        return cell_num;
     }
 
-    public void setField_num(Integer field_num) {
-        this.field_num = field_num;
+    public void setCell_num(Integer field_num) {
+        this.cell_num = field_num;
     }
 
     public Integer getId_card() {

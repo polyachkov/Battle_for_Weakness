@@ -1,7 +1,5 @@
 package ru.nsu.fit.battle_fw.elders;
 
-import ru.nsu.fit.battle_fw.Board;
-
 import java.io.Serializable;
 
 public class InitGameResponse implements Serializable {
