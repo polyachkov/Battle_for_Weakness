@@ -24,9 +24,10 @@ CREATE TABLE IF NOT EXISTS card
 DROP TABLE IF EXISTS game;
 CREATE TABLE IF NOT EXISTS game
 (
-    id_game    INTEGER PRIMARY KEY ,
+    id_game    INTEGER PRIMARY KEY,
     id_player1    INTEGER NOT NULL,
     id_player2    INTEGER NOT NULL,
+    id_turn    INTEGER NOT NULL,
     is_ended BOOLEAN NOT NULL
 );
 DROP SEQUENCE IF EXISTS games_id_seq;
