@@ -19,8 +19,19 @@ public class Game {
     @Column(name = "id_player2")
     private Integer id_player2;
 
+    @Column(name = "id_turn")
+    private Integer id_turn;
+
     @Column(name = "is_ended")
     private Boolean is_ended;
+
+    public Integer getId_turn() {
+        return id_turn;
+    }
+
+    public void setId_turn(Integer id_turn) {
+        this.id_turn = id_turn;
+    }
 
     public Integer getId_game() {
         return id_game;
