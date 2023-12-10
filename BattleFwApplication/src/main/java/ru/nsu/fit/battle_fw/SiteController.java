@@ -27,7 +27,7 @@ public class SiteController {
     final
     HandCompRepo handCompR;
     final
-    FieldRepo fieldR;
+    CellRepo fieldR;
 
     public SiteController(PersonRepo personR,
                           CardRepo cardR,
@@ -36,7 +36,7 @@ public class SiteController {
                           LibraryCompRepo libCompR,
                           HandRepo handR,
                           HandCompRepo handCompR,
-                          FieldRepo fieldR) {
+                          CellRepo fieldR) {
         this.personR = personR;
         this.cardR = cardR;
         this.gameR = gameR;
@@ -47,9 +47,9 @@ public class SiteController {
         this.fieldR = fieldR;
     }
 
-    @PostMapping("/persons/add")
-    public void addPerson(@RequestBody Person[] persons) {
-        personR.saveAll(Arrays.asList(persons));
+    @PostMapping("/person/add")
+    public void addPerson(@RequestBody Person person) {
+        personR.save(person);
     }
 
     @PostMapping("/init")
@@ -76,11 +76,11 @@ public class SiteController {
         createHand(libR.getLibId(player2, game.getId_game(), "common"), game.getId_game(), player2);
 
         for (int i = 1; i <= 40; i++) {
-            Field field = new Field();
-            field.setField_num(i);
-            field.setId_card(null);
-            field.setId_game(game.getId_game());
-            fieldR.save(field);
+            Cell cell = new Cell();
+            cell.setCell_num(i);
+            cell.setId_card(null);
+            cell.setId_game(game.getId_game());
+            fieldR.save(cell);
         }
     }
 
