@@ -2,9 +2,12 @@
 package ru.nsu.fit.battle_fw;
 
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.*;
 import ru.nsu.fit.battle_fw.database.model.*;
 import ru.nsu.fit.battle_fw.database.repo.*;
+import ru.nsu.fit.battle_fw.exceptions.PersonAlreadyExistsException;
+import ru.nsu.fit.battle_fw.requests.InitGameRequest;
+import ru.nsu.fit.battle_fw.requests.nextTurnRequest;
+import ru.nsu.fit.battle_fw.requests.putCardInCellRequest;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -171,4 +174,15 @@ public class SiteControllerUtils {
 
         handR.save(hand);
     }
+
+    public void addPerson(Person person) throws PersonAlreadyExistsException {
+        Person reference = personR.findByName(person.getName());
+        if (reference == null) {
+            personR.save(person);
+        } else{
+          throw new PersonAlreadyExistsException("p");
+        }
+
+    }
+
 }
