@@ -1,7 +1,7 @@
-package ru.nsu.fit.battle_fw;
+package ru.nsu.fit.battle_fw.requests;
 
 import java.io.Serializable;
-public class putCardInCellRequest implements Serializable {
+public class PutCardInCellRequest implements Serializable {
     private Integer gameId;
     private Integer playerId;
     private Integer cardId;

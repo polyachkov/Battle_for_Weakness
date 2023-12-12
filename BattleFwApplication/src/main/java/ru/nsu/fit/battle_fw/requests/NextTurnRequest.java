@@ -1,6 +1,6 @@
-package ru.nsu.fit.battle_fw;
+package ru.nsu.fit.battle_fw.requests;
 
-public class nextTurnRequest {
+public class NextTurnRequest {
     private int gameId;
     private int nextTurnId;
     private String rarity;

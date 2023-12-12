@@ -2,9 +2,13 @@
 package ru.nsu.fit.battle_fw;
 
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.*;
 import ru.nsu.fit.battle_fw.database.model.*;
 import ru.nsu.fit.battle_fw.database.repo.*;
+import ru.nsu.fit.battle_fw.exceptions.PersonAlreadyExistsException;
+import ru.nsu.fit.battle_fw.requests.InitGameRequest;
+import ru.nsu.fit.battle_fw.requests.MoveCardRequest;
+import ru.nsu.fit.battle_fw.requests.NextTurnRequest;
+import ru.nsu.fit.battle_fw.requests.PutCardInCellRequest;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -135,7 +139,7 @@ public class SiteControllerUtils {
         }
     }
 
-    public void putCardInCell(putCardInCellRequest req) {
+    public void putCardInCell(PutCardInCellRequest req) {
         Integer gameId = req.getGameId();
         Integer playerId = req.getPlayerId();
         Integer cardId = req.getCardId();
@@ -150,13 +154,31 @@ public class SiteControllerUtils {
 
         Cell cell = cellR.getCell(gameId, cellId);
         cell.setId_card(cardId);
+        cell.setId_owner(playerId);
 
         handR.save(hand);
         handCompR.deleteById(handComp.getId_hand_card());
         cellR.save(cell);
     }
 
-    public void nextTurn(nextTurnRequest req) {
+    public void moveCard(MoveCardRequest req) {
+        Integer gameId = req.getGameId();
+        Integer playerId = req.getGameId();
+        Integer cellId1 = req.getCellId1();
+        Integer cellId2 = req.getCellId2();
+
+        Cell cell1 = cellR.getCell(gameId, cellId1);
+        Cell cell2 = cellR.getCell(gameId, cellId2);
+        cell2.setId_card(cell1.getId_card());
+        cell2.setId_owner(playerId);
+        cell1.setId_card(null);
+        cell1.setId_owner(null);
+
+        cellR.save(cell1);
+        cellR.save(cell2);
+    }
+
+    public void nextTurn(NextTurnRequest req) {
         Integer nextTurnId = req.getNextTurnId();
         Integer gameId = req.getGameId();
         String rarity = req.getRarity();
@@ -170,5 +192,14 @@ public class SiteControllerUtils {
         getCardToHand(library_id, hand.getId_hand());
 
         handR.save(hand);
+    }
+
+    public void addPerson(Person person) throws PersonAlreadyExistsException {
+        Person reference = personR.findByName(person.getName());
+        if (reference == null) {
+            personR.save(person);
+        } else{
+          throw new PersonAlreadyExistsException("p");
+        }
     }
 }
