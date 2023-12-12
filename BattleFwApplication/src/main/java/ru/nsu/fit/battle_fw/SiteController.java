@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import ru.nsu.fit.battle_fw.database.model.*;
+import ru.nsu.fit.battle_fw.exceptions.NoBabosException;
 import ru.nsu.fit.battle_fw.exceptions.PersonAlreadyExistsException;
 import ru.nsu.fit.battle_fw.requests.get.GetGameRequest;
 import ru.nsu.fit.battle_fw.requests.post.InitGameRequest;
@@ -43,7 +44,7 @@ public class SiteController {
     }
 
     @PostMapping("/putCardInCell")
-    public void putCardInCell(@RequestBody PutCardInCellRequest req) {
+    public void putCardInCell(@RequestBody PutCardInCellRequest req) throws NoBabosException {
         logger.info("POST /putCardInCell");
         logger.info("GameId " + req.getGameId());
         logger.info("PlayerId " + req.getPlayerId());
