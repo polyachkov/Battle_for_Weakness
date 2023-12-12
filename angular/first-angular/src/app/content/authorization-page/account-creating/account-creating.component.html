@@ -1,15 +1,4 @@
 <div class="wrapper">
-<<<<<<< Updated upstream
-  <h1><strong>Battle For Weakness</strong></h1>
-
-  <div class="data">
-    <input type="text" placeholder="Введите логин" />
-    <input type="password" placeholder="Введите пароль" />
-  </div>
-  <button (click)="getData()">Войти</button>
-
-  <span>{{ passwordData }}{{ loginData }}</span>
-=======
   <ng-container [ngSwitch]="true">
     <div *ngSwitchCase="pageContentService.currentMenu === chapterMenu.SIGNIN">
       <app-signin></app-signin>
@@ -30,5 +19,4 @@
   User name: <input type="text" [(ngModel)]="value" />
   <button (click)="search()">Search</button>
   <div *ngIf="answer">{{ answer }}</div>
->>>>>>> Stashed changes
 </div>

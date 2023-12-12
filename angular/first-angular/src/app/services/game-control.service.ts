@@ -1,13 +1,19 @@
 import { Injectable } from '@angular/core';
 import { GamePhases, GameState } from '../constants';
 import { Fractions } from '../content/game-page/preparing/constants';
-import { Turn } from '../content/game-page/data-field/constants';
+import {
+  Turn,
+  field,
+  idMoneyCollectorPictures,
+} from '../content/game-page/data-field/constants';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GameControlService {
   currentPhase: GamePhases = GamePhases.PREPARING;
+  isShowModal: boolean = false;
+  cardPos: number[] = [-1, -1];
 
   mySelectedFraction: Fractions | null = null;
   opponentSelectedFraction: string = 'Swamp';
@@ -18,6 +24,8 @@ export class GameControlService {
 
   playButton: string = 'Play';
   opponentsState: string = 'Opponent is not ready';
+
+  idMoneyCollectorPictures = idMoneyCollectorPictures;
 
   changeColor() {
     const colorForButton = document.getElementById('exampleButton');
@@ -67,8 +75,6 @@ export class GameControlService {
       this.currentPhase = current;
       if (current == 'PREPARING') this.secondPlayerIsReady = false;
     } else {
-      // loadCircle.style = 'display: block';
-      // this.currentPhase = current;
     }
   }
 
@@ -84,6 +90,14 @@ export class GameControlService {
     this.gameState = 0;
   }
 
+  determineCard(row: number, cell: number) {
+    if (field[row][cell].name === 0) {
+      return;
+    }
+    this.cardPos = [row, cell];
+    this.isShowModal = true;
+  }
+
   handleTurn() {
     if (this.turn === 0) {
       this.turnTitle = "Opponent's Turn";
@@ -92,5 +106,34 @@ export class GameControlService {
       this.turnTitle = 'End the Turn';
       this.turn = 0;
     }
+  }
+  getCardImageUrl(row: number, cell: number) {
+    let url = '';
+    switch (row) {
+      case 0:
+      case 7:
+        url = idMoneyCollectorPictures[cell];
+        break;
+      case 1:
+      case 2:
+        url = idMoneyCollectorPictures[cell];
+        break;
+      case 3:
+      case 4:
+        url = idMoneyCollectorPictures[cell];
+        break;
+      case 5:
+      case 6:
+        url = idMoneyCollectorPictures[cell];
+        break;
+    }
+    return url;
+  }
+
+  showModal() {
+    let url = '';
+    let imgNum = field[this.cardPos[0]][this.cardPos[1]].name;
+    url = idMoneyCollectorPictures[imgNum];
+    return url;
   }
 }

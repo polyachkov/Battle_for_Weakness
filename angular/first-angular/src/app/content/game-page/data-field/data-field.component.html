@@ -1,4 +1,5 @@
 <div class="background">
+  <app-modal *ngIf="gameControlService.isShowModal"></app-modal>
   <div class="container">
     <div [ngStyle]="{ top: '30px' }" class="opponentsInterface">
       <div class="fraction-name">
@@ -79,13 +80,14 @@
             <div
               class="cardField"
               cdkDropList
-              (mousedown)="pickCard(rowIndex, cellIndex, cell)"
+              (click)="gameControlService.determineCard(rowIndex, cellIndex)"
+              (mousedown)="pickCard(rowIndex, cellIndex, cell.name)"
               (mouseup)="dropCard(rowIndex, cellIndex)"
             >
               <img
                 cdkDrag
                 class="image"
-                [src]="getCardImageUrl(rowIndex, cell)"
+                [src]="gameControlService.getCardImageUrl(rowIndex, cell.name)"
                 alt=""
               />
             </div>
@@ -101,7 +103,6 @@
       </div>
     </div>
     <div class="hand" cdkDropList [cdkDropListData]="myHand">
-      <!-- [cdkDropListEnterPredicate]="noReturnPredicate" -->
       <div
         class="myCards"
         *ngFor="let item of myHand"

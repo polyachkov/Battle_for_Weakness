@@ -19,18 +19,14 @@ import { DevelopersPageComponent } from './content/developers-page/developers-pa
 import { DataFieldComponent } from './content/game-page/data-field/data-field.component';
 import { PreparingComponent } from './content/game-page/preparing/preparing.component';
 import { GameOverComponent } from './content/game-page/game-over/game-over.component';
-import { FieldCardRendererComponent } from './content/game-page/data-field/field-card-renderer/field-card-renderer.component';
 import { AuthorizationPageComponent } from './content/authorization-page/authorization-page.component';
 import { AccountCreatingComponent } from './content/authorization-page/account-creating/account-creating.component';
 import { AccountSettingsComponent } from './content/authorization-page/account-settings/account-settings.component';
-<<<<<<< Updated upstream
-=======
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ModalComponent } from './content/game-page/data-field/modal/modal.component';
 import { SigninComponent } from './content/authorization-page/account-creating/signin/signin.component';
 import { SignupComponent } from './content/authorization-page/account-creating/signup/signup.component';
->>>>>>> Stashed changes
 
 @NgModule({
   declarations: [
@@ -44,16 +40,12 @@ import { SignupComponent } from './content/authorization-page/account-creating/s
     DataFieldComponent,
     PreparingComponent,
     GameOverComponent,
-    FieldCardRendererComponent,
     AuthorizationPageComponent,
     AccountCreatingComponent,
     AccountSettingsComponent,
-<<<<<<< Updated upstream
-=======
     ModalComponent,
     SigninComponent,
     SignupComponent,
->>>>>>> Stashed changes
   ],
   imports: [
     BrowserModule,
@@ -66,6 +58,8 @@ import { SignupComponent } from './content/authorization-page/account-creating/s
     MatCardModule,
     MatButtonModule,
     DragDropModule,
+    HttpClientModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
