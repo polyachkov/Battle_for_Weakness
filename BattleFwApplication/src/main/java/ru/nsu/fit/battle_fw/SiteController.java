@@ -77,9 +77,9 @@ public class SiteController {
         return gameService.getOne();
     }
 
-    @GetMapping("/getGameId")
-    public Optional<Integer> getGameId(@RequestBody GetGameRequest req) {
+    @GetMapping("/getGame")
+    public Optional<Game> getGameId(@RequestBody GetGameRequest req) {
         logger.info("POST /getGameId");
-        return gameService.getGameId(req);
+        return gameService.getGame(req);
     }
 }

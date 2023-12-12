@@ -26,7 +26,7 @@ public class SiteControllerUtils {
     private final CellRepo cellR;
 
     public SiteControllerUtils(PersonRepo personR, CardRepo cardR, GameRepo gameR, LibraryRepo libR,
-                       LibraryCompRepo libCompR, HandRepo handR, HandCompRepo handCompR, CellRepo cellR) {
+                               LibraryCompRepo libCompR, HandRepo handR, HandCompRepo handCompR, CellRepo cellR) {
         this.personR = personR;
         this.cardR = cardR;
         this.gameR = gameR;
@@ -79,8 +79,8 @@ public class SiteControllerUtils {
     }
 
     private void createLib(String rarity, String fraction, Game game, Integer playerId) {
-        List<Card> listC =  cardR.getListOfCard(rarity, fraction);
-        List<Integer> listId =  new ArrayList<Integer>();
+        List<Card> listC = cardR.getListOfCard(rarity, fraction);
+        List<Integer> listId = new ArrayList<Integer>();
         for (Card c : listC) {
             for (int i = c.getNumber_of_cards(); i > 0; i--) {
                 listId.add(c.getId_card());
@@ -110,7 +110,7 @@ public class SiteControllerUtils {
         hand.setCards_cnt(0);
         hand.setId_player(id_player);
         handR.save(hand);
-        for(int i = 0; i < 7; i++) {
+        for (int i = 0; i < 7; i++) {
             getCardToHand(lib_id, hand.getId_hand());
             hand.setCards_cnt(hand.getCards_cnt() + 1);
         }
@@ -196,8 +196,8 @@ public class SiteControllerUtils {
         Person reference = personR.findByName(person.getName());
         if (reference == null) {
             personR.save(person);
-        } else{
-          throw new PersonAlreadyExistsException("p");
+        } else {
+            throw new PersonAlreadyExistsException("p");
         }
     }
 
@@ -205,19 +205,17 @@ public class SiteControllerUtils {
         return cardR.findById(1);
     }
 
-    public Optional<Integer> getGameId(GetGameRequest req) {
+    /**
+     * Get game by 2 id of players
+     */
+    public Optional<Game> getGame(GetGameRequest req) {
         Integer playerId1 = req.getPlayerId1();
         Integer playerId2 = req.getPlayerId2();
 
         Game game = gameR.getGame(playerId1, playerId2);
 
-        return Optional.of(game.getId_game());
+        return Optional.of(game);
     }
-    public Optional<Integer> getPlayersId(GetGameRequest req) {
-        Integer gameId = req.getPlayerId1();
+    // игру по id игры
 
-        gameR.findById(gameId);
-
-//        return Optional.of(gameR.getId_game());
-    }
 }
