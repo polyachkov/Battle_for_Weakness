@@ -17,7 +17,7 @@
   min-height: 60px;
   width: 90%;
   left: 5%;
-  top: 10%;
+  top: 90px;
 }
 
 .nameOfGame {
@@ -43,21 +43,21 @@
   padding: 0;
   border-radius: 55px;
   display: flex;
+  color: #fff;
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0);
   border: 3px solid black;
+  &:hover {
+    color: #f40c0c;
+  }
 }
 
 .toolbarButtonText {
   font-size: 30px;
-  color: #fff;
   position: absolute;
   left: 0;
   right: 0;
-  &:hover {
-    color: #f40c0c;
-  }
 }
 
 .toolbarImg {

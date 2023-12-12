@@ -1,4 +1,9 @@
-<div class="mainBackground">
+<div
+  [ngClass]="{
+    rulesBackground: pageContentService.currentPage === Pages.RULES_PAGE
+  }"
+  class="mainBackground"
+>
   <ng-container
     *ngIf="
       gameControlService.gameState === 0 &&
