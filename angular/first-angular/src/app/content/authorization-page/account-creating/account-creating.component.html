@@ -1,4 +1,5 @@
 <div class="wrapper">
+<<<<<<< Updated upstream
   <h1><strong>Battle For Weakness</strong></h1>
 
   <div class="data">
@@ -8,4 +9,26 @@
   <button (click)="getData()">Войти</button>
 
   <span>{{ passwordData }}{{ loginData }}</span>
+=======
+  <ng-container [ngSwitch]="true">
+    <div *ngSwitchCase="pageContentService.currentMenu === chapterMenu.SIGNIN">
+      <app-signin></app-signin>
+    </div>
+    <div *ngSwitchCase="pageContentService.currentMenu === chapterMenu.SIGNUP">
+      <app-signup></app-signup>
+    </div>
+  </ng-container>
+</div>
+<button
+  (click)="pageContentService.handleChangeContent(pages.MAIN_PAGE)"
+  class="backButton"
+>
+  <img class="backImg" src="../../../../assets/Photoes/backButton.jpg" alt="" />
+</button>
+
+<div class="aboveCenter">
+  User name: <input type="text" [(ngModel)]="value" />
+  <button (click)="search()">Search</button>
+  <div *ngIf="answer">{{ answer }}</div>
+>>>>>>> Stashed changes
 </div>

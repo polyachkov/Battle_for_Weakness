@@ -1,4 +1,11 @@
-<ng-container *ngIf="gameControlService.gameState === 0">
-  <app-toolbar></app-toolbar>
-</ng-container>
-<app-content></app-content>
+<div class="mainBackground">
+  <ng-container
+    *ngIf="
+      gameControlService.gameState === 0 &&
+      pageContentService.currentPage !== Pages.AUTHORIZATION_PAGE
+    "
+  >
+    <app-toolbar></app-toolbar>
+  </ng-container>
+  <app-content></app-content>
+</div>

@@ -14,7 +14,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ContentComponent } from './content/content.component';
 import { FirstPageComponent } from './content/first-page/first-page.component';
 import { GamePageComponent } from './content/game-page/game-page.component';
-import { ThirdPageComponent } from './content/third-page/third-page.component';
+import { RulesPageComponent } from './content/rules-page/rules-page.component';
 import { DevelopersPageComponent } from './content/developers-page/developers-page.component';
 import { DataFieldComponent } from './content/game-page/data-field/data-field.component';
 import { PreparingComponent } from './content/game-page/preparing/preparing.component';
@@ -23,6 +23,14 @@ import { FieldCardRendererComponent } from './content/game-page/data-field/field
 import { AuthorizationPageComponent } from './content/authorization-page/authorization-page.component';
 import { AccountCreatingComponent } from './content/authorization-page/account-creating/account-creating.component';
 import { AccountSettingsComponent } from './content/authorization-page/account-settings/account-settings.component';
+<<<<<<< Updated upstream
+=======
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { ModalComponent } from './content/game-page/data-field/modal/modal.component';
+import { SigninComponent } from './content/authorization-page/account-creating/signin/signin.component';
+import { SignupComponent } from './content/authorization-page/account-creating/signup/signup.component';
+>>>>>>> Stashed changes
 
 @NgModule({
   declarations: [
@@ -31,7 +39,7 @@ import { AccountSettingsComponent } from './content/authorization-page/account-s
     ContentComponent,
     FirstPageComponent,
     GamePageComponent,
-    ThirdPageComponent,
+    RulesPageComponent,
     DevelopersPageComponent,
     DataFieldComponent,
     PreparingComponent,
@@ -40,6 +48,12 @@ import { AccountSettingsComponent } from './content/authorization-page/account-s
     AuthorizationPageComponent,
     AccountCreatingComponent,
     AccountSettingsComponent,
+<<<<<<< Updated upstream
+=======
+    ModalComponent,
+    SigninComponent,
+    SignupComponent,
+>>>>>>> Stashed changes
   ],
   imports: [
     BrowserModule,

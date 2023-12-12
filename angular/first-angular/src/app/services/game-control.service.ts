@@ -37,7 +37,7 @@ export class GameControlService {
     const loadCircle = document.getElementById('loadCircle');
 
     if (this.playButton == 'Play') {
-      this.playButton = 'Search for an opponent';
+      this.playButton = 'Find Game';
 
       if (loadCircle != null) {
         loadCircle.style.visibility = 'visible';

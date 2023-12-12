@@ -1,175 +1,81 @@
-@import url("https://fonts.googleapis.com/css2?family=Rosarivo:ital@1&display=swap");
-
-.background {
-  background-color: bisque;
-  width: 100%;
-  height: calc(100% - 64px);
-  padding-top: 64px;
+.playAndInviteButtons {
+  display: flex;
+  justify-content: center;
+  gap: 120px;
+  margin-top: calc(150px + 5%);
 }
 
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-$openSans: "Open Sans", Helvetica, Arial, sans-serif;
-body {
-  background: #333;
-  font-family: $openSans;
-}
-
-.buttons {
+.playButtons {
+  min-width: 300px;
+  min-height: 60px;
+  font-family: Syne Tactile;
+  color: #fff;
+  font-size: 60px;
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
   display: flex;
   justify-content: center;
   align-items: center;
-  text-align: center;
-  border-radius: 30px;
+  &:hover {
+    color: #f40c0c;
+  }
 }
 
-$cyan: #0505a9;
-$dark: #ffffff;
-$borderW: 2px;
+.buttonText {
+  position: absolute;
+}
 
-.blob-btn {
-  $numOfBlobs: 4;
-  z-index: 1;
-  position: relative;
-  padding: 20px 46px;
-  margin-bottom: 30px;
-  text-align: center;
-  text-transform: uppercase;
-  color: $cyan;
-  width: 20rem;
-  font-size: 16px;
-  font-weight: bold;
-  background-color: transparent;
-  outline: none;
-  border: none;
-  transition: color 0.5s;
-  cursor: pointer;
-  border-radius: 30px;
-
-  &:before {
-    content: "";
-    z-index: 1;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    border: $borderW solid $cyan;
-    border-radius: 30px;
-  }
-
-  &:after {
-    content: "";
-    z-index: -2;
-    position: absolute;
-    left: $borderW * 1.5;
-    top: $borderW * 1.5;
-    width: 100%;
-    height: 100%;
-
-    transition: all 0.3s 0.2s;
-    border-radius: 30px;
-  }
-
-  &:hover {
-    color: $dark;
-    border-radius: 30px;
-
-    &:after {
-      transition: all 0.3s;
-      left: 0;
-      top: 0;
-      border-radius: 30px;
-    }
-  }
-
-  &__inner {
-    z-index: -1;
-    overflow: hidden;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 30px;
-    background: #ffffff;
-  }
-
-  // additional container created, because in FF blobs are breaking overflow:hidden of element with svg gooey filter
-  &__blobs {
-    position: relative;
-    display: block;
-    height: 100%;
-    filter: url("#goo");
-  }
-
-  &__blob {
-    position: absolute;
-    top: $borderW;
-    width: 100% / $numOfBlobs;
-    height: 100%;
-    background: $cyan;
-    border-radius: 100%;
-    transform: translate3d(0, 150%, 0) scale(1.7);
-    transition: transform 0.45s;
-
-    @supports (filter: url("#goo")) {
-      transform: translate3d(0, 150%, 0) scale(1.4);
-    }
-
-    @for $i from 1 through $numOfBlobs {
-      &:nth-child(#{$i}) {
-        left: ($i - 1) * (120% / $numOfBlobs);
-        transition-delay: ($i - 1) * 0.08s;
-      }
-    }
-
-    .blob-btn:hover & {
-      transform: translateZ(0) scale(1.7);
-
-      @supports (filter: url("#goo")) {
-        transform: translateZ(0) scale(1.4);
-      }
-    }
-  }
+.buttonImg {
+  display: block;
+  object-fit: cover;
+  border-radius: 55px;
+  width: 100%;
+  height: 100%;
 }
 
 .choice {
+  margin-top: 60px;
   display: flex;
   justify-content: space-evenly;
 }
 
-.fractionImg {
-  width: 20rem;
-}
-
 .fractionCard {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  height: 20rem;
-  background-color: lightgray;
+  position: relative;
   text-align: center;
-  font-size: 4rem;
-  font-family: "Rosarivo", cursive;
-  display: flex;
-  flex-direction: column;
+  width: 25%;
+  box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.25);
+  border-radius: 55px;
   caret-color: transparent;
-  box-shadow: 0px 25px 20px -20px rgba(0, 0, 0, 0.45),
-    25px 0 20px -20px rgba(0, 0, 0, 0.45);
-  border-radius: 1rem;
   &:hover {
     box-shadow: 0 0 0 12px #53ea93;
   }
+  @media (max-width: 845px) {
+    width: 35%;
+  }
+}
+
+.fractionName {
+  position: absolute;
+  bottom: 60px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 60px;
+  font-family: Syne Tactile;
+  color: #f40c0c;
+  caret-color: transparent;
+}
+
+.fractionImg {
+  display: block;
+  object-fit: cover;
+  border-radius: 55px;
+  width: 100%;
+  height: 100%;
 }
 
 .activeFraction {
-  background-color: white;
+  box-shadow: 0 0 0 12px #597df3;
 }
 
 .exampleButton {

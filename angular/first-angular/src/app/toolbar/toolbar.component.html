@@ -1,43 +1,60 @@
-<mat-toolbar class="toolBarBackground">
+<div class="toolBarBackground">
   <span class="nameOfGame">Battle For Weakness</span>
-  <div class="containerTool mx-auto">
+  <div class="containerTool">
     <button
       (click)="pageContentService.handleChangeContent(Pages.MAIN_PAGE)"
-      class="btn menuBtn"
+      class="menuBtn"
     >
-      Main Page
+      <span class="toolbarButtonText">Main Page</span>
+      <img
+        class="toolbarImg"
+        src="../../assets/Photoes/toolbarButton.jpg"
+        alt="Account"
+      />
     </button>
     <button
       (click)="pageContentService.handleChangeContent(Pages.GAME_PAGE)"
       class="menuBtn"
     >
-      Game
+      <div class="toolbarButtonText">Game</div>
+      <img
+        class="toolbarImg"
+        src="../../assets/Photoes/toolbarButton.jpg"
+        alt="Account"
+      />
     </button>
     <button
-      (click)="pageContentService.handleChangeContent(Pages.THIRD_PAGE)"
+      (click)="pageContentService.handleChangeContent(Pages.RULES_PAGE)"
       class="menuBtn"
     >
-      Third
+      <div class="toolbarButtonText">Rules</div>
+      <img
+        class="toolbarImg"
+        src="../../assets/Photoes/toolbarButton.jpg"
+        alt="Account"
+      />
     </button>
-
     <button
       (click)="pageContentService.handleChangeContent(Pages.DEVELOPERS_PAGE)"
       class="menuBtn"
     >
-      Developers
+      <div class="toolbarButtonText">Developers</div>
+      <img
+        class="toolbarImg"
+        src="../../assets/Photoes/toolbarButton.jpg"
+        alt="Account"
+      />
     </button>
-  </div>
-  <div class="accountPlace">
     <button
       (click)="pageContentService.handleChangeContent(Pages.AUTHORIZATION_PAGE)"
-      class="accountName"
+      class="menuBtn"
     >
+      <div class="toolbarButtonText">Account</div>
       <img
-        class="accountPicture"
-        src="../assets/Photoes/profilePhoto.jpg"
-        alt="YourPicture"
+        class="toolbarImg"
+        src="../../assets/Photoes/toolbarButton.jpg"
+        alt="Account"
       />
-      <span class="accountNameText">AccountName</span>
     </button>
   </div>
-</mat-toolbar>
+</div>
