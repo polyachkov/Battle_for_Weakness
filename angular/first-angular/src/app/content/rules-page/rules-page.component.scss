@@ -1,57 +1,73 @@
+.one {
+  //background-color: rgb(0, 0, 0);
+  background-image: url(../../../assets/Photoes/PhotoForRules/Rules.jpg);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+//background-color: bisque;
+
 .background {
-  width: 70%;
-  padding-top: 64px;
+  width: 75%;
+  padding-top: 80px;
+  padding-bottom: 30px;
   margin-right: auto;
   margin-left: auto;
-  background-color: white;
 }
 
 .container {
-  overflow-y: auto;
-  text-align: center;
+  display: flex;
+  justify-content: space-evenly;
   width: 100%;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .rules-header {
-  font-weight: bold;
-  align-items: center;
-  font-size: 32px;
-  font-family: Roboto, sans-serif;
-  line-height: 32px;
-  margin-bottom: 1.5rem;
-  padding-top: 1rem;
+  padding: 10px;
+  width: 300px;
+  height: 15px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
 }
 
-.sub-rules {
-  font-size: 16px;
-  display: flex;
-  margin-right: auto;
-  margin-left: auto;
-  background-color: white;
-  margin-bottom: 1.5rem;
+// .sub-rules {
+//   flex-direction: column;
+//   display: flex;
+//   margin-right: 50px;
+//   margin-left: 50px;
+//   background-color: white;
+// }
+
+ol {
+  padding-left: 40px;
+  margin-top: 5px;
+  margin-bottom: 0px;
 }
 
 .rules-header-second {
   font-weight: bold;
   align-items: center;
-  font-size: 24px;
+  font-size: 22px;
   font-family: Roboto, sans-serif;
   line-height: 32px;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
 }
 
 .paragraph {
-  text-indent: 20px;
-}
-
-p {
-  margin: 0;
-  padding: 0;
+  text-align: justify;
+  margin-top: 10px;
+  margin-bottom: 0px;
+  text-indent: 16px;
 }
 
 .map-photo {
+  margin-top: 15px;
   height: 15rem;
   width: 10rem;
+  margin-bottom: 1px;
   &:hover {
     height: 18rem;
     width: 12rem;
@@ -61,6 +77,24 @@ p {
 }
 
 .map-container {
-  display: flex;
-  justify-content: center;
+  margin-right: 50px;
+  margin-left: 50px;
+}
+
+.map-container-photo {
+  margin-right: 50px;
+  margin-left: 35px;
+}
+
+.list-map-2 {
+  // margin-left: 20%;
+  margin-left: 166px;
+}
+
+.end {
+  padding-bottom: 20px;
+  font-size: 20px;
+  line-height: 25px;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
 }

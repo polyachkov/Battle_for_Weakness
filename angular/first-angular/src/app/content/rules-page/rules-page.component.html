@@ -1,40 +1,191 @@
-<div class="background">
-  <div class="container rules-header">Rules</div>
-  <div class="sub-rules">
-    <p class="paragraph">
-      Battle for Weakness is a tabletop multiplayer PvP card game, the goal of
-      which is to defeat your opponent.
-    </p>
-  </div>
-  <div class="container rules-header-second">Preparation for the “battle”</div>
-  <div class="sub-rules">
-    <p class="paragraph">
-      Before the start of the battle, each player must choose a deck of a
-      certain faction (at the moment these are “Mountains” and “Swamp”). For
-      each faction, certain cards are available that are related to the selected
-      faction in style and have a certain set of unique parameters and
-      abilities. The choice of your strategy for the game and the gaming
-      experience you have gained will depend on the choice of the faction
-    </p>
-  </div>
-  <div class="map-container">
-    <button>
+<div class="one">
+  <div class="background">
+    <div class="container rules-header-second">Rules</div>
+    <div class="map-container">
+      <p class="paragraph">
+        Battle for Weakness is a tabletop multiplayer PvP card game, the goal of
+        which is to defeat your opponent.
+      </p>
+    </div>
+    <div class="container rules-header-second">
+      Preparation for the "battle"
+    </div>
+    <div class="map-container">
+      <!-- sub-rules -->
+      <p class="paragraph">
+        Before the start of the battle, each player must choose a deck of a
+        certain faction (at the moment these are "Mountains" and "Swamp"). For
+        each faction, certain cards are available that are related to the
+        selected faction in style and have a certain set of unique parameters
+        and abilities. The choice of your strategy for the game and the gaming
+        experience you have gained will depend on the choice of the faction.
+      </p>
+    </div>
+    <div class="map-container-photo">
+      <!-- <button> -->
+
       <img
         class="map-photo"
         src="../../../assets/Photoes/PhotoForRules/map.jpg"
+        width="100"
+        height="200"
+        vspace="0"
+        hspace="15"
         alt="Map"
+        align="left"
       />
-    </button>
-  </div>
-  <div>
-    <a href="../../../assets/Rules.pdf" download="Rules">
+    </div>
+    <div class="map-container">
+      <p class="paragraph">
+        After choosing a faction, you will be presented with an 8x6-cell playing
+        field (see the real prototype in Figure 1). Each player needs to be
+        given 5 stacks of cards corresponding to the selected faction (why 5
+        will be explained later). Each stack of cards will be conventionally
+        called a “library".
+        <br />
+        &nbsp;&nbsp;&nbsp;&nbsp;The libraries will be distributed according to
+        the “rarity" of the cards. In the first library there will be cards of
+        ordinary rarity, in the second unusual, in the third rare, in the fourth
+        epic and finally in the fifth legendary rarity.
+        <br />
+        &nbsp;&nbsp;&nbsp;&nbsp;At the beginning of the game, each player will
+        only have access to a library of regular cards. The remaining libraries
+        will be opened during the gameplay.
+        <br />
+        &nbsp;&nbsp;&nbsp;&nbsp;As it was said at the very beginning, the goal
+        of the game is to defeat your opponent, which is achieved by reducing
+        the other player's "health points" to 0. At the beginning of the game,
+        everyone has 25 points.
+      </p>
+      <!-- </button> -->
+    </div>
+    <div class="container rules-header-second">
+      <p class="paragraph">The "battle" process</p>
+    </div>
+    <div class="map-container">
+      <!-- sub-rules -->
+      <p class="paragraph">
+        The game begins by choosing the player whose turn will be the first,
+        after which everyone takes 7 cards from the usual library into their
+        hand, without showing them to their opponent. The player receives 2
+        units of in-game currency called "Babos$", which he can spend on playing
+        cards from his hand.
+        <br />
+        &nbsp;&nbsp;&nbsp;&nbsp;After much thought, the player, for example,
+        decides to play a card worth 1 Babo$. He can select any cell in the 8x2
+        section closest to him and place the selected card there, after which 1
+        Babo$ remains in our "storage". You can put up any number of cards for
+        your turn. The unspent Babos$ are saved for the next moves, which can be
+        used for your strategic purposes.
+      </p>
+    </div>
+    <div class="map-container-photo">
       <img
-        src="../../../assets/Photoes/pdf-image.jpg"
-        alt="Rules"
-        width="40"
-        height="52"
+        class="map-photo"
+        src="../../../assets/Photoes/PhotoForRules/cobold.jpg"
+        width="100"
+        height="200"
+        vspace="0"
+        hspace="15"
+        alt="Map2"
+        align="left"
       />
-    </a>
-    Скачать правила.
+    </div>
+    <div class="map-container">
+      <p class="paragraph">
+        Each card, as mentioned earlier, has its own set of parameters (see the
+        example in Fig. 2), namely:
+      </p>
+      <ol class="list-map-2">
+        <li>Attack</li>
+        <li>Health</li>
+        <li>Evasion</li>
+        <li>Cost</li>
+        <li>Attack Speed</li>
+        <li>Movement speed</li>
+      </ol>
+      <p class="paragraph">
+        The parameters are responsible for interacting with other cards on the
+        battlefield, moving around the battlefield and interacting with the
+        opponent's health points.
+        <br />
+        &nbsp;&nbsp;&nbsp;&nbsp;If a card has been played in this turn, then for
+        now it gets an "exit disease" and cannot interact with the environment,
+        so the player who moves first simply passes the move to his opponent.
+        The opponent takes another card before and also gets 2 Babo$a, after
+        which he already plays his cards or decides not to play anything and
+        passes the move for the same reasons. At the end of the turn, if the
+        player has more than 9 cards, he is obliged to put the excess under the
+        rarity library of the "discarded" card.
+        <br />
+        &nbsp;&nbsp;&nbsp;&nbsp;The first player takes his turn, takes a card,
+        gets Babos$s, plays cards, after which the “combat phase” begins. During
+        this phase, the player can interact with the cards without “exit
+        sickness". The map can be moved by the number of cells equal to the
+        speed of movement. The card can be moved vertically or horizontally
+        (Clarification: at a running speed of 2, the card can move first 1 cell
+        forward, and then 1 to the left. You can move the cards by the number of
+        cells less than the value of the running speed (including 0)). You
+        cannot move to cells occupied by other cards.
+        <br />
+        &nbsp;&nbsp;&nbsp;&nbsp;After moving, the card can cause damage equal to
+        the value of the attack on the opponent's card, located at a distance of
+        1 cell vertically or horizontally from the original card. The health of
+        the card is responsible for how many units of damage this card can
+        withstand. After receiving damage, the current health of the card is
+        permanently reduced by the corresponding number of units. If the card's
+        health drops to 0, then it will go to the bottom of the corresponding
+        rarity library.
+        <br />
+        &nbsp;&nbsp;&nbsp;&nbsp;The card can also cause damage to the opponent's
+        health points if it is located in one of the 8 cells closest to the
+        opponent.
+        <br />
+        &nbsp;&nbsp;&nbsp;&nbsp;During your combat phase, the opponent's cards
+        also do not sit idle. After you have moved all the cards and dealt
+        damage, the opponent's cards can already deal damage to your cards in
+        the neighborhood. In fact, the attack speed parameter is responsible for
+        the order of damage.
+        <br />
+        &nbsp;&nbsp;&nbsp;&nbsp;First, your cards with Fast attack speed cause
+        damage, then the opponent's cards with Fast, then your cards with
+        Medium, the opponent's cards with Medium, your cards with Slow, and
+        finally the opponent's cards with Slow.
+        <br />
+        &nbsp;&nbsp;&nbsp;&nbsp;A card can avoid damage if its evasion parameter
+        is greater than 0. If the evasion is not zero, then a hexagon cube is
+        thrown on the card when attacking, and if the value that falls out is
+        less than or equal to the evasion value, then the damage will not pass.
+        <br />
+        &nbsp;&nbsp;&nbsp;&nbsp;After the end of the combat phase, the player
+        passes the move and the process repeats.
+      </p>
+      <p class="paragraph">
+        For the accumulated Babos$s, in addition to drawing cards, you can open
+        libraries with new rarities and exhibit collectors of Babos$s. Having
+        discovered a new rarity, the player at the beginning of his turn can
+        choose the library from which he will take a card. Rarities can only be
+        opened in order:
+      </p>
+      <ol>
+        <li>Unusual &mdash; 3 Babos$a</li>
+        <li>Rare &mdash; 5 Babos$s</li>
+        <li>Epic &mdash; 7 Babos$s</li>
+        <li>Legendary &mdash; 9 Babos$s</li>
+      </ol>
+      <p class="paragraph">
+        Collectors are placed outside the field behind the nearest 8 cells near
+        the player. The opponent's cards can destroy the collector while being
+        near him, since he also has his own health. Each subsequent collector
+        costs 2 Babos$ and is more expensive for each collector in the game.
+        After the collector is destroyed, the player can rearrange it. A new
+        collector can be set only after the discovery of a new rarity. There can
+        be a maximum of 4 collectors.
+      </p>
+      <p class="end">
+        That's all! Have a nice game for the brave souls who decided to fight
+        for “Weakness”!
+      </p>
+    </div>
   </div>
 </div>
