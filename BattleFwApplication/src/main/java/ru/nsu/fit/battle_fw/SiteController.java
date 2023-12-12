@@ -5,10 +5,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import ru.nsu.fit.battle_fw.database.model.*;
 import ru.nsu.fit.battle_fw.exceptions.PersonAlreadyExistsException;
-import ru.nsu.fit.battle_fw.requests.InitGameRequest;
-import ru.nsu.fit.battle_fw.requests.MoveCardRequest;
-import ru.nsu.fit.battle_fw.requests.NextTurnRequest;
-import ru.nsu.fit.battle_fw.requests.PutCardInCellRequest;
+import ru.nsu.fit.battle_fw.requests.get.GetGameRequest;
+import ru.nsu.fit.battle_fw.requests.post.InitGameRequest;
+import ru.nsu.fit.battle_fw.requests.post.MoveCardRequest;
+import ru.nsu.fit.battle_fw.requests.post.NextTurnRequest;
+import ru.nsu.fit.battle_fw.requests.post.PutCardInCellRequest;
 
 import java.util.Optional;
 
@@ -70,10 +71,15 @@ public class SiteController {
         gameService.nextTurn(req);
     }
 
-    @GetMapping("/getone")
+    @GetMapping("/getOne")
     public Optional<Card> getOne() {
-        logger.info("POST /getone");
+        logger.info("POST /getOne");
         return gameService.getOne();
     }
 
+    @GetMapping("/getGameId")
+    public Optional<Integer> getGameId(@RequestBody GetGameRequest req) {
+        logger.info("POST /getGameId");
+        return gameService.getGameId(req);
+    }
 }

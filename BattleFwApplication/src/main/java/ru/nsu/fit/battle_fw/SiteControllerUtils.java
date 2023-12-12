@@ -5,10 +5,11 @@ import org.springframework.stereotype.Component;
 import ru.nsu.fit.battle_fw.database.model.*;
 import ru.nsu.fit.battle_fw.database.repo.*;
 import ru.nsu.fit.battle_fw.exceptions.PersonAlreadyExistsException;
-import ru.nsu.fit.battle_fw.requests.InitGameRequest;
-import ru.nsu.fit.battle_fw.requests.MoveCardRequest;
-import ru.nsu.fit.battle_fw.requests.NextTurnRequest;
-import ru.nsu.fit.battle_fw.requests.PutCardInCellRequest;
+import ru.nsu.fit.battle_fw.requests.get.GetGameRequest;
+import ru.nsu.fit.battle_fw.requests.post.InitGameRequest;
+import ru.nsu.fit.battle_fw.requests.post.MoveCardRequest;
+import ru.nsu.fit.battle_fw.requests.post.NextTurnRequest;
+import ru.nsu.fit.battle_fw.requests.post.PutCardInCellRequest;
 
 import java.util.*;
 
@@ -204,4 +205,19 @@ public class SiteControllerUtils {
         return cardR.findById(1);
     }
 
+    public Optional<Integer> getGameId(GetGameRequest req) {
+        Integer playerId1 = req.getPlayerId1();
+        Integer playerId2 = req.getPlayerId2();
+
+        Game game = gameR.getGame(playerId1, playerId2);
+
+        return Optional.of(game.getId_game());
+    }
+    public Optional<Integer> getPlayersId(GetGameRequest req) {
+        Integer gameId = req.getPlayerId1();
+
+        gameR.findById(gameId);
+
+//        return Optional.of(gameR.getId_game());
+    }
 }
