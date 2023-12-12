@@ -10,10 +10,7 @@ import ru.nsu.fit.battle_fw.requests.MoveCardRequest;
 import ru.nsu.fit.battle_fw.requests.NextTurnRequest;
 import ru.nsu.fit.battle_fw.requests.PutCardInCellRequest;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Component
 public class SiteControllerUtils {
@@ -202,4 +199,9 @@ public class SiteControllerUtils {
           throw new PersonAlreadyExistsException("p");
         }
     }
+
+    public Optional<Card> getOne() {
+        return cardR.findById(1);
+    }
+
 }
