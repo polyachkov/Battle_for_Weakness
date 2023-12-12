@@ -6,8 +6,9 @@ import ru.nsu.fit.battle_fw.database.model.*;
 import ru.nsu.fit.battle_fw.database.repo.*;
 import ru.nsu.fit.battle_fw.exceptions.PersonAlreadyExistsException;
 import ru.nsu.fit.battle_fw.requests.InitGameRequest;
-import ru.nsu.fit.battle_fw.requests.nextTurnRequest;
-import ru.nsu.fit.battle_fw.requests.putCardInCellRequest;
+import ru.nsu.fit.battle_fw.requests.MoveCardRequest;
+import ru.nsu.fit.battle_fw.requests.NextTurnRequest;
+import ru.nsu.fit.battle_fw.requests.PutCardInCellRequest;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -138,7 +139,7 @@ public class SiteControllerUtils {
         }
     }
 
-    public void putCardInCell(putCardInCellRequest req) {
+    public void putCardInCell(PutCardInCellRequest req) {
         Integer gameId = req.getGameId();
         Integer playerId = req.getPlayerId();
         Integer cardId = req.getCardId();
@@ -153,13 +154,31 @@ public class SiteControllerUtils {
 
         Cell cell = cellR.getCell(gameId, cellId);
         cell.setId_card(cardId);
+        cell.setId_owner(playerId);
 
         handR.save(hand);
         handCompR.deleteById(handComp.getId_hand_card());
         cellR.save(cell);
     }
 
-    public void nextTurn(nextTurnRequest req) {
+    public void moveCard(MoveCardRequest req) {
+        Integer gameId = req.getGameId();
+        Integer playerId = req.getGameId();
+        Integer cellId1 = req.getCellId1();
+        Integer cellId2 = req.getCellId2();
+
+        Cell cell1 = cellR.getCell(gameId, cellId1);
+        Cell cell2 = cellR.getCell(gameId, cellId2);
+        cell2.setId_card(cell1.getId_card());
+        cell2.setId_owner(playerId);
+        cell1.setId_card(null);
+        cell1.setId_owner(null);
+
+        cellR.save(cell1);
+        cellR.save(cell2);
+    }
+
+    public void nextTurn(NextTurnRequest req) {
         Integer nextTurnId = req.getNextTurnId();
         Integer gameId = req.getGameId();
         String rarity = req.getRarity();
@@ -182,7 +201,5 @@ public class SiteControllerUtils {
         } else{
           throw new PersonAlreadyExistsException("p");
         }
-
     }
-
 }

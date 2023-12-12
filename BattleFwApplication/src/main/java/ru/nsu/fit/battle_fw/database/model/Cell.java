@@ -22,6 +22,17 @@ public class Cell {
     @Column(name = "id_card")
     private Integer id_card;
 
+    public Integer getId_owner() {
+        return id_owner;
+    }
+
+    public void setId_owner(Integer id_owner) {
+        this.id_owner = id_owner;
+    }
+
+    @Column(name = "id_owner")
+    private Integer id_owner;
+
     public Integer getId_field() {
         return id_field;
     }

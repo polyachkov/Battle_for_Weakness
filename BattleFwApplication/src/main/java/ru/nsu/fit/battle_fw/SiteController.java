@@ -4,8 +4,9 @@ import org.springframework.web.bind.annotation.*;
 import ru.nsu.fit.battle_fw.database.model.*;
 import ru.nsu.fit.battle_fw.exceptions.PersonAlreadyExistsException;
 import ru.nsu.fit.battle_fw.requests.InitGameRequest;
-import ru.nsu.fit.battle_fw.requests.nextTurnRequest;
-import ru.nsu.fit.battle_fw.requests.putCardInCellRequest;
+import ru.nsu.fit.battle_fw.requests.MoveCardRequest;
+import ru.nsu.fit.battle_fw.requests.NextTurnRequest;
+import ru.nsu.fit.battle_fw.requests.PutCardInCellRequest;
 
 @RestController
 public class SiteController {
@@ -26,12 +27,17 @@ public class SiteController {
     }
 
     @PostMapping("/putCardInCell")
-    public void init(@RequestBody putCardInCellRequest req) {
+    public void putCardInCell(@RequestBody PutCardInCellRequest req) {
         gameService.putCardInCell(req);
     }
 
+    @PostMapping("/moveCard")
+    public void moveCardRequest(@RequestBody MoveCardRequest req) {
+        gameService.moveCard(req);
+    }
+
     @PostMapping("/nextTurn")
-    public void init(@RequestBody nextTurnRequest req) {
+    public void nextTurn(@RequestBody NextTurnRequest req) {
         gameService.nextTurn(req);
     }
 }

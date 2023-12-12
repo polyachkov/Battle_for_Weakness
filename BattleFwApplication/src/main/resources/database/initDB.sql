@@ -82,8 +82,9 @@ CREATE TABLE cell
 (
     id_cell    INTEGER PRIMARY KEY ,
     id_game    INTEGER  NOT NULL,
-    cell_num INTEGER NOT NULL ,
-    id_card    INTEGER
+    cell_num INTEGER NOT NULL,
+    id_card    INTEGER,
+    id_owner    INTEGER
 );
 DROP SEQUENCE IF EXISTS cell_id_seq;
 CREATE SEQUENCE IF NOT EXISTS cell_id_seq START WITH 1 INCREMENT BY 1;
