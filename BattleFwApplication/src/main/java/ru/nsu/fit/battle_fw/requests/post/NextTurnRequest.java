@@ -1,4 +1,4 @@
-package ru.nsu.fit.battle_fw.requests;
+package ru.nsu.fit.battle_fw.requests.post;
 
 public class NextTurnRequest {
     private int gameId;
