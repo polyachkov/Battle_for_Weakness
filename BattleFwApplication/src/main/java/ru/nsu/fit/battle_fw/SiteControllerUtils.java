@@ -244,14 +244,27 @@ public class SiteControllerUtils {
     /**
      * Get game by 2 id of players
      */
-    public Optional<Game> getGame(GetGameRequest req) {
+    public Optional<Game> getGameByPlayers(GetGameRequest req) {
         Integer playerId1 = req.getPlayerId1();
         Integer playerId2 = req.getPlayerId2();
 
         Game game = gameR.getGame(playerId1, playerId2);
 
-        return Optional.of(game);
+        return Optional.ofNullable(game);
     }
-    // игру по id игры
+    /**
+     * Get game by id of game
+     */
+    public Optional<Game> getGameById(Integer gameId) {
+        return gameR.findById(gameId);
+    }
+
+    /**
+     * Get field by game id
+     */
+    public Optional<List<Cell>> getFieldByGame(Integer gameId) {
+        return Optional.of(cellR.getCells(gameId));
+
+    }
 
 }

@@ -6,12 +6,14 @@ import org.springframework.web.bind.annotation.*;
 import ru.nsu.fit.battle_fw.database.model.*;
 import ru.nsu.fit.battle_fw.exceptions.NoBabosException;
 import ru.nsu.fit.battle_fw.exceptions.PersonAlreadyExistsException;
+import ru.nsu.fit.battle_fw.requests.get.GameIdRequest;
 import ru.nsu.fit.battle_fw.requests.get.GetGameRequest;
 import ru.nsu.fit.battle_fw.requests.post.InitGameRequest;
 import ru.nsu.fit.battle_fw.requests.post.MoveCardRequest;
 import ru.nsu.fit.battle_fw.requests.post.NextTurnRequest;
 import ru.nsu.fit.battle_fw.requests.post.PutCardInCellRequest;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -72,15 +74,30 @@ public class SiteController {
         gameService.nextTurn(req);
     }
 
-    @GetMapping("/getOne")
+    @GetMapping("/get/one")
     public Optional<Card> getOne() {
-        logger.info("POST /getOne");
+        logger.info("GET /get/one");
         return gameService.getOne();
     }
 
-    @GetMapping("/getGame")
+    @GetMapping("/get/game/byplayers")
     public Optional<Game> getGameId(@RequestBody GetGameRequest req) {
-        logger.info("POST /getGameId");
-        return gameService.getGame(req);
+        logger.info("GET /get/Game");
+        logger.info("get game by players");
+        return gameService.getGameByPlayers(req);
     }
+
+    @GetMapping("/get/game/byid")
+    public Optional<Game> getGameById(@RequestBody GameIdRequest req) {
+        logger.info("GET /get/game");
+        logger.info("get game by ID");
+        return gameService.getGameById(req.getGameId());
+    }
+
+    @GetMapping("/get/filed")
+    public Optional<List<Cell>> getField(@RequestBody GameIdRequest req) {
+        logger.info("GET /get/field");
+        return gameService.getFieldByGame(req.getGameId());
+    }
+
 }
