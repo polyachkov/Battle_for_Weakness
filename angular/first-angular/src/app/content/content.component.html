@@ -1,22 +1,20 @@
-<div class="background">
-  <ng-container [ngSwitch]="pageContentService.currentPage">
-    <div *ngSwitchCase="Pages.MAIN_PAGE">
-      <app-first-page></app-first-page>
-    </div>
+<ng-container [ngSwitch]="pageContentService.currentPage">
+  <div *ngSwitchCase="Pages.MAIN_PAGE">
+    <app-first-page></app-first-page>
+  </div>
 
-    <div *ngSwitchCase="Pages.GAME_PAGE" class="background">
-      <app-game-page></app-game-page>
-    </div>
+  <div *ngSwitchCase="Pages.GAME_PAGE" class="background">
+    <app-game-page></app-game-page>
+  </div>
 
-    <div *ngSwitchCase="Pages.THIRD_PAGE">
-      <app-third-page></app-third-page>
-    </div>
+  <div *ngSwitchCase="Pages.RULES_PAGE">
+    <app-rules-page></app-rules-page>
+  </div>
 
-    <div *ngSwitchCase="Pages.DEVELOPERS_PAGE">
-      <app-developers-page></app-developers-page>
-    </div>
-    <div *ngSwitchCase="Pages.AUTHORIZATION_PAGE">
-      <app-authorization-page></app-authorization-page>
-    </div>
-  </ng-container>
-</div>
+  <div *ngSwitchCase="Pages.DEVELOPERS_PAGE">
+    <app-developers-page></app-developers-page>
+  </div>
+  <div *ngSwitchCase="Pages.AUTHORIZATION_PAGE">
+    <app-authorization-page></app-authorization-page>
+  </div>
+</ng-container>

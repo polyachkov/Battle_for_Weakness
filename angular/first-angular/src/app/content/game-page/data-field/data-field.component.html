@@ -1,7 +1,7 @@
 <div class="background">
   <app-modal *ngIf="gameControlService.isShowModal"></app-modal>
   <div class="container">
-    <div [ngStyle]="{ top: '0' }" class="opponentsInterface">
+    <div [ngStyle]="{ top: '30px' }" class="opponentsInterface">
       <div class="fraction-name">
         {{ gameControlService.opponentSelectedFraction }}
       </div>
@@ -16,7 +16,7 @@
     </div>
   </div>
   <div class="container">
-    <div [ngStyle]="{ bottom: '0' }" class="myInterface">
+    <div [ngStyle]="{ bottom: '30px' }" class="myInterface">
       <div class="fraction-name">
         {{ gameControlService.mySelectedFraction }}
       </div>
@@ -103,7 +103,6 @@
       </div>
     </div>
     <div class="hand" cdkDropList [cdkDropListData]="myHand">
-      <!-- [cdkDropListEnterPredicate]="noReturnPredicate" -->
       <div
         class="myCards"
         *ngFor="let item of myHand"

@@ -5,6 +5,4 @@ import { Component } from '@angular/core';
   templateUrl: './first-page.component.html',
   styleUrls: ['./first-page.component.scss'],
 })
-export class FirstPageComponent {
-  text = 'Hello World!';
-}
+export class FirstPageComponent {}

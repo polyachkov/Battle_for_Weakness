@@ -1,0 +1,81 @@
+.background {
+  width: 75%;
+  padding-block-end: 90px;
+  padding-block-start: 200px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.container {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.rules-header {
+  padding: 10px;
+  width: 300px;
+  height: 15px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+}
+ol {
+  padding-left: 40px;
+  margin-top: 5px;
+  margin-bottom: 0px;
+}
+
+.rules-header-second {
+  font-weight: bold;
+  align-items: center;
+  font-size: 22px;
+  font-family: Roboto, sans-serif;
+  line-height: 32px;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+.paragraph {
+  text-align: justify;
+  margin-top: 10px;
+  margin-bottom: 0px;
+  text-indent: 16px;
+}
+
+.map-photo {
+  margin-top: 15px;
+  height: 15rem;
+  width: 10rem;
+  margin-bottom: 1px;
+  &:hover {
+    height: 18rem;
+    width: 12rem;
+    border: 0.3rem solid;
+    border-color: black;
+  }
+}
+
+.map-container {
+  margin-right: 50px;
+  margin-left: 50px;
+}
+
+.map-container-photo {
+  margin-right: 50px;
+  margin-left: 35px;
+}
+
+.list-map-2 {
+  margin-left: 166px;
+}
+
+.end {
+  padding-bottom: 20px;
+  font-size: 20px;
+  line-height: 25px;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}

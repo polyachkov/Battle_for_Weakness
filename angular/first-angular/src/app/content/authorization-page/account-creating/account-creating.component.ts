@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { inputProp } from './constants';
+import { ChapterMenu } from './constants';
+import { PageContentService } from 'src/app/services/page-content.service';
+import { Pages } from 'src/app/constants';
 
 @Component({
   selector: 'app-account-creating',
@@ -8,40 +10,38 @@ import { inputProp } from './constants';
   styleUrls: ['./account-creating.component.scss'],
 })
 export class AccountCreatingComponent {
+  pages = Pages;
   value: string = '';
-  response: any;
+
+  chapterMenu = ChapterMenu;
 
   answer: any;
 
-  inputProps = [
-    inputProp.EMAIL,
-    inputProp.LOGIN,
-    inputProp.PASSWORD,
-    inputProp.PASSWORD_AGAIN,
-  ];
+  valueProps = ['', '', ''];
 
-  valueProps = ['', '', '', ''];
+  constructor(
+    private http: HttpClient,
+    public pageContentService: PageContentService
+  ) {}
 
-  emailData: string = '';
-  loginData: string = '';
-  passwordData: string = '';
+  body = {
+    fraction1: 'mountains',
+    fraction2: 'mountains',
+    player1: 1,
+    player2: 2,
+  };
 
-  displayPassword: string = '';
-  displayLogin: string = '';
+  url = 'http://193.109.79.58:8081/init';
 
-  constructor(private http: HttpClient) {}
-
-  getData() {
-    this.displayPassword = this.loginData;
-    this.displayLogin = this.passwordData;
-  }
   search() {
-    this.http
-      .get('https://jsonplaceholder.typicode.com/users/' + this.value)
-      .subscribe((response) => {
-        this.response = response;
-        this.answer = Object.entries(this.response);
-        console.log(this.response);
-      });
+    console.log('Я отправил');
+    // 'https://jsonplaceholder.typicode.com/users/2' +
+
+    this.http.post<any>(this.url, this.body).subscribe((response) => {
+      console.log(response);
+    });
+    // this.http.get(this.url).subscribe((response) => {
+    //   console.log(response);
+    // });
   }
 }

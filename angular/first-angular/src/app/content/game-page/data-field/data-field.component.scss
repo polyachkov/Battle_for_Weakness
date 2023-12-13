@@ -11,14 +11,13 @@
 .myInterface,
 .opponentsInterface {
   position: absolute;
-  width: 20%;
-  height: 5rem;
+  min-width: 20%;
+  min-height: 120px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-left: 2rem;
-  padding-right: 2rem;
-  background: linear-gradient(to right, rgb(239, 131, 64), bisque);
+  padding-left: 30px;
+  background-color: rgba(0, 0, 0, 0);
 }
 
 .giveUpField {

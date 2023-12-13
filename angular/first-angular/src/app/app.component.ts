@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { GameControlService } from './services/game-control.service';
+import { PageContentService } from './services/page-content.service';
+import { Pages } from './constants';
 
 @Component({
   selector: 'app-root',
@@ -7,5 +9,10 @@ import { GameControlService } from './services/game-control.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  constructor(public gameControlService: GameControlService) {}
+  Pages = Pages;
+
+  constructor(
+    public gameControlService: GameControlService,
+    public pageContentService: PageContentService
+  ) {}
 }

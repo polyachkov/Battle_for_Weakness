@@ -1,24 +1,22 @@
 <div class="wrapper">
-  <h1 class="header"><strong>Battle For Weakness</strong></h1>
-  <h2 class="header"><strong>Registration</strong></h2>
-
-  <div *ngFor="let item of [0, 1, 2, 3]; let rowIndex = index">
-    <div class="nameOfInput">{{ inputProps[item] }}</div>
-    <div class="myInput">
-      <input
-        [(ngModel)]="valueProps[item]"
-        type="{{ rowIndex === 0 || rowIndex === 1 ? 'text' : 'password' }}"
-      />
+  <ng-container [ngSwitch]="true">
+    <div *ngSwitchCase="pageContentService.currentMenu === chapterMenu.SIGNIN">
+      <app-signin></app-signin>
     </div>
-  </div>
-  {{ displayPassword }}
-  <div class="loginDiv">
-    <button class="loginButton" (click)="getData()">Войти</button>
-  </div>
-  {{ displayLogin }}
+    <div *ngSwitchCase="pageContentService.currentMenu === chapterMenu.SIGNUP">
+      <app-signup></app-signup>
+    </div>
+  </ng-container>
 </div>
+<button
+  (click)="pageContentService.handleChangeContent(pages.MAIN_PAGE)"
+  class="backButton"
+>
+  <img class="backImg" src="../../../../assets/Photoes/backButton.jpg" alt="" />
+</button>
+
 <div class="aboveCenter">
   User name: <input type="text" [(ngModel)]="value" />
   <button (click)="search()">Search</button>
-  <div *ngIf="response">{{ answer }}</div>
+  <div *ngIf="answer">{{ answer }}</div>
 </div>

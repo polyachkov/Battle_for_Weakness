@@ -1,0 +1,34 @@
+<div class="wrapperForButtons">
+  <button
+    [ngClass]="{
+      activeButton: pageContentService.currentMenu === chapterMenu.SIGNIN
+    }"
+    (click)="pageContentService.handleCurrentMenu(chapterMenu.SIGNIN)"
+    class="menuButton"
+  >
+    Sign In
+  </button>
+  <button
+    [ngClass]="{
+      activeButton: pageContentService.currentMenu === chapterMenu.SIGNUP
+    }"
+    (click)="pageContentService.handleCurrentMenu(chapterMenu.SIGNUP)"
+    class="menuButton"
+  >
+    Sign Up
+  </button>
+</div>
+
+<div *ngFor="let item of [0, 1]; let rowIndex = index">
+  <div class="nameOfInput">{{ inputProps[item] }}</div>
+  <div>
+    <input
+      class="myInput"
+      [(ngModel)]="valueProps[item]"
+      type="{{ rowIndex === 0 ? 'text' : 'password' }}"
+    />
+  </div>
+</div>
+{{ displayPassword }}
+<button class="loginButton" (click)="getData()">Log In</button>
+{{ displayLogin }}
