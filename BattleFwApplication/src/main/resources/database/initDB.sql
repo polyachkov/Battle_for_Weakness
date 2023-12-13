@@ -1,9 +1,11 @@
+DROP TABLE IF EXISTS persona;
 CREATE TABLE IF NOT EXISTS persona
 (
     id_profile    INTEGER PRIMARY KEY ,
     name  VARCHAR(200) NOT NULL ,
     password VARCHAR(254) NOT NULL
 );
+DROP SEQUENCE IF EXISTS persona_id_seq;
 CREATE SEQUENCE IF NOT EXISTS persona_id_seq START WITH 1 INCREMENT BY 1;
 
 DROP TABLE IF EXISTS card;
@@ -24,9 +26,10 @@ CREATE TABLE IF NOT EXISTS card
 DROP TABLE IF EXISTS game;
 CREATE TABLE IF NOT EXISTS game
 (
-    id_game    INTEGER PRIMARY KEY ,
+    id_game    INTEGER PRIMARY KEY,
     id_player1    INTEGER NOT NULL,
     id_player2    INTEGER NOT NULL,
+    id_turn    INTEGER NOT NULL,
     is_ended BOOLEAN NOT NULL
 );
 DROP SEQUENCE IF EXISTS games_id_seq;
@@ -76,13 +79,14 @@ CREATE TABLE hand_composition
 DROP SEQUENCE IF EXISTS hand_comp_id_seq;
 CREATE SEQUENCE IF NOT EXISTS hand_comp_id_seq START WITH 1 INCREMENT BY 1;
 
-DROP TABLE IF EXISTS field;
-CREATE TABLE field
+DROP TABLE IF EXISTS cell;
+CREATE TABLE cell
 (
-    id_field    INTEGER PRIMARY KEY ,
+    id_cell    INTEGER PRIMARY KEY ,
     id_game    INTEGER  NOT NULL,
-    field_num INTEGER NOT NULL ,
-    id_card    INTEGER
+    cell_num INTEGER NOT NULL,
+    id_card    INTEGER,
+    id_owner    INTEGER
 );
-DROP SEQUENCE IF EXISTS field_id_seq;
-CREATE SEQUENCE IF NOT EXISTS field_id_seq START WITH 1 INCREMENT BY 1;
+DROP SEQUENCE IF EXISTS cell_id_seq;
+CREATE SEQUENCE IF NOT EXISTS cell_id_seq START WITH 1 INCREMENT BY 1;

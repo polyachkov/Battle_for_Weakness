@@ -1,4 +1,4 @@
-package ru.nsu.fit.battle_fw;
+package ru.nsu.fit.battle_fw.requests.post;
 
 import java.io.Serializable;
 
