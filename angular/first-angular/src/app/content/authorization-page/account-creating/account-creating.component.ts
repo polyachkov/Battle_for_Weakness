@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ChapterMenu, inputProp } from './constants';
+import { ChapterMenu } from './constants';
 import { PageContentService } from 'src/app/services/page-content.service';
 import { Pages } from 'src/app/constants';
 
