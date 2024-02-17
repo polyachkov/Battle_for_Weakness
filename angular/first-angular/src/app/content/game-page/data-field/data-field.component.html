@@ -64,12 +64,12 @@
       <div class="opponentsCards" *ngFor="let item of opponentsHand"></div>
     </div>
     <div class="wrapper">
-      <div class="opponentsDecks decks">
-        <div class="deck odeck1 opponentsDeck"></div>
-        <div class="deck odeck2 opponentsDeck"></div>
-        <div class="deck odeck3 opponentsDeck"></div>
-        <div class="deck odeck4 opponentsDeck"></div>
-        <div class="deck odeck5 opponentsDeck"></div>
+      <div class="decks" style="flex-wrap: wrap-reverse">
+        <div
+          class="deck"
+          style="background-color: purple"
+          *ngFor="let item of oppsLibraries"
+        ></div>
       </div>
       <div class="field">
         <div class="row" *ngFor="let row of field; let rowIndex = index">
@@ -94,12 +94,12 @@
           </div>
         </div>
       </div>
-      <div class="myDecks decks">
-        <div class="deck mdeck1 myDeck"></div>
-        <div class="deck mdeck2 myDeck"></div>
-        <div class="deck mdeck3 myDeck"></div>
-        <div class="deck mdeck4 myDeck"></div>
-        <div class="deck mdeck5 myDeck"></div>
+      <div class="decks" style="flex-wrap: wrap">
+        <div
+          class="deck"
+          style="background-color: green"
+          *ngFor="let item of myLibraries"
+        ></div>
       </div>
     </div>
     <div class="hand" cdkDropList [cdkDropListData]="myHand">

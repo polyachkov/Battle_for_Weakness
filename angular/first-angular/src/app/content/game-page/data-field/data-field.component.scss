@@ -260,30 +260,13 @@ $turn-time: 6s;
 }
 
 .decks {
+  align-self: center;
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
   gap: 1rem;
   width: 25%;
   height: 100%;
   margin: 2rem;
-}
-
-.opponentsDecks {
-  align-self: center;
-  flex-wrap: wrap-reverse;
-}
-
-.opponentsDeck {
-  background-color: purple;
-}
-
-.myDecks {
-  align-self: center;
-}
-
-.myDeck {
-  background-color: green;
 }
 
 .deck {
@@ -381,31 +364,6 @@ $turn-time: 6s;
   &:hover {
     box-shadow: inset 0 0 0 6px #53ea93;
   }
-}
-
-.yellowCircle {
-  caret-color: transparent;
-  background-color: yellow;
-  border-radius: 100%;
-  border: 1px solid black;
-}
-
-.blueSquare {
-  caret-color: transparent;
-  background-color: rgb(129, 129, 248);
-  border: 1px solid black;
-}
-
-.redSquare {
-  caret-color: transparent;
-  background-color: rgb(250, 173, 145);
-  border: 1px solid black;
-}
-
-.whiteSquare {
-  caret-color: transparent;
-  background-color: white;
-  border: 1px solid black;
 }
 
 .endTurnButtonField {
