@@ -22,16 +22,11 @@ public class Cell {
     @Column(name = "id_card")
     private Integer id_card;
 
-    public Integer getId_owner() {
-        return id_owner;
-    }
-
-    public void setId_owner(Integer id_owner) {
-        this.id_owner = id_owner;
-    }
-
     @Column(name = "id_owner")
     private Integer id_owner;
+
+    @Column(name = "sickness")
+    private Integer sickness;
 
     public Integer getId_field() {
         return id_field;
@@ -63,5 +58,21 @@ public class Cell {
 
     public void setId_card(Integer id_card) {
         this.id_card = id_card;
+    }
+
+    public Integer getId_owner() {
+        return id_owner;
+    }
+
+    public void setId_owner(Integer id_owner) {
+        this.id_owner = id_owner;
+    }
+
+    public Integer getSickness() {
+        return sickness;
+    }
+
+    public void setSickness(Integer sickness) {
+        this.sickness = sickness;
     }
 }
