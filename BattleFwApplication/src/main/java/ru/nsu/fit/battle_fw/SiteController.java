@@ -16,7 +16,6 @@ import ru.nsu.fit.battle_fw.requests.post.PutCardInCellRequest;
 import java.util.List;
 import java.util.Optional;
 
-
 @RestController
 public class SiteController {
 
