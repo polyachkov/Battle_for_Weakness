@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="35c11b1a-d5dd-4c37-ba47-3e24e467787c" name="Changes" comment="" />
+    <list default="true" id="35c11b1a-d5dd-4c37-ba47-3e24e467787c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BattleFwApplication/src/main/java/ru/nsu/fit/battle_fw/SiteController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BattleFwApplication/src/main/java/ru/nsu/fit/battle_fw/SiteController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/angular/first-angular/angular.json" beforeDir="false" afterPath="$PROJECT_DIR$/angular/first-angular/angular.json" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,9 +21,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 5
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="2ZLjHJRwJDaoUHAmJC2DsNwMTf0" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -26,7 +34,11 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/GITs/Battle_for_Weakness/BattleFwApplication",
+    "last_opened_file_path": "Z:/GITs/Battle_for_Weakness",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -39,6 +51,7 @@
       <option name="presentableId" value="Default" />
       <updated>1702208164297</updated>
       <workItem from="1702208165278" duration="17000" />
+      <workItem from="1708439848310" duration="663000" />
     </task>
     <servers />
   </component>
