@@ -4,13 +4,12 @@ package ru.nsu.fit.battle_fw;
 import org.springframework.stereotype.Component;
 import ru.nsu.fit.battle_fw.database.model.*;
 import ru.nsu.fit.battle_fw.database.repo.*;
+import ru.nsu.fit.battle_fw.exceptions.BadCellException;
+import ru.nsu.fit.battle_fw.exceptions.CollectorsLimitException;
 import ru.nsu.fit.battle_fw.exceptions.NoBabosException;
 import ru.nsu.fit.battle_fw.exceptions.PersonAlreadyExistsException;
 import ru.nsu.fit.battle_fw.requests.get.GetGameRequest;
-import ru.nsu.fit.battle_fw.requests.post.InitGameRequest;
-import ru.nsu.fit.battle_fw.requests.post.MoveCardRequest;
-import ru.nsu.fit.battle_fw.requests.post.NextTurnRequest;
-import ru.nsu.fit.battle_fw.requests.post.PutCardInCellRequest;
+import ru.nsu.fit.battle_fw.requests.post.*;
 
 import java.util.*;
 
@@ -27,8 +26,10 @@ public class SiteControllerUtils {
     private final CellRepo cellR;
     private final StatusRepo statusR;
 
-    public SiteControllerUtils(PersonRepo personR, CardRepo cardR, GameRepo gameR, LibraryRepo libR, LibraryCompRepo libCompR,
-                               HandRepo handR, HandCompRepo handCompR, CellRepo cellR, StatusRepo statusR) {
+    public SiteControllerUtils(PersonRepo personR, CardRepo cardR, GameRepo gameR,
+                               LibraryRepo libR, LibraryCompRepo libCompR,
+                               HandRepo handR, HandCompRepo handCompR, CellRepo cellR,
+                               StatusRepo statusR) {
         this.personR = personR;
         this.cardR = cardR;
         this.gameR = gameR;
@@ -76,6 +77,7 @@ public class SiteControllerUtils {
         Status status = new Status();
         status.setId_player(playerId);
         status.setId_game(gameId);
+        status.setCollectors(0);
         status.setHealth(25);
         if (Objects.equals(turnId, playerId)) {
             status.setBabos(2);
@@ -148,7 +150,7 @@ public class SiteControllerUtils {
     }
 
     private void createField(Integer gameId) {
-        for (int i = 1; i <= 40; i++) {
+        for (int i = 1; i <= 56; i++) {
             Cell cell = new Cell();
             cell.setCell_num(i);
             cell.setId_card(null);
@@ -157,35 +159,72 @@ public class SiteControllerUtils {
         }
     }
 
-    public void putCardInCell(PutCardInCellRequest req) throws NoBabosException {
+    public void putCardInCell(PutCardInCellRequest req)
+            throws NoBabosException, BadCellException {
         Integer gameId = req.getGameId();
         Integer playerId = req.getPlayerId();
         Integer cardId = req.getCardId();
         Integer cellId = req.getCellId();
 
-        Card card = cardR.getReferenceById(cardId);
-        Status status = statusR.getStatus(gameId, playerId);
-
-        if (status.getBabos() < card.getCost()) {
-            throw new NoBabosException();
+        if (cellId <= 8 || cellId >= 49) {
+            throw new BadCellException();
         } else {
-            Hand hand = handR.getHand(gameId, playerId);
-            hand.setCards_cnt(hand.getCards_cnt() - 1);
+            Card card = cardR.getReferenceById(cardId);
+            Status status = statusR.getStatus(gameId, playerId);
 
-            List<HandComp> handCompList = handCompR.getHandCard(hand.getId_hand(), cardId);
+            if (status.getBabos() < card.getCost()) {
+                throw new NoBabosException();
+            } else {
+                Hand hand = handR.getHand(gameId, playerId);
+                hand.setCards_cnt(hand.getCards_cnt() - 1);
 
-            HandComp handComp = handCompList.get(0);
+                List<HandComp> handCompList = handCompR.getHandCard(hand.getId_hand(), cardId);
 
-            Cell cell = cellR.getCell(gameId, cellId);
-            cell.setId_card(cardId);
-            cell.setId_owner(playerId);
+                HandComp handComp = handCompList.get(0);
 
-            status.setBabos(status.getBabos() - card.getCost());
+                Cell cell = cellR.getCell(gameId, cellId);
+                cell.setId_card(cardId);
+                cell.setId_owner(playerId);
+                cell.setSickness(1);
 
-            handCompR.deleteById(handComp.getId_hand_card());
-            statusR.save(status);
-            handR.save(hand);
-            cellR.save(cell);
+                status.setBabos(status.getBabos() - card.getCost());
+
+                handCompR.deleteById(handComp.getId_hand_card());
+                statusR.save(status);
+                handR.save(hand);
+                cellR.save(cell);
+            }
+        }
+    }
+
+    public void putCollectorInCell(PutCollectorInCellRequest req)
+            throws NoBabosException, BadCellException, CollectorsLimitException {
+        Integer gameId = req.getGameId();
+        Integer playerId = req.getPlayerId();
+        Integer cellId = req.getCellId();
+
+        if (cellId > 8 && cellId < 49) {
+            throw new BadCellException();
+        } else {
+            Card collector = cardR.getReferenceById(49);
+            //49 - collector`s ID
+            Status status = statusR.getStatus(gameId, playerId);
+
+            if (status.getBabos() < collector.getCost()) {
+                throw new NoBabosException();
+            } else if (status.getCollectors() >= 4) {
+                throw new CollectorsLimitException();
+            } else {
+                Cell cell = cellR.getCell(gameId, cellId);
+                cell.setId_card(49);
+                cell.setId_owner(playerId);
+                cell.setSickness(0);
+
+                status.setCollectors(status.getCollectors() + 1);
+
+                cellR.save(cell);
+                statusR.save(status);
+            }
         }
     }
 
@@ -220,12 +259,18 @@ public class SiteControllerUtils {
         Hand hand = handR.getHand(gameId, nextTurnId);
         hand.setCards_cnt(hand.getCards_cnt() + 1);
 
+        List<Cell> cells = cellR.getCells(gameId);
+        for (Cell c : cells) {
+            c.setSickness(0);
+        }
+
         Integer library_id = libR.getLibId(nextTurnId, gameId, rarity);
         getCardToHand(library_id, hand.getId_hand());
 
         gameR.save(game);
         statusR.save(status);
         handR.save(hand);
+        cellR.saveAll(cells);
     }
 
     public void addPerson(Person person) throws PersonAlreadyExistsException {
