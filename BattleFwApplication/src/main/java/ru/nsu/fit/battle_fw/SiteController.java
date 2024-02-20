@@ -45,7 +45,7 @@ public class SiteController {
 
     @PostMapping("/putCardInCell")
     public void putCardInCell(@RequestBody PutCardInCellRequest req)
-            throws NoBabosException, BadCellException {
+            throws NoBabosException, BadCellException, CollectorsLimitException {
         logger.info("POST /putCardInCell");
         logger.info("GameId " + req.getGameId());
         logger.info("PlayerId " + req.getPlayerId());
@@ -81,12 +81,6 @@ public class SiteController {
         logger.info("NextTurnId " + req.getNextTurnId());
         logger.info("Rarity " + req.getRarity());
         gameService.nextTurn(req);
-    }
-
-    @GetMapping("/get/one")
-    public Optional<Card> getOne() {
-        logger.info("GET /get/one");
-        return gameService.getOne();
     }
 
     @GetMapping("/get/game/byplayers")
