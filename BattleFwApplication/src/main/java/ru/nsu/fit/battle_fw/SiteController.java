@@ -4,14 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import ru.nsu.fit.battle_fw.database.model.*;
+import ru.nsu.fit.battle_fw.exceptions.BadCellException;
+import ru.nsu.fit.battle_fw.exceptions.CollectorsLimitException;
 import ru.nsu.fit.battle_fw.exceptions.NoBabosException;
 import ru.nsu.fit.battle_fw.exceptions.PersonAlreadyExistsException;
 import ru.nsu.fit.battle_fw.requests.get.GameIdRequest;
 import ru.nsu.fit.battle_fw.requests.get.GetGameRequest;
-import ru.nsu.fit.battle_fw.requests.post.InitGameRequest;
-import ru.nsu.fit.battle_fw.requests.post.MoveCardRequest;
-import ru.nsu.fit.battle_fw.requests.post.NextTurnRequest;
-import ru.nsu.fit.battle_fw.requests.post.PutCardInCellRequest;
+import ru.nsu.fit.battle_fw.requests.post.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -45,13 +44,24 @@ public class SiteController {
     }
 
     @PostMapping("/putCardInCell")
-    public void putCardInCell(@RequestBody PutCardInCellRequest req) throws NoBabosException {
+    public void putCardInCell(@RequestBody PutCardInCellRequest req)
+            throws NoBabosException, BadCellException {
         logger.info("POST /putCardInCell");
         logger.info("GameId " + req.getGameId());
         logger.info("PlayerId " + req.getPlayerId());
         logger.info("CardId " + req.getCardId());
         logger.info("CellId " + req.getCellId());
         gameService.putCardInCell(req);
+    }
+
+    @PostMapping("/putCollectorInCell")
+    public void putCollectorInCell(@RequestBody PutCollectorInCellRequest req)
+            throws NoBabosException, BadCellException, CollectorsLimitException {
+        logger.info("POST /putCardInCell");
+        logger.info("GameId " + req.getGameId());
+        logger.info("PlayerId " + req.getPlayerId());
+        logger.info("CellId " + req.getCellId());
+        gameService.putCollectorInCell(req);
     }
 
     @PostMapping("/moveCard")
