@@ -31,13 +31,13 @@ export class AccountCreatingComponent {
     player2: 2,
   };
 
-  url = 'http://193.109.79.58:8081/init';
+  initUrl = 'http://193.109.79.58:8081/init';
 
   search() {
     console.log('Я отправил');
     // 'https://jsonplaceholder.typicode.com/users/2' +
 
-    this.http.post<any>(this.url, this.body).subscribe((response) => {
+    this.http.post<any>(this.initUrl, this.body).subscribe((response) => {
       console.log(response);
     });
     // this.http.get(this.url).subscribe((response) => {

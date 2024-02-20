@@ -13,6 +13,8 @@ export class DataFieldComponent {
   GamePhases = GamePhases;
 
   myHand: number[] = [1, 2, 2, 2, 1];
+  myLibraries: number[] = [0, 1, 2, 3, 4];
+  oppsLibraries: number[] = [0, 1, 2, 3, 4];
   opponentsHand: number[] = [1, 1, 1];
   currentCard: number = 0;
 
