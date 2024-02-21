@@ -102,5 +102,4 @@ public class SiteController {
         logger.info("GET /get/field");
         return gameService.getFieldByGame(req.getGameId());
     }
-
 }

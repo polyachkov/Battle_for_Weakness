@@ -116,6 +116,7 @@ public class SiteControllerUtils {
         Status status = new Status(); // Создание экземпляра и заполнение данных
         status.setId_player(playerId);
         status.setId_game(gameId);
+        status.setCollectors(0);
         status.setHealth(25); // Начальное здоровье
         if (Objects.equals(turnId, playerId)) { // Если икрок ходит первым, то его кол-во денег 2, иначе 1
             status.setBabos(2);
