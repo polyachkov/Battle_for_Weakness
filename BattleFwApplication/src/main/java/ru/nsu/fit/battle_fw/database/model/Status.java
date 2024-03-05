@@ -22,6 +22,9 @@ public class Status {
     @Column(name = "babos")
     private Integer babos;
 
+    @Column(name = "collectors")
+    private Integer collectors;
+
     @Column(name = "health")
     private Integer health;
 
@@ -55,6 +58,14 @@ public class Status {
 
     public void setBabos(Integer babos) {
         this.babos = babos;
+    }
+
+    public Integer getCollectors() {
+        return collectors;
+    }
+
+    public void setCollectors(Integer collectors) {
+        this.collectors = collectors;
     }
 
     public Integer getHealth() {
