@@ -11,18 +11,22 @@ import ru.nsu.fit.battle_fw.exceptions.PersonAlreadyExistsException;
 import ru.nsu.fit.battle_fw.requests.get.GameIdRequest;
 import ru.nsu.fit.battle_fw.requests.get.GetGameRequest;
 import ru.nsu.fit.battle_fw.requests.post.*;
+import ru.nsu.fit.battle_fw.services.CardService;
+import ru.nsu.fit.battle_fw.services.GameService;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 public class SiteController {
-
     Logger logger = LoggerFactory.getLogger(SiteController.class);
-    private final SiteControllerUtils gameService;
+    private final GameService gameService;
+    private final CardService cardService;
 
-    public SiteController(SiteControllerUtils gameService) {
+    public SiteController(GameService gameService,
+                          CardService cardService) {
         this.gameService = gameService;
+        this.cardService = cardService;
     }
 
     @PostMapping("/person/add")
@@ -51,7 +55,7 @@ public class SiteController {
         logger.info("PlayerId " + req.getPlayerId());
         logger.info("CardId " + req.getCardId());
         logger.info("CellId " + req.getCellId());
-        gameService.putCardInCell(req);
+        cardService.putCardInCell(req);
     }
 
     @PostMapping("/putCollectorInCell")
@@ -61,7 +65,7 @@ public class SiteController {
         logger.info("GameId " + req.getGameId());
         logger.info("PlayerId " + req.getPlayerId());
         logger.info("CellId " + req.getCellId());
-        gameService.putCollectorInCell(req);
+        cardService.putCollectorInCell(req);
     }
 
     @PostMapping("/moveCard")
@@ -71,7 +75,7 @@ public class SiteController {
         logger.info("PlayerId " + req.getPlayerId());
         logger.info("CellId1 " + req.getCellId1());
         logger.info("CellId2 " + req.getCellId2());
-        gameService.moveCard(req);
+        cardService.moveCard(req);
     }
 
     @PostMapping("/nextTurn")
