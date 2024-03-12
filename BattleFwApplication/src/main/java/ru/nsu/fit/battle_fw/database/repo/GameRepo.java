@@ -6,9 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import ru.nsu.fit.battle_fw.database.model.Game;
-import ru.nsu.fit.battle_fw.database.model.HandComp;
-
-import java.util.List;
 
 @RepositoryRestResource
 public interface GameRepo extends JpaRepository<Game, Integer> {

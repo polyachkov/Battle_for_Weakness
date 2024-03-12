@@ -10,9 +10,11 @@ import ru.nsu.fit.battle_fw.exceptions.NoBabosException;
 import ru.nsu.fit.battle_fw.exceptions.PersonAlreadyExistsException;
 import ru.nsu.fit.battle_fw.requests.get.GameIdRequest;
 import ru.nsu.fit.battle_fw.requests.get.GetGameRequest;
+import ru.nsu.fit.battle_fw.requests.get.GetInvites;
 import ru.nsu.fit.battle_fw.requests.post.*;
 import ru.nsu.fit.battle_fw.services.CardService;
 import ru.nsu.fit.battle_fw.services.GameService;
+import ru.nsu.fit.battle_fw.services.PersonAndInviteService;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,11 +24,14 @@ public class SiteController {
     Logger logger = LoggerFactory.getLogger(SiteController.class);
     private final GameService gameService;
     private final CardService cardService;
+    private final PersonAndInviteService personAndInviteService;
 
     public SiteController(GameService gameService,
-                          CardService cardService) {
+                          CardService cardService,
+                          PersonAndInviteService personAndInviteService) {
         this.gameService = gameService;
         this.cardService = cardService;
+        this.personAndInviteService = personAndInviteService;
     }
 
     @PostMapping("/person/add")
@@ -34,7 +39,7 @@ public class SiteController {
         logger.info("POST /person/add");
         logger.info("name " + person.getName());
         logger.info("password " + person.getPassword());
-        gameService.addPerson(person);
+        personAndInviteService.addPerson(person);
     }
 
     @PostMapping("/init")
@@ -105,5 +110,10 @@ public class SiteController {
     public Optional<List<Cell>> getField(@RequestBody GameIdRequest req) {
         logger.info("GET /get/field");
         return gameService.getFieldByGame(req.getGameId());
+    }
+    @GetMapping("/get/filed")
+    public Optional<List<Invites>> getInvites(@RequestBody GetInvites req) {
+        logger.info("GET /get/field");
+        return personAndInviteService.getInvitesByPlayerId(req.getPlayerId());
     }
 }

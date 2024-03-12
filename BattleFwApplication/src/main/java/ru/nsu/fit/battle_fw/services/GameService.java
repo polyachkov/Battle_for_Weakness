@@ -273,21 +273,6 @@ public class GameService {
     }
 
     /**
-     * Сохранение нового пользователя в базе данных
-     * @param person - Объект персоны
-     * @throws PersonAlreadyExistsException - Персона уже существует, поэтому нельзя добавить
-     * Ничего не возвращает
-     */
-    public void addPerson(Person person) throws PersonAlreadyExistsException {
-        Person reference = personR.findByName(person.getName()); // Проверка на наличие в базе
-        if (reference == null) {
-            personR.save(person);
-        } else {
-            throw new PersonAlreadyExistsException("p");
-        }
-    }
-
-    /**
      * Метод получает id игры по двум id игроков
      * @param req - Сам запрос, содержащий id игроков
      * @return - возвращает контейнер Optional, содержащий Объект игры
