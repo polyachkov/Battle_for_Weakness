@@ -1,8 +1,8 @@
 .playAndInviteButtons {
   display: flex;
   justify-content: center;
-  gap: 120px;
-  margin-top: calc(150px + 5%);
+  gap: 160px;
+  margin-top: calc(200px + 5%);
 }
 
 .playButtons {
@@ -10,7 +10,7 @@
   min-height: 60px;
   font-family: Syne Tactile;
   color: #fff;
-  font-size: 60px;
+  font-size: 45px;
   background-color: rgba(0, 0, 0, 0);
   border: none;
   display: flex;
@@ -29,7 +29,7 @@
   display: block;
   object-fit: cover;
   border-radius: 55px;
-  width: 100%;
+  width: 90%;
   height: 100%;
 }
 
@@ -56,11 +56,11 @@
 
 .fractionName {
   position: absolute;
-  bottom: 60px;
+  bottom: 40px;
   left: 0;
   right: 0;
   text-align: center;
-  font-size: 60px;
+  font-size: 45px;
   font-family: Syne Tactile;
   color: #f40c0c;
   caret-color: transparent;
