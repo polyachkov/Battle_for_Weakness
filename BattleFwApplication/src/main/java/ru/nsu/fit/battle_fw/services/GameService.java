@@ -4,10 +4,6 @@ package ru.nsu.fit.battle_fw.services;
 import org.springframework.stereotype.Component;
 import ru.nsu.fit.battle_fw.database.model.*;
 import ru.nsu.fit.battle_fw.database.repo.*;
-import ru.nsu.fit.battle_fw.exceptions.BadCellException;
-import ru.nsu.fit.battle_fw.exceptions.CollectorsLimitException;
-import ru.nsu.fit.battle_fw.exceptions.NoBabosException;
-import ru.nsu.fit.battle_fw.exceptions.PersonAlreadyExistsException;
 import ru.nsu.fit.battle_fw.requests.get.GetGameRequest;
 import ru.nsu.fit.battle_fw.requests.post.*;
 
@@ -43,7 +39,7 @@ public class GameService {
      * @param statusR - Статус каждого игрока в контексте каждой из его игр
      */
     public GameService(PersonRepo personR, CardRepo cardR, GameRepo gameR, LibraryRepo libR, LibraryCompRepo libCompR,
-                       HandRepo handR, HandCompRepo handCompR, CellRepo cellR, StatusRepo statusR) {
+                       HandRepo handR, HandCompRepo handCompR, CellRepo cellR, StatusRepo statusR, InvitesRepo invitesR) {
         this.personR = personR;
         this.cardR = cardR;
         this.gameR = gameR;

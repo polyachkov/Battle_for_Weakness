@@ -1,7 +1,11 @@
 package ru.nsu.fit.battle_fw.database.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
+@Entity
+@Table(name = "invites", schema = "public")
 public class Invites {
     @Id
     @Column(name = "id_invite")
@@ -9,7 +13,9 @@ public class Invites {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invitesIdSeq")
     private Integer id_invite;
 
+    @Column(name = "id_player1")
     private Integer id_player1;
+    @Column(name = "id_player2")
     private Integer id_player2;
 
     public Integer getId_invite() {

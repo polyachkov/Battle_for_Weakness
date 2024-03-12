@@ -111,9 +111,9 @@ public class SiteController {
         logger.info("GET /get/field");
         return gameService.getFieldByGame(req.getGameId());
     }
-    @GetMapping("/get/filed")
+    @GetMapping("/get/invites")
     public Optional<List<Invites>> getInvites(@RequestBody GetInvites req) {
-        logger.info("GET /get/field");
+        logger.info("GET /get/invites");
         return personAndInviteService.getInvitesByPlayerId(req.getPlayerId());
     }
 }

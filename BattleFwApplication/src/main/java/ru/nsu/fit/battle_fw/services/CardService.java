@@ -38,7 +38,7 @@ public class CardService {
      * @param statusR - Статус каждого игрока в контексте каждой из его игр
      */
     public CardService(PersonRepo personR, CardRepo cardR, GameRepo gameR, LibraryRepo libR, LibraryCompRepo libCompR,
-                       HandRepo handR, HandCompRepo handCompR, CellRepo cellR, StatusRepo statusR) {
+                       HandRepo handR, HandCompRepo handCompR, CellRepo cellR, StatusRepo statusR, InvitesRepo invitesR) {
         this.personR = personR;
         this.cardR = cardR;
         this.gameR = gameR;
