@@ -12,7 +12,7 @@
 .opponentsInterface {
   position: absolute;
   min-width: 20%;
-  min-height: 120px;
+  min-height: 160px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -259,7 +259,7 @@ $turn-time: 6s;
   justify-content: space-around;
 }
 
-.decks {
+.decksBlue {
   align-self: center;
   display: flex;
   justify-content: center;
@@ -267,12 +267,24 @@ $turn-time: 6s;
   width: 25%;
   height: 100%;
   margin: 2rem;
+  padding-left: 2rem;
+}
+
+.decksRed {
+  align-self: center;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  width: 25%;
+  height: 100%;
+  margin: 2rem;
+  padding-right: 2rem;
 }
 
 .deck {
-  border: 1px solid black;
-  height: 20vh;
-  width: 40%;
+  //border: 1px solid black;
+  height: 7rem;
+  width: 5.17rem;
 }
 
 .hand {
@@ -325,27 +337,28 @@ $turn-time: 6s;
 
 .yellowCircle {
   caret-color: transparent;
-  background-color: yellow;
-  border-radius: 100%;
-  border: 1px solid black;
+  background-image: url("../../../../assets/Photoes/FieldPictures/yellowField.png");
+  background-size: cover;
 }
 
 .blueSquare {
   caret-color: transparent;
-  background-color: rgb(129, 129, 248);
-  border: 1px solid black;
+  background-image: url("../../../../assets/Photoes/FieldPictures/blueField.png");
+  background-size: cover;
 }
 
 .redSquare {
   caret-color: transparent;
-  background-color: rgb(250, 173, 145);
-  border: 1px solid black;
+  background-image: url("../../../../assets/Photoes/FieldPictures/redField.png");
+  background-size: cover;
 }
 
-.whiteSquare {
+.blackSquare {
   caret-color: transparent;
-  background-color: white;
-  border: 1px solid black;
+  background-image: url("../../../../assets/Photoes/FieldPictures/blackField.png");
+  background-size: cover;
+  // background-color: white;
+  // border: 1px solid black;
 }
 
 .row {
@@ -359,7 +372,7 @@ $turn-time: 6s;
 .cardField {
   caret-color: transparent;
   border-radius: 5px;
-  width: 4.5rem;
+  width: 4.87rem;
   height: 4.5rem;
   &:hover {
     box-shadow: inset 0 0 0 6px #53ea93;
@@ -381,6 +394,8 @@ $turn-time: 6s;
   &:focus {
     animation: effect 0.4s 1;
   }
+  margin-right: 6rem;
+  margin-bottom: 2.2rem;
 }
 
 @keyframes effect {
