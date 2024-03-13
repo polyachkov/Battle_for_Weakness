@@ -45,20 +45,21 @@ export class DataFieldComponent {
   getRowColor(index: number): DynamicObject<boolean> {
     const rowColorObj: DynamicObject<boolean> = {};
     switch (index) {
-      case 0:
-      case 7:
-        rowColorObj['yellowCircle'] = true;
-        break;
       case 1:
       case 2:
+      case 5:
+      case 6:
+        rowColorObj['yellowCircle'] = true;
+        break;
+      case 2:
+      case 7:
         rowColorObj['redSquare'] = true;
         break;
       case 3:
       case 4:
-        rowColorObj['whiteSquare'] = true;
+        rowColorObj['blackSquare'] = true;
         break;
-      case 5:
-      case 6:
+      case 0:
         rowColorObj['blueSquare'] = true;
         break;
     }

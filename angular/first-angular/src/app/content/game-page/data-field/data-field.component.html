@@ -64,10 +64,13 @@
       <div class="opponentsCards" *ngFor="let item of opponentsHand"></div>
     </div>
     <div class="wrapper">
-      <div class="decks" style="flex-wrap: wrap-reverse">
+      <div class="decksBlue" style="flex-wrap: wrap-reverse">
         <div
           class="deck"
-          style="background-color: purple"
+          style="
+            background-image: url('../../../../assets/Photoes/deckBlue.png');
+            background-size: cover;
+          "
           *ngFor="let item of oppsLibraries"
         ></div>
       </div>
@@ -94,10 +97,13 @@
           </div>
         </div>
       </div>
-      <div class="decks" style="flex-wrap: wrap">
+      <div class="decksRed" style="flex-wrap: wrap">
         <div
           class="deck"
-          style="background-color: green"
+          style="
+            background-image: url('../../../../assets/Photoes/deckRed.png');
+            background-size: cover;
+          "
           *ngFor="let item of myLibraries"
         ></div>
       </div>
