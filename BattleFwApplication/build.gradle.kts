@@ -18,7 +18,9 @@ repositories {
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.security:spring-security-config:6.1.5")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	implementation("org.springframework.security:spring-security-config")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-data-rest")
 	implementation("org.springframework.boot:spring-boot-starter-web")
@@ -26,6 +28,27 @@ dependencies {
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("org.postgresql:postgresql")
 	annotationProcessor("org.projectlombok:lombok")
+
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springframework.boot:spring-boot-starter-web")
+
+	runtimeOnly("org.springframework.boot:spring-boot-devtools")
+	runtimeOnly("org.postgresql:postgresql")
+
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.security:spring-security-test")
+
+	// JWT
+	implementation("io.jsonwebtoken:jjwt-api:0.10.7")
+	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.10.7")
+	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.10.7")
+
+	implementation("javax.xml.bind:jaxb-api:2.3.0")
+	implementation("com.sun.xml.bind:jaxb-impl:2.2.11")
+	implementation("com.sun.xml.bind:jaxb-core:2.2.11")
+
+	implementation("javax.servlet:javax.servlet-api:4.0.1")
 }
 
 tasks.withType<Test> {
