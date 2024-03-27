@@ -31,14 +31,15 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class AuthController {
+
     @Autowired
     AuthenticationManager authenticationManager;
 
     @Autowired
-    UserRepo userRepo;
+    UserRepo userRespository;
 
     @Autowired
-    RoleRepo roleRepo;
+    RoleRepo roleRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -48,9 +49,11 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<?> authUser(@RequestBody LoginRequest loginRequest) {
+
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsername(),loginRequest.getPassword()));
+                        loginRequest.getUsername(),
+                        loginRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
@@ -66,15 +69,17 @@ public class AuthController {
                 userDetails.getEmail(),
                 roles));
     }
+
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignupRequest signupRequest) {
-        if (userRepo.existsByUsername(signupRequest.getUsername())) {
+
+        if (userRespository.existsByUsername(signupRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Username is exist"));
         }
 
-        if (userRepo.existsByEmail(signupRequest.getEmail())) {
+        if (userRespository.existsByEmail(signupRequest.getEmail())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Email is exist"));
@@ -88,7 +93,7 @@ public class AuthController {
         Set<Role> roles = new HashSet<>();
 
         if (reqRoles == null) {
-            Role userRole = roleRepo
+            Role userRole = roleRepository
                     .findByName(ERole.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error, Role USER is not found"));
             roles.add(userRole);
@@ -96,14 +101,14 @@ public class AuthController {
             reqRoles.forEach(r -> {
                 switch (r) {
                     case "admin":
-                        Role adminRole = roleRepo
+                        Role adminRole = roleRepository
                                 .findByName(ERole.ROLE_ADMIN)
                                 .orElseThrow(() -> new RuntimeException("Error, Role ADMIN is not found"));
                         roles.add(adminRole);
 
                         break;
                     case "mod":
-                        Role modRole = roleRepo
+                        Role modRole = roleRepository
                                 .findByName(ERole.ROLE_MODERATOR)
                                 .orElseThrow(() -> new RuntimeException("Error, Role MODERATOR is not found"));
                         roles.add(modRole);
@@ -111,7 +116,7 @@ public class AuthController {
                         break;
 
                     default:
-                        Role userRole = roleRepo
+                        Role userRole = roleRepository
                                 .findByName(ERole.ROLE_USER)
                                 .orElseThrow(() -> new RuntimeException("Error, Role USER is not found"));
                         roles.add(userRole);
@@ -119,7 +124,7 @@ public class AuthController {
             });
         }
         user.setRoles(roles);
-        userRepo.save(user);
+        userRespository.save(user);
         return ResponseEntity.ok(new MessageResponse("User CREATED"));
     }
 }
