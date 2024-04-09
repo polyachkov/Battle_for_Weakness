@@ -27,6 +27,13 @@ import { FormsModule } from '@angular/forms';
 import { ModalComponent } from './content/game-page/data-field/modal/modal.component';
 import { SigninComponent } from './content/authorization-page/account-creating/signin/signin.component';
 import { SignupComponent } from './content/authorization-page/account-creating/signup/signup.component';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+import { HomeComponent } from './home/home.component';
+import { UserComponent } from './user/user.component';
+import { ModComponent } from './mod/mod.component';
+import { AdminComponent } from './admin/admin.component';
+import { httpInterceptorProviders } from "./auth/auth-interceptor";
 
 @NgModule({
   declarations: [
@@ -46,6 +53,12 @@ import { SignupComponent } from './content/authorization-page/account-creating/s
     ModalComponent,
     SigninComponent,
     SignupComponent,
+    LoginComponent,
+    RegisterComponent,
+    HomeComponent,
+    UserComponent,
+    ModComponent,
+    AdminComponent,
   ],
   imports: [
     BrowserModule,
@@ -61,7 +74,7 @@ import { SignupComponent } from './content/authorization-page/account-creating/s
     HttpClientModule,
     FormsModule,
   ],
-  providers: [],
+  providers: [httpInterceptorProviders],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
