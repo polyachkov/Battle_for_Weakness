@@ -42,7 +42,7 @@ public class GameService {
      * @param inviteR - Приглашения в игры
      */
     public GameService(PersonRepo personR, CardRepo cardR, GameRepo gameR, LibraryRepo libR, LibraryCompRepo libCompR,
-                       HandRepo handR, HandCompRepo handCompR, CellRepo cellR, StatusRepo statusR,InviteRepo inviteR) {
+                       HandRepo handR, HandCompRepo handCompR, CellRepo cellR, StatusRepo statusR, InviteRepo inviteR) {
         this.personR = personR;
         this.cardR = cardR;
         this.gameR = gameR;
