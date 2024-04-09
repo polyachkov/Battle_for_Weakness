@@ -4,10 +4,7 @@ package ru.nsu.fit.battle_fw.services;
 import org.springframework.stereotype.Component;
 import ru.nsu.fit.battle_fw.database.model.*;
 import ru.nsu.fit.battle_fw.database.repo.*;
-import ru.nsu.fit.battle_fw.exceptions.BadCellException;
-import ru.nsu.fit.battle_fw.exceptions.CollectorsLimitException;
-import ru.nsu.fit.battle_fw.exceptions.NoBabosException;
-import ru.nsu.fit.battle_fw.exceptions.PersonAlreadyExistsException;
+import ru.nsu.fit.battle_fw.exceptions.*;
 import ru.nsu.fit.battle_fw.requests.get.GetGameRequest;
 import ru.nsu.fit.battle_fw.requests.post.*;
 
@@ -29,6 +26,7 @@ public class GameService {
     private final HandCompRepo handCompR;
     private final CellRepo cellR;
     private final StatusRepo statusR;
+    private final InviteRepo inviteR;
 
     /**
      * Конструктор. Принимает объекты, позволяющие влиять на базу данных.
@@ -41,9 +39,10 @@ public class GameService {
      * @param handCompR - Таблица состава рук
      * @param cellR - Таблица клеток игр (полей)
      * @param statusR - Статус каждого игрока в контексте каждой из его игр
+     * @param inviteR - Приглашения в игры
      */
     public GameService(PersonRepo personR, CardRepo cardR, GameRepo gameR, LibraryRepo libR, LibraryCompRepo libCompR,
-                       HandRepo handR, HandCompRepo handCompR, CellRepo cellR, StatusRepo statusR) {
+                       HandRepo handR, HandCompRepo handCompR, CellRepo cellR, StatusRepo statusR,InviteRepo inviteR) {
         this.personR = personR;
         this.cardR = cardR;
         this.gameR = gameR;
@@ -53,6 +52,7 @@ public class GameService {
         this.handCompR = handCompR;
         this.cellR = cellR;
         this.statusR = statusR;
+        this.inviteR = inviteR;
     }
 
     /**
@@ -317,6 +317,66 @@ public class GameService {
      */
     public Optional<List<Cell>> getFieldByGame(Integer gameId) {
         return Optional.of(cellR.getCells(gameId));
+
+    }
+
+    /**
+     * Создаёт invite по id приглашающего и id приглашённого
+     * Игнорит если уже есть такой приглос или игра
+     * @param req - содержит 2 id
+     */
+    public void createInvite(InviteCreateRequest req) {
+        int id_inviter = req.getInviter_id();
+        int id_invited = req.getInvited_id();
+        String inviter_race = req.getInviter_race();
+
+        Invite inv = new Invite(id_inviter, id_invited, inviter_race);
+
+        Invite check = inviteR.getInvite(id_inviter, id_invited);
+        Game g1 = gameR.getGame(id_inviter, id_invited);
+        Game g2 = gameR.getGame(id_invited, id_inviter);
+        if(check == null && g1 == null && g2 == null && id_invited != id_inviter) {
+            inviteR.save(inv);
+        }
+    }
+
+    /**\
+     * Удаляет invite из таблицы.
+     * Требует id_inviter и id_invited
+     * Удаление происходит когда пользователь invited отклоняет запрос
+     * @param req - содержит id_inviter и id_invited
+     */
+    public void deleteInvite(InviteDeleteRequest req) {
+        int id_inviter = req.getInviter_id();
+        int id_invited = req.getInvited_id();
+
+        Invite toDel = inviteR.getInvite(id_inviter, id_invited);
+        if(toDel != null) {
+            inviteR.delete(toDel);
+        }
+    }
+
+    /**
+     * Обработка приёма запроса (удаление его из БД и создание игры)
+     * @param req - содержат id и fraction второго игрока
+     * @throws InviteIsNullException - в случае если такого инвайта нет
+     */
+    public void acceptInvite(InviteAcceptRequest req) throws InviteIsNullException {
+        int id_inviter = req.getInviter_id();
+        int id_invited = req.getInvited_id();
+        String inviter_race;
+        String invited_race = req.getInvited_race();
+        Invite toDel = inviteR.getInvite(id_inviter, id_invited);
+        if(toDel != null) {
+            inviter_race = toDel.getInviter_race();
+            inviteR.delete(toDel);
+        }
+        else{
+            throw new InviteIsNullException("Invite does not exist");
+        }
+
+        InitGameRequest req2 = new InitGameRequest(inviter_race, invited_race, id_inviter, id_invited);
+        initializeGameAndLibraries(req2);
 
     }
 
