@@ -1,4 +1,4 @@
-export class SignUpInfo {
+export class SignupInfo {
   name: string;
   username: string;
   email: string;
@@ -9,7 +9,7 @@ export class SignUpInfo {
     this.name = name;
     this.username = username;
     this.email = email;
-    this.role = ['user'];
     this.password = password;
+    this.role = ['user'];
   }
 }

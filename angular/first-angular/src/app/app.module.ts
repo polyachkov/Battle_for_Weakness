@@ -33,7 +33,7 @@ import { HomeComponent } from './home/home.component';
 import { UserComponent } from './user/user.component';
 import { ModComponent } from './mod/mod.component';
 import { AdminComponent } from './admin/admin.component';
-import {httpInterceptorProviders} from "./auth/auth-interceptor";
+import { httpInterceptorProviders } from "./auth/auth-interceptor";
 
 @NgModule({
   declarations: [
