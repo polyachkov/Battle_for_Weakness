@@ -39,4 +39,12 @@ public class InitGameRequest implements Serializable {
     public void setPlayer2(Integer player2) {
         this.player2 = player2;
     }
+
+    public InitGameRequest() {}
+    public InitGameRequest(String fraction1, String fraction2, Integer player1, Integer player2) {
+        this.fraction1 = fraction1;
+        this.fraction2 = fraction2;
+        this.player1 = player1;
+        this.player2 = player2;
+    }
 }
