@@ -28,6 +28,9 @@
     </div>
     <ul class="nav navbar-nav" routerLinkActive="active">
       <li class="nav-item"><a class="nav-link" routerLink="home">Home</a></li>
+      <li *ngIf="authority" class="nav-item">
+        <a class="nav-link" routerLink="invite">Invite</a>
+      </li>
       <li *ngIf="authority === 'user'" class="nav-item">
         <a class="nav-link" routerLink="user">User Board</a>
       </li>

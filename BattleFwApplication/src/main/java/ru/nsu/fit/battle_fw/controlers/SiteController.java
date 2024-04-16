@@ -121,5 +121,4 @@ public class SiteController {
         logger.info("POST /invite/accept");
         gameService.acceptInvite(req);
     }
-
 }
