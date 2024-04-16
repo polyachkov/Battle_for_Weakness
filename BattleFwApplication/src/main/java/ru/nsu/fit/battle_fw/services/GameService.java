@@ -64,13 +64,13 @@ public class GameService {
     public void initializeGameAndLibraries(InitGameRequest req) {
         String fraction1 = req.getFraction1(); //Получение фракций
         String fraction2 = req.getFraction2();
-        Integer player1 = req.getPlayer1(); //Получение игрков
-        Integer player2 = req.getPlayer2();
+        String player1 = req.getPlayer1(); //Получение игрков
+        String player2 = req.getPlayer2();
 
         Game game = initializeGame(player1, player2); //Создание игры
 
-        initializeStatus(game.getId_game(), player1, game.getId_turn()); //Инициализация статусов
-        initializeStatus(game.getId_game(), player2, game.getId_turn());
+        initializeStatus(game.getId_game(), player1, game.getName_turn()); //Инициализация статусов
+        initializeStatus(game.getId_game(), player2, game.getName_turn());
 
         initializeLibraries(fraction1, game, player1); //Инициализация библиотек
         initializeLibraries(fraction2, game, player2);
@@ -81,24 +81,24 @@ public class GameService {
     /**
      * Инициализация игры, а именно
      * 1) Создаётся объект Game
-     * 2) Заполняется объект Game (id игроков, is_ended, также выбирается кто будет ходить первым
+     * 2) Заполняется объект Game (Name игроков, is_ended, также выбирается кто будет ходить первым
      * 3) Объект сохраняется как запись в базу данных
      * Принимает параметры:
-     * @param player1  Id игрока 1
-     * @param player2  Id игрока 2
+     * @param player1  Name игрока 1
+     * @param player2  Name игрока 2
      * Возвращает:
      * @return Объект класса Game
      */
-    private Game initializeGame(Integer player1, Integer player2) {
+    private Game initializeGame(String player1, String player2) {
         Game game = new Game();
-        game.setId_player1(player1); // Задание Id игроков
-        game.setId_player2(player2);
+        game.setName_player1(player1); // Задание Id игроков
+        game.setName_player2(player2);
         game.setIs_ended(false); // Показать что игра не окончена
         Random isFirstPlayer = new Random(); // Случайным образом выбирается тот, кто будет ходить первым
         if (isFirstPlayer.nextBoolean()) {
-            game.setId_turn(player1);
+            game.setName_turn(player1);
         } else {
-            game.setId_turn(player2);
+            game.setName_turn(player2);
         }
         gameR.save(game); // Сохранение записи в базу данных
         return game;
@@ -109,16 +109,16 @@ public class GameService {
      * Устанавливает HP игрока и начальное кол-во бабосов
      * Записывает информацию об этом в базу данных
      * @param gameId - Id игры, в которой участвует игрок
-     * @param playerId - Id игрока, для которого небходимо задать запись
-     * @param turnId - Id игрока, который ходит первым
+     * @param playerName - Name игрока, для которого небходимо задать запись
+     * @param turnName - Name игрока, который ходит первым
      */
-    private void initializeStatus(Integer gameId, Integer playerId, Integer turnId) {
+    private void initializeStatus(Integer gameId, String playerName, String turnName) {
         Status status = new Status(); // Создание экземпляра и заполнение данных
-        status.setId_player(playerId);
+        status.setName_player(playerName);
         status.setId_game(gameId);
         status.setCollectors(0);
         status.setHealth(25); // Начальное здоровье
-        if (Objects.equals(turnId, playerId)) { // Если икрок ходит первым, то его кол-во денег 2, иначе 1
+        if (Objects.equals(turnName, playerName)) { // Если икрок ходит первым, то его кол-во денег 2, иначе 1
             status.setBabos(2);
         }  else  {
             status.setBabos(1);
@@ -130,24 +130,24 @@ public class GameService {
      * Создание библиотек. Используется функция createLib
      * @param fraction - имя фракции
      * @param game - Объект игры
-     * @param playerId - Id игрока
+     * @param playerName - Name игрока
      * Ничего не возвращает
      */
-    private void initializeLibraries(String fraction, Game game, Integer playerId) {
+    private void initializeLibraries(String fraction, Game game, String playerName) {
         String[] rarities = new String[]{"common", "uncommon", "rare", "epic", "legendary"}; //Задаются редкости
         for (String rarity : rarities) {
-            createLib(rarity, fraction, game, playerId); // Создание библиотек
+            createLib(rarity, fraction, game, playerName); // Создание библиотек
         }
     }
 
     /**
      * Создание руки
      * @param game - Объект игры
-     * @param player1 - Id второго игрока
-     * @param player2 - Id второго игрока
+     * @param player1 - name первого игрока
+     * @param player2 - name второго игрока
      * Ничего не возвращает
      */
-    private void createHands(Game game, Integer player1, Integer player2) {
+    private void createHands(Game game, String player1, String player2) {
         createHand(libR.getLibId(player1, game.getId_game(), "common"), game.getId_game(), player1);
         createHand(libR.getLibId(player2, game.getId_game(), "common"), game.getId_game(), player2);
     }
@@ -157,10 +157,10 @@ public class GameService {
      * @param rarity - редкость библиотеки
      * @param fraction - фракция игрока
      * @param game - Объект игры
-     * @param playerId - Id игрока
+     * @param playerName - name игрока
      * Ничего не возвращает
      */
-    private void createLib(String rarity, String fraction, Game game, Integer playerId) {
+    private void createLib(String rarity, String fraction, Game game, String playerName) {
         List<Card> listC = cardR.getListOfCard(rarity, fraction); // Получение списка карт из базы данных
         List<Integer> listId = new ArrayList<Integer>(); // Создание библиотеки
         for (Card c : listC) {
@@ -173,7 +173,7 @@ public class GameService {
         Library lib = new Library(); //Заполнение библиотеки
         lib.setCards_cnt(listId.size());
         lib.setGame_id(game.getId_game());
-        lib.setPlayer_id(playerId);
+        lib.setPlayer_id(playerName);
         lib.setLocked(!rarity.equals("common")); // Все библиотеки, кроме библиотеки редкости common, заблокированы
         lib.setRarity(rarity);
         libR.save(lib); // Сохранение библиотеки в базу данных
@@ -190,14 +190,14 @@ public class GameService {
      * Создать одну руку для определённого игрока
      * @param lib_id - id библиотеки из которой берём руку
      * @param id_game - id игры
-     * @param id_player - id игрока
+     * @param player_name - name игрока
      * Ничего не возвращает
      */
-    private void createHand(Integer lib_id, Integer id_game, Integer id_player) {
+    private void createHand(Integer lib_id, Integer id_game, String player_name) {
         Hand hand = new Hand(); // Создание руки и заполнение полей
         hand.setId_game(id_game);
         hand.setCards_cnt(0);
-        hand.setId_player(id_player);
+        hand.setName_player(player_name);
         handR.save(hand);
         for (int i = 0; i < 7; i++) { // Взятие карт из библиотеки
             getCardToHand(lib_id, hand.getId_hand());
@@ -242,20 +242,20 @@ public class GameService {
     /**
      * Передача хода другому игроку
      * @param req - Сам запрос
+     * @param nextTurnName - name игрока, который ходит следующим
      * Ничего не возвращает
      */
-    public void nextTurn(NextTurnRequest req) {
-        Integer nextTurnId = req.getNextTurnId(); // Id игрока, который ходит следующим
+    public void nextTurn(NextTurnRequest req, String nextTurnName) {
         Integer gameId = req.getGameId(); // id игры
         String rarity = req.getRarity(); // редкость колоды, из которой следующий игрок берёт карту
 
         Game game = gameR.getReferenceById(gameId);
-        game.setId_turn(nextTurnId); // Задаём ход
+        game.setName_turn(nextTurnName); // Задаём ход
 
-        Status status = statusR.getStatus(gameId, nextTurnId);
+        Status status = statusR.getStatus(gameId, nextTurnName);
         status.setBabos(status.getBabos() + 2); // Увеличиваем кол-во денег следующего игрока
 
-        Hand hand = handR.getHand(gameId, nextTurnId); // Даём в руку карту указанной редкости
+        Hand hand = handR.getHand(gameId, nextTurnName); // Даём в руку карту указанной редкости
         hand.setCards_cnt(hand.getCards_cnt() + 1);
 
         List<Cell> cells = cellR.getCells(gameId); // Устанавливаем болезнь выхода всех карт в 0
@@ -263,7 +263,7 @@ public class GameService {
             c.setSickness(0);
         }
 
-        Integer library_id = libR.getLibId(nextTurnId, gameId, rarity);
+        Integer library_id = libR.getLibId(nextTurnName, gameId, rarity);
         getCardToHand(library_id, hand.getId_hand()); // Даём карту в руку
 
         gameR.save(game);
@@ -272,12 +272,15 @@ public class GameService {
         cellR.saveAll(cells);
     }
 
+
     /**
      * Сохранение нового пользователя в базе данных
      * @param person - Объект персоны
      * @throws PersonAlreadyExistsException - Персона уже существует, поэтому нельзя добавить
      * Ничего не возвращает
+     * Устаревший метод, более не нужен
      */
+    @Deprecated
     public void addPerson(Person person) throws PersonAlreadyExistsException {
         Person reference = personR.findByName(person.getName()); // Проверка на наличие в базе
         if (reference == null) {
@@ -288,15 +291,15 @@ public class GameService {
     }
 
     /**
-     * Метод получает id игры по двум id игроков
-     * @param req - Сам запрос, содержащий id игроков
+     * Метод получает id игры по двум name игроков
+     * @param req - Сам запрос, содержащий name игрока
+     * @param playerName1 - имя первого игрока (кинувшего запрос)
      * @return - возвращает контейнер Optional, содержащий Объект игры
      */
-    public Optional<Game> getGameByPlayers(GetGameRequest req) {
-        Integer playerId1 = req.getPlayerId1();
-        Integer playerId2 = req.getPlayerId2();
+    public Optional<Game> getGameByPlayers(GetGameRequest req, String playerName1) {
+        String playerName2 = req.getPlayerName2();
 
-        Game game = gameR.getGame(playerId1, playerId2); // Используется sql запрос
+        Game game = gameR.getGame(playerName1, playerName2); // Используется sql запрос
 
         return Optional.ofNullable(game);
     }
@@ -321,36 +324,36 @@ public class GameService {
     }
 
     /**
-     * Создаёт invite по id приглашающего и id приглашённого
+     * Создаёт invite по name приглашающего и name приглашённого
      * Игнорит если уже есть такой приглос или игра
-     * @param req - содержит 2 id
+     * @param req - содержит имя приглашённого
+     * @param inviter_name - имя приглашающего
      */
-    public void createInvite(InviteCreateRequest req) {
-        int id_inviter = req.getInviter_id();
-        int id_invited = req.getInvited_id();
+    public void createInvite(InviteCreateRequest req, String inviter_name) {
+        String invited_name = req.getInvited_name();
         String inviter_race = req.getInviter_race();
 
-        Invite inv = new Invite(id_inviter, id_invited, inviter_race);
+        Invite inv = new Invite(inviter_name, invited_name, inviter_race);
 
-        Invite check = inviteR.getInvite(id_inviter, id_invited);
-        Game g1 = gameR.getGame(id_inviter, id_invited);
-        Game g2 = gameR.getGame(id_invited, id_inviter);
-        if(check == null && g1 == null && g2 == null && id_invited != id_inviter) {
+        Invite check = inviteR.getInvite(inviter_name, invited_name);
+        Game g1 = gameR.getGame(inviter_name, invited_name);
+        Game g2 = gameR.getGame(invited_name, inviter_name);
+        if(check == null && g1 == null && g2 == null && invited_name != inviter_name) {
             inviteR.save(inv);
         }
     }
 
     /**\
      * Удаляет invite из таблицы.
-     * Требует id_inviter и id_invited
+     * Требует inviter_name и invited_name
      * Удаление происходит когда пользователь invited отклоняет запрос
-     * @param req - содержит id_inviter и id_invited
+     * @param req - содержит inviter_name
+     * @param invited_name - имя приглашённого
      */
-    public void deleteInvite(InviteDeleteRequest req) {
-        int id_inviter = req.getInviter_id();
-        int id_invited = req.getInvited_id();
+    public void deleteInvite(InviteDeleteRequest req, String invited_name) {
+        String inviter_name = req.getInviter_name();
 
-        Invite toDel = inviteR.getInvite(id_inviter, id_invited);
+        Invite toDel = inviteR.getInvite(inviter_name, invited_name);
         if(toDel != null) {
             inviteR.delete(toDel);
         }
@@ -358,15 +361,14 @@ public class GameService {
 
     /**
      * Обработка приёма запроса (удаление его из БД и создание игры)
-     * @param req - содержат id и fraction второго игрока
+     * @param req - содержат name и fraction второго игрока
      * @throws InviteIsNullException - в случае если такого инвайта нет
      */
-    public void acceptInvite(InviteAcceptRequest req) throws InviteIsNullException {
-        int id_inviter = req.getInviter_id();
-        int id_invited = req.getInvited_id();
+    public void acceptInvite(InviteAcceptRequest req, String invited_name) throws InviteIsNullException {
+        String inviter_name = req.getInviter_name();
         String inviter_race;
-        String invited_race = req.getInvited_race();
-        Invite toDel = inviteR.getInvite(id_inviter, id_invited);
+        String invited_race = req.getInvited_fraction();
+        Invite toDel = inviteR.getInvite(inviter_name, invited_name);
         if(toDel != null) {
             inviter_race = toDel.getInviter_race();
             inviteR.delete(toDel);
@@ -375,7 +377,7 @@ public class GameService {
             throw new InviteIsNullException("Invite does not exist");
         }
 
-        InitGameRequest req2 = new InitGameRequest(inviter_race, invited_race, id_inviter, id_invited);
+        InitGameRequest req2 = new InitGameRequest(inviter_race, invited_race, inviter_name, invited_name);
         initializeGameAndLibraries(req2);
 
     }

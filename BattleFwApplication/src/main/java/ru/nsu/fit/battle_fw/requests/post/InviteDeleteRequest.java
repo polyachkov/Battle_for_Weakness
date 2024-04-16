@@ -2,23 +2,15 @@ package ru.nsu.fit.battle_fw.requests.post;
 
 public class InviteDeleteRequest {
 
-    private int inviter_id;
+    private String inviter_name;
 
-    private int invited_id;
 
-    public int getInviter_id() {
-        return inviter_id;
+    public String getInviter_name() {
+        return inviter_name;
     }
 
-    public void setInviter_id(int inviter_id) {
-        this.inviter_id = inviter_id;
+    public void setInviter_name(String inviter_name) {
+        this.inviter_name = inviter_name;
     }
 
-    public int getInvited_id() {
-        return invited_id;
-    }
-
-    public void setInvited_id(int invited_id) {
-        this.invited_id = invited_id;
-    }
 }
