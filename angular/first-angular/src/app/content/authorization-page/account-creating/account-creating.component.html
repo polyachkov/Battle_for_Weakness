@@ -1,4 +1,5 @@
 <!--<div class="wrapper">-->
+
 <!--  <ng-container [ngSwitch]="true">-->
 <!--    <div *ngSwitchCase="pageContentService.currentMenu === chapterMenu.SIGNIN">-->
 <!--      <app-signin></app-signin>-->
@@ -7,6 +8,7 @@
 <!--      <app-signup></app-signup>-->
 <!--    </div>-->
 <!--  </ng-container>-->
+
 <!--</div>-->
 <!--<button-->
 <!--  (click)="pageContentService.handleChangeContent(pages.MAIN_PAGE)"-->
@@ -22,33 +24,61 @@
 <!--</div>-->
 
 <nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">Back</a>
-    </div>
-    <ul class="nav navbar-nav" routerLinkActive="active">
-      <li class="nav-item"><a class="nav-link" routerLink="home">Home</a></li>
-      <li *ngIf="authority" class="nav-item">
-        <a class="nav-link" routerLink="invite">Invite</a>
-      </li>
-      <li *ngIf="authority === 'user'" class="nav-item">
-        <a class="nav-link" routerLink="user">User Board</a>
-      </li>
-      <li *ngIf="authority === 'admin'" class="nav-item">
-        <a class="nav-link" routerLink="admin">Admin Board</a>
-      </li>
-      <li *ngIf="authority === 'pm'" class="nav-item">
-        <a class="nav-link" routerLink="pm">PM Board</a>
-      </li>
-      <li *ngIf="!authority" class="nav-item">
-        <a class="nav-link" routerLink="auth/login">Login</a>
-      </li>
-      <li *ngIf="!authority" class="nav-item">
-        <a class="nav-link" routerLink="signup">Sign Up</a>
-      </li>
-    </ul>
+  <div class="navbar-header">
+    <button
+      class="backButton"
+      routerLink="home"
+      (click)="pageContentService.handleChangeContent(Pages.MAIN_PAGE)"
+    ></button>
   </div>
+
+  <div *ngIf="!authority" class="wrapper">
+    <div *ngIf="!authority" class="wrapperForButtons">
+      <button
+        *ngIf="!authority"
+        class="menuButton"
+        routerLink="auth/login"
+        [ngClass]="{
+          activeButton: pageContentService.currentMenu === chapterMenu.SIGNIN
+        }"
+        (click)="pageContentService.handleCurrentMenu(chapterMenu.SIGNIN)"
+      >
+        Login
+      </button>
+      <button
+        *ngIf="!authority"
+        class="menuButton"
+        routerLink="signup"
+        [ngClass]="{
+          activeButton: pageContentService.currentMenu === chapterMenu.SIGNUP
+        }"
+        (click)="pageContentService.handleCurrentMenu(chapterMenu.SIGNUP)"
+      >
+        Sign Up
+      </button>
+    </div>
+    <div *ngIf="!authority" class="container">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+  <div *ngIf="authority" class="container">
+    <router-outlet></router-outlet>
+  </div>
+  <ul class="nav navbar-nav" routerLinkActive="active">
+    <li *ngIf="authority" class="nav-item">
+      <a class="nav-link" routerLink="home">Home</a>
+    </li>
+    <li *ngIf="authority === 'user'" class="nav-item">
+      <a class="nav-link" routerLink="user">User Board</a>
+    </li>
+    <li *ngIf="authority === 'admin'" class="nav-item">
+      <a class="nav-link" routerLink="admin">Admin Board</a>
+    </li>
+    <li *ngIf="authority === 'pm'" class="nav-item">
+      <a class="nav-link" routerLink="pm">PM Board</a>
+    </li>
+  </ul>
 </nav>
-<div class="container">
+<!-- <div class="container">
   <router-outlet></router-outlet>
-</div>
+</div> -->

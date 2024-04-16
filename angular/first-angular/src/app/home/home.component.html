@@ -1,6 +1,8 @@
-<div *ngIf="info.token; else loggedOut">
+<!-- <div *ngIf="info.token; else loggedOut"> -->
+<div *ngIf="info.token; else info.token">
   <h5 class="text-primary">Hello, Home!</h5>
   <p>
+
     <strong>Username: </strong> {{info.username}} <br/>
     <strong>Id: </strong> {{info.id}} <br/>
     <strong>Roles:</strong> {{info.authorities}} <br/>
@@ -9,6 +11,4 @@
   <button class="btn btn-secondary" (click)="logout()">Logout</button>
 </div>
 
-<ng-template #loggedOut>
-  Please login or sign up.
-</ng-template>
+<ng-template #loggedOut> Please login or sign up. </ng-template>
