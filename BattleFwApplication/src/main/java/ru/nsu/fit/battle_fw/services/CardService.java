@@ -59,10 +59,9 @@ public class CardService {
      * @throws BadCellException - Если в данную клетку нельзя поставить карту
      * Ничего не возвращает
      */
-    public void putCardInCell(PutCardInCellRequest req)
+    public void putCardInCell(PutCardInCellRequest req, String playerName)
             throws NoBabosException, BadCellException {
         Integer gameId = req.getGameId();
-        Integer playerId = req.getPlayerId();
         Integer cardId = req.getCardId();
         Integer cellId = req.getCellId();
 
@@ -70,12 +69,12 @@ public class CardService {
             throw new BadCellException();
         } else {  // Если нет, то ставим карту
             Card card = cardR.getReferenceById(cardId);
-            Status status = statusR.getStatus(gameId, playerId);
+            Status status = statusR.getStatus(gameId, playerName);
 
             if (status.getBabos() < card.getCost()) { // Проверка на наличие бабосов
                 throw new NoBabosException();
             } else {
-                Hand hand = handR.getHand(gameId, playerId);
+                Hand hand = handR.getHand(gameId, playerName);
                 hand.setCards_cnt(hand.getCards_cnt() - 1); // Удаление карты из руки
 
                 List<HandComp> handCompList = handCompR.getHandCard(hand.getId_hand(), cardId); // Берём карту с нужным id
@@ -84,7 +83,7 @@ public class CardService {
 
                 Cell cell = cellR.getCell(gameId, cellId); // Постановка карты
                 cell.setId_card(cardId);
-                cell.setId_owner(playerId);
+                cell.setName_owner(playerName);
                 cell.setSickness(1); // Установка болезни выхода
 
                 status.setBabos(status.getBabos() - card.getCost()); // Убавление бабосов
@@ -107,10 +106,9 @@ public class CardService {
      * @throws CollectorsLimitException - Кидается, если достигнут лимит сборщиков, и ставить больше нельзя
      * Ничего не возвращает
      */
-    public void putCollectorInCell(PutCollectorInCellRequest req)
+    public void putCollectorInCell(PutCollectorInCellRequest req, String playerName)
             throws NoBabosException, BadCellException, CollectorsLimitException {
         Integer gameId = req.getGameId();
-        Integer playerId = req.getPlayerId();
         Integer cellId = req.getCellId();
 
         if (cellId > 8 && cellId < 49) { // Сборщики нельзя ставить в обычные клетки
@@ -118,7 +116,7 @@ public class CardService {
         } else {
             Card collector = cardR.getReferenceById(49); // 49 - id карты сборщика
 
-            Status status = statusR.getStatus(gameId, playerId);
+            Status status = statusR.getStatus(gameId, playerName);
 
             if (status.getBabos() < collector.getCost()) { // Проверка на наличие денег
                 throw new NoBabosException();
@@ -127,7 +125,7 @@ public class CardService {
             } else {
                 Cell cell = cellR.getCell(gameId, cellId);
                 cell.setId_card(49);
-                cell.setId_owner(playerId);
+                cell.setName_owner(playerName);
                 cell.setSickness(0); // У сборщиков нет болезни выстава
 
                 status.setCollectors(status.getCollectors() + 1); // Увеличиваем кол-во сборщиков
@@ -143,18 +141,17 @@ public class CardService {
      * @param req - Сам запрос
      * Ничего не возвращает
      */
-    public void moveCard(MoveCardRequest req) {
+    public void moveCard(MoveCardRequest req, String playerName) {
         Integer gameId = req.getGameId(); // Начальные данные
-        Integer playerId = req.getPlayerId();
         Integer cellId1 = req.getCellId1();
         Integer cellId2 = req.getCellId2();
 
         Cell cell1 = cellR.getCell(gameId, cellId1);
         Cell cell2 = cellR.getCell(gameId, cellId2);
         cell2.setId_card(cell1.getId_card()); // Установка карты
-        cell2.setId_owner(playerId);
+        cell2.setName_owner(playerName);
         cell1.setId_card(null); // Очищение предыдущей клетки
-        cell1.setId_owner(null);
+        cell1.setName_owner(null);
 
         cellR.save(cell1);
         cellR.save(cell2);

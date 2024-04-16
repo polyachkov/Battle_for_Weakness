@@ -16,8 +16,9 @@ public class Library {
     @Column(name = "game_id")
     private Integer game_id;
 
-    @Column(name = "player_id")
-    private Integer player_id;
+    @Column(name = "player_name")
+    private String player_name;
+
 
     @Column(name = "cards_cnt")
     private Integer cards_cnt;
@@ -44,12 +45,12 @@ public class Library {
         this.game_id = game_id;
     }
 
-    public Integer getPlayer_id() {
-        return player_id;
+    public String getPlayer_id() {
+        return player_name;
     }
 
-    public void setPlayer_id(Integer player_id) {
-        this.player_id = player_id;
+    public void setPlayer_id(String player_id) {
+        this.player_name = player_id;
     }
 
     public Integer getCards_cnt() {

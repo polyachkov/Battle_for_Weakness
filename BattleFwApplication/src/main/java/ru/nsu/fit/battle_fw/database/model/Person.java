@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "persona", schema = "public")
+@Deprecated
 public class Person {
     @Id
     @Column(name = "id_profile")
