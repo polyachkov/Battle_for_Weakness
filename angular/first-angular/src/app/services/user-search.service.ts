@@ -38,8 +38,8 @@ export class UserSearchService {
     );
   }
 
-  inviteUser(inviterId: number, invitedId: number, inviterRace: string): Observable<any> {
-    const body = { inviter_id: inviterId, invited_id: invitedId, inviter_race: inviterRace };
+  inviteUser(invitedName: string, inviterRace: string): Observable<any> {
+    const body = { invited_name: invitedName, inviter_race: inviterRace };
 
     return this.http.post(this.inviteUserUrl, body).pipe(
       catchError(this.errorHandler.bind(this))

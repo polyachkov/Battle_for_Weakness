@@ -14,15 +14,13 @@ export class UserInfoComponent {
   invited = false
 
   constructor(
-    private token: TokenStorageService,
     private userSearchService: UserSearchService
   ) {
   }
 
-  inviteUser(invitedId: number): void {
-    const inviterId = parseInt(this.token.getId(), 10);
+  inviteUser(invitedName: string): void {
     const inviterRace = 'mountains';
-    this.userSearchService.inviteUser(inviterId, invitedId, inviterRace)
+    this.userSearchService.inviteUser(invitedName, inviterRace)
       .subscribe(
         () => {
           console.log('Invitation sent successfully.');
