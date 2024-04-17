@@ -3,7 +3,6 @@ package ru.nsu.fit.battle_fw.requests.post;
 import java.io.Serializable;
 public class PutCardInCellRequest implements Serializable {
     private Integer gameId;
-    private Integer playerId;
     private Integer cardId;
     private Integer cellId;
 
@@ -13,14 +12,6 @@ public class PutCardInCellRequest implements Serializable {
 
     public void setGameId(Integer gameId) {
         this.gameId = gameId;
-    }
-
-    public Integer getPlayerId() {
-        return playerId;
-    }
-
-    public void setPlayerId(Integer playerId) {
-        this.playerId = playerId;
     }
 
     public Integer getCardId() {

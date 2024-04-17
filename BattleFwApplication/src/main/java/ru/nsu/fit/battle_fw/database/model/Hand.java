@@ -16,8 +16,8 @@ public class Hand {
     @Column(name = "id_game")
     private Integer id_game;
 
-    @Column(name = "id_player")
-    private Integer id_player;
+    @Column(name = "name_player")
+    private String name_player;
 
     @Column(name = "cards_cnt")
     private Integer cards_cnt;
@@ -38,12 +38,12 @@ public class Hand {
         this.id_game = id_game;
     }
 
-    public Integer getId_player() {
-        return id_player;
+    public String getName_player() {
+        return name_player;
     }
 
-    public void setId_player(Integer id_player) {
-        this.id_player = id_player;
+    public void setName_player(String name_player) {
+        this.name_player = name_player;
     }
 
     public Integer getCards_cnt() {

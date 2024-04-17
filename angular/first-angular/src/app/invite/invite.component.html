@@ -1,0 +1,18 @@
+<div>
+  <input
+    type="text"
+    class="mb-2 border py-2 px-4 w-full"
+    placeholder="Search users..."
+    [(ngModel)]="term"
+  >
+
+  <div *ngIf="users | async as users">
+    <app-user-info
+      *ngFor="let user of (users | filterUsers: term).slice(0, 10); let i = index"
+      [user]="user">
+    </app-user-info>
+  </div>
+
+</div>
+
+

@@ -1,10 +1,12 @@
 export class JwtResponse {
+  id: number;
   token: string;
   type: string;
   username: string;
   roles: string[];
 
-  constructor(token: string, type: string, username: string) {
+  constructor(id: number, token: string, type: string, username: string) {
+    this.id = id;
     this.token = token;
     this.type = type;
     this.username = username;

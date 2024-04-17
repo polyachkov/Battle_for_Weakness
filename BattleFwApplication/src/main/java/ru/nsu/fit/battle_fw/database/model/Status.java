@@ -13,8 +13,8 @@ public class Status {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "statusIdSeq")
     private Integer id_status;
 
-    @Column(name = "id_player")
-    private Integer id_player;
+    @Column(name = "name_player")
+    private String name_player;
 
     @Column(name = "id_game")
     private Integer id_game;
@@ -36,12 +36,12 @@ public class Status {
         this.id_status = id_status;
     }
 
-    public Integer getId_player() {
-        return id_player;
+    public String getName_player() {
+        return name_player;
     }
 
-    public void setId_player(Integer id_player) {
-        this.id_player = id_player;
+    public void setName_player(String name_player) {
+        this.name_player = name_player;
     }
 
     public Integer getId_game() {

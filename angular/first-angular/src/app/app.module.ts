@@ -34,6 +34,9 @@ import { UserComponent } from './user/user.component';
 import { ModComponent } from './mod/mod.component';
 import { AdminComponent } from './admin/admin.component';
 import { httpInterceptorProviders } from "./auth/auth-interceptor";
+import { InviteComponent } from './invite/invite.component';
+import { UserInfoComponent } from './user-info/user-info.component';
+import { FilterUsersPipe } from './pipes/filter-users.pipe';
 
 @NgModule({
   declarations: [
@@ -59,6 +62,9 @@ import { httpInterceptorProviders } from "./auth/auth-interceptor";
     UserComponent,
     ModComponent,
     AdminComponent,
+    InviteComponent,
+    UserInfoComponent,
+    FilterUsersPipe,
   ],
   imports: [
     BrowserModule,
