@@ -377,8 +377,7 @@ public class GameService {
             throw new InviteIsNullException("Invite does not exist");
         }
 
-        InitGameRequest req2 = new InitGameRequest(inviter_race, invited_race, inviter_name, invited_name);
-        initializeGameAndLibraries(req2);
-
+//        InitGameRequest req2 = new InitGameRequest(inviter_race, invited_race, inviter_name, invited_name);
+//        initializeGameAndLibraries(req2);
     }
 }

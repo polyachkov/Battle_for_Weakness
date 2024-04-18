@@ -146,8 +146,8 @@ DROP TABLE IF EXISTS invites;
 CREATE TABLE IF NOT EXISTS invites
 (
     invite_id INTEGER PRIMARY KEY,
-    inviter_id INTEGER NOT NULL ,
-    invited_id INTEGER NOT NULL,
+    inviter_name VARCHAR(200) NOT NULL ,
+    invited_name VARCHAR(200) NOT NULL,
     inviter_race VARCHAR(200) NOT NULL
 );
 DROP SEQUENCE IF EXISTS invite_id_seq;

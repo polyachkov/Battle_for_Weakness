@@ -133,26 +133,6 @@ public class SiteController {
         return gameService.getFieldByGame(req.getGameId());
     }
 
-    @PostMapping("/invite/create")
-    public void InviteCreate(@RequestHeader Map<String, String> headers, @RequestBody InviteCreateRequest req) {
-        logger.info("POST /invite/create");
-        String nameOwner = getUsernameFromJWT(headers);
-        gameService.createInvite(req, nameOwner);
-    }
-
-    @PostMapping("/invite/delete")
-    public void InviteDelete(@RequestHeader Map<String, String> headers, @RequestBody InviteDeleteRequest req) {
-        logger.info("POST /invite/delete");
-        String nameOwner = getUsernameFromJWT(headers);
-        gameService.deleteInvite(req, nameOwner);
-    }
-
-    @PostMapping("/invite/accept")
-    public void InviteAccept(@RequestHeader Map<String, String> headers, @RequestBody InviteAcceptRequest req) throws InviteIsNullException {
-        logger.info("POST /invite/accept");
-        String nameOwner = getUsernameFromJWT(headers);
-        gameService.acceptInvite(req, nameOwner);
-    }
     @GetMapping(value = "/get-headers")
     public ResponseEntity<?> getHeaders(@RequestHeader Map<String, String> headers){//представляет заголовки ввиде мапы,
         //где ключ это наименование заголовка, а значение мапы - это значение заголовка
