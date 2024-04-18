@@ -20,5 +20,10 @@
   <h1>
     Invites
   </h1>
-
+  <div *ngIf="invites | async as invites">
+    <app-invite-info
+      *ngFor="let invite of invites.slice(0, 10); let i = index"
+      [invite]="invite">
+    </app-invite-info>
+  </div>
 </div>

@@ -1,7 +1,6 @@
 import {Component, Input} from '@angular/core';
-import {UInfo} from "../models/user-model";
-import {UserSearchService} from "../services/user-search.service";
-import {TokenStorageService} from "../auth/token-storage.service";
+import {IUser} from "../../models/user-model";
+import {InviteService} from "../../services/invite.service";
 
 @Component({
   selector: 'app-user-info',
@@ -9,18 +8,18 @@ import {TokenStorageService} from "../auth/token-storage.service";
   styleUrls: ['./user-info.component.scss']
 })
 export class UserInfoComponent {
-  @Input() user!: UInfo
+  @Input() user!: IUser
 
   invited = false
 
   constructor(
-    private userSearchService: UserSearchService
+    private inviteService: InviteService
   ) {
   }
 
   inviteUser(invitedName: string): void {
-    const inviterRace = 'mountains';
-    this.userSearchService.inviteUser(invitedName, inviterRace)
+    const inviterRace: string = 'mountains';
+    this.inviteService.inviteUser(invitedName, inviterRace)
       .subscribe(
         () => {
           console.log('Invitation sent successfully.');
