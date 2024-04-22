@@ -6,8 +6,13 @@ import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { UserComponent } from './user/user.component';
 import { AdminComponent } from './admin/admin.component';
+import {InviteComponent} from "./invite/invite.component";
 
 const routes: Routes = [
+  {
+    path: 'invite',
+    component: InviteComponent
+  },
   {
     path: 'home',
     component: HomeComponent

@@ -1,0 +1,7 @@
+<p>
+  {{ user.id }} - {{ user.username }}
+  <button (click)="inviteUser(user.username);invited = true">
+    {{ invited ? 'Invited' : 'Invite'}}
+  </button>
+</p>
+

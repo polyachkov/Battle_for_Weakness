@@ -1,0 +1,10 @@
+<p>
+  {{ invite.inviter_name }}
+  <button (click)="acceptInvite(invite.inviter_name)">
+    Accept
+  </button>
+  <button (click)="rejectInvite(invite.inviter_name)">
+    Reject
+  </button>
+</p>
+

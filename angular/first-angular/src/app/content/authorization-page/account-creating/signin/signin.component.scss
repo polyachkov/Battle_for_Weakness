@@ -17,6 +17,16 @@
   border-radius: 55px;
 }
 
+.inputDiv {
+  height: 345px;
+}
+
+.registerButton {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
 .wrapperForButtons {
   margin-bottom: 30px;
   margin-top: 25px;

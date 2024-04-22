@@ -120,14 +120,6 @@ INSERT INTO roles(name) VALUES('ROLE_ADMIN');
 -- DROP SEQUENCE IF EXISTS role_id_seq;
 -- CREATE SEQUENCE IF NOT EXISTS role_id_seq START WITH 1 INCREMENT BY 1;
 
-CREATE TABLE IF NOT EXISTS user_roles (
-      user_id INTEGER,
-      role_id INTEGER,
-      FOREIGN KEY (user_id) REFERENCES users (user_id),
-      FOREIGN KEY (role_id) REFERENCES roles (role_id)
-);
-
-
 DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE IF NOT EXISTS users
 (
@@ -139,12 +131,23 @@ CREATE TABLE IF NOT EXISTS users
 DROP SEQUENCE IF EXISTS user_id_seq;
 CREATE SEQUENCE IF NOT EXISTS user_id_seq START WITH 1 INCREMENT BY 1;
 
+DROP TABLE IF EXISTS user_roles;
+CREATE TABLE IF NOT EXISTS user_roles (
+      user_id INTEGER,
+      role_id INTEGER,
+      FOREIGN KEY (user_id) REFERENCES users (user_id),
+      FOREIGN KEY (role_id) REFERENCES roles (role_id)
+);
+
+
+
+
 DROP TABLE IF EXISTS invites;
 CREATE TABLE IF NOT EXISTS invites
 (
     invite_id INTEGER PRIMARY KEY,
-    inviter_id INTEGER NOT NULL ,
-    invited_id INTEGER NOT NULL,
+    inviter_name VARCHAR(200) NOT NULL ,
+    invited_name VARCHAR(200) NOT NULL,
     inviter_race VARCHAR(200) NOT NULL
 );
 DROP SEQUENCE IF EXISTS invite_id_seq;
