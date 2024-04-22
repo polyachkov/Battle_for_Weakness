@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS game
     id_game     INTEGER PRIMARY KEY,
     name_player1  VARCHAR(200) NOT NULL,
     name_player2  VARCHAR(200) NOT NULL,
-    id_turn     INTEGER NOT NULL,
+    name_turn     VARCHAR(200) NOT NULL,
     is_ended    BOOLEAN NOT NULL
 );
 DROP SEQUENCE IF EXISTS games_id_seq;

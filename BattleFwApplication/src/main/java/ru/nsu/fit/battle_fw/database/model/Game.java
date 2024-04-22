@@ -19,7 +19,7 @@ public class Game {
     @Column(name = "name_player2")
     private String name_player2;
 
-    @Column(name = "id_turn")
+    @Column(name = "name_turn")
     private String name_turn;
 
     @Column(name = "is_ended")
