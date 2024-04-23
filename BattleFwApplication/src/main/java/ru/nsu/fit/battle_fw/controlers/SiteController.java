@@ -12,12 +12,15 @@ import ru.nsu.fit.battle_fw.exceptions.*;
 import ru.nsu.fit.battle_fw.requests.get.GameIdRequest;
 import ru.nsu.fit.battle_fw.requests.get.GetGameRequest;
 import ru.nsu.fit.battle_fw.requests.post.*;
+import ru.nsu.fit.battle_fw.responses.AllUsersResponse;
+import ru.nsu.fit.battle_fw.responses.info.UserInfo;
 import ru.nsu.fit.battle_fw.services.CardService;
 import ru.nsu.fit.battle_fw.services.GameService;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static ru.nsu.fit.battle_fw.helpers.GetFromHeaders.getUsernameFromJWT;
 
@@ -107,6 +110,14 @@ public class SiteController {
         logger.info("get game by players");
         String nameOwner = getUsernameFromJWT(headers, jwtUtils);
         return gameService.getGameByPlayers(req, nameOwner);
+    }
+
+    @GetMapping("/get/all/games")
+    public ResponseEntity<?> getAllGames(@RequestHeader Map<String, String> headers) {
+        logger.info("GET /get/all/games");
+
+        String nameOwner = getUsernameFromJWT(headers, jwtUtils);
+        return gameService.getAllGames(nameOwner);
     }
 
     @GetMapping("/get/game/byid")

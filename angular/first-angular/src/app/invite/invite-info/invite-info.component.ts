@@ -17,8 +17,8 @@ export class InviteInfoComponent {
   }
 
   acceptInvite(inviterName: string): void {
-    const invitedRace: string = 'mountains';
-    this.inviteService.acceptInvite(inviterName, invitedRace)
+    const invitedFraction: string = 'mountains';
+    this.inviteService.acceptInvite(inviterName, invitedFraction)
       .subscribe(
         () => {
           console.log('Invitation accept successfully.');
