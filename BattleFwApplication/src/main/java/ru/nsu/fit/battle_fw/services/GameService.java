@@ -27,6 +27,7 @@ public class GameService {
     private final CellRepo cellR;
     private final StatusRepo statusR;
     private final InviteRepo inviteR;
+    private final UserRepo userR;
 
     /**
      * Конструктор. Принимает объекты, позволяющие влиять на базу данных.
@@ -42,7 +43,7 @@ public class GameService {
      * @param inviteR - Приглашения в игры
      */
     public GameService(PersonRepo personR, CardRepo cardR, GameRepo gameR, LibraryRepo libR, LibraryCompRepo libCompR,
-                       HandRepo handR, HandCompRepo handCompR, CellRepo cellR, StatusRepo statusR, InviteRepo inviteR) {
+                       HandRepo handR, HandCompRepo handCompR, CellRepo cellR, StatusRepo statusR, InviteRepo inviteR, UserRepo userR) {
         this.personR = personR;
         this.cardR = cardR;
         this.gameR = gameR;
@@ -53,6 +54,7 @@ public class GameService {
         this.cellR = cellR;
         this.statusR = statusR;
         this.inviteR = inviteR;
+        this.userR = userR;
     }
 
     /**
@@ -329,16 +331,28 @@ public class GameService {
      * @param req - содержит имя приглашённого
      * @param inviter_name - имя приглашающего
      */
-    public void createInvite(InviteCreateRequest req, String inviter_name) {
+    public void createInvite(InviteCreateRequest req, String inviter_name) throws EqualsPlayersException, JustNoPersonException {
         String invited_name = req.getInvited_name();
         String inviter_race = req.getInviter_race();
 
         Invite inv = new Invite(inviter_name, invited_name, inviter_race);
 
+        if(invited_name.equals(inviter_name)){
+            throw new EqualsPlayersException("Нельзя пригласить самого себя в игру");
+        }
+
+        boolean exists1 = userR.getAllUsers().stream().anyMatch(obj -> obj.getUsername().equals(invited_name));
+        boolean exists2 = userR.getAllUsers().stream().anyMatch(obj -> obj.getUsername().equals(inviter_name));
+
+
+        if(!(exists1 && exists2)){
+            throw new JustNoPersonException("Одного из игрков (приглашённого или приглашающего) не существует");
+        }
+
         Invite check = inviteR.getInvite(inviter_name, invited_name);
         Game g1 = gameR.getGame(inviter_name, invited_name);
         Game g2 = gameR.getGame(invited_name, inviter_name);
-        if(check == null && g1 == null && g2 == null && invited_name != inviter_name) {
+        if(check == null && g1 == null && g2 == null) {
             inviteR.save(inv);
         }
     }

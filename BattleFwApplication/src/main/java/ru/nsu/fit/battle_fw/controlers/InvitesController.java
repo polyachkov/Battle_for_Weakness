@@ -8,7 +8,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import ru.nsu.fit.battle_fw.database.model.Invite;
 import ru.nsu.fit.battle_fw.database.repo.InviteRepo;
+import ru.nsu.fit.battle_fw.exceptions.EqualsPlayersException;
 import ru.nsu.fit.battle_fw.exceptions.InviteIsNullException;
+import ru.nsu.fit.battle_fw.exceptions.JustNoPersonException;
 import ru.nsu.fit.battle_fw.requests.post.InviteAcceptRequest;
 import ru.nsu.fit.battle_fw.requests.post.InviteCreateRequest;
 import ru.nsu.fit.battle_fw.requests.post.InviteDeleteRequest;
@@ -68,7 +70,7 @@ public class InvitesController {
     }
 
     @PostMapping("/invite/create")
-    public void InviteCreate(@RequestHeader Map<String, String> headers, @RequestBody InviteCreateRequest req) {
+    public void InviteCreate(@RequestHeader Map<String, String> headers, @RequestBody InviteCreateRequest req) throws EqualsPlayersException, JustNoPersonException {
         logger.info("POST /invite/create");
         String nameOwner = getUsernameFromJWT(headers);
         gameService.createInvite(req, nameOwner);

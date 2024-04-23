@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static ru.nsu.fit.battle_fw.helpers.GetFromHeaders.getUsernameFromJWT;
+
 @RestController
 public class SiteController {
 
@@ -33,19 +35,6 @@ public class SiteController {
                           CardService cardService) {
         this.gameService = gameService;
         this.cardService = cardService;
-    }
-
-    public String getUsernameFromJWT(Map<String, String> headers){
-        String headerAuth = headers.get("authorization");
-        String jwt;
-
-        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-            jwt = headerAuth.substring(7);
-        }
-        else{
-            return null;
-        }
-        return jwtUtils.getUserNameFromJwtToken(jwt);
     }
 
     @PostMapping("/person/add")
@@ -71,7 +60,7 @@ public class SiteController {
     @PostMapping("/putCardInCell")
     public void putCardInCell(@RequestHeader Map<String, String> headers, @RequestBody PutCardInCellRequest req)
             throws NoBabosException, BadCellException, CollectorsLimitException {
-        String nameOwner = getUsernameFromJWT(headers);
+        String nameOwner = getUsernameFromJWT(headers, jwtUtils);
         logger.info("POST /putCardInCell");
         logger.info("GameId " + req.getGameId());
         logger.info("PlayerId " + nameOwner);
@@ -83,8 +72,8 @@ public class SiteController {
     @PostMapping("/putCollectorInCell")
     public void putCollectorInCell(@RequestHeader Map<String, String> headers, @RequestBody PutCollectorInCellRequest req)
             throws NoBabosException, BadCellException, CollectorsLimitException {
-        String nameOwner = getUsernameFromJWT(headers);
-        logger.info("POST /putCardInCell");
+        String nameOwner = getUsernameFromJWT(headers, jwtUtils);
+        logger.info("POST /putCollectorInCell");
         logger.info("GameId " + req.getGameId());
         logger.info("PlayerId " + nameOwner);
         logger.info("CellId " + req.getCellId());
@@ -93,7 +82,7 @@ public class SiteController {
 
     @PostMapping("/moveCard")
     public void moveCardRequest(@RequestHeader Map<String, String> headers, @RequestBody MoveCardRequest req) {
-        String nameOwner = getUsernameFromJWT(headers);
+        String nameOwner = getUsernameFromJWT(headers, jwtUtils);
         logger.info("POST /moveCard");
         logger.info("GameId " + req.getGameId());
         logger.info("PlayerId " + nameOwner);
@@ -104,7 +93,7 @@ public class SiteController {
 
     @PostMapping("/nextTurn")
     public void nextTurn(@RequestHeader Map<String, String> headers, @RequestBody NextTurnRequest req) {
-        String nameOwner = getUsernameFromJWT(headers);
+        String nameOwner = getUsernameFromJWT(headers, jwtUtils);
         logger.info("POST /nextTurn");
         logger.info("GameId " + req.getGameId());
         logger.info("NextTurnId " + nameOwner);
@@ -116,7 +105,7 @@ public class SiteController {
     public Optional<Game> getGameId(@RequestHeader Map<String, String> headers, @RequestBody GetGameRequest req) {
         logger.info("GET /get/Game");
         logger.info("get game by players");
-        String nameOwner = getUsernameFromJWT(headers);
+        String nameOwner = getUsernameFromJWT(headers, jwtUtils);
         return gameService.getGameByPlayers(req, nameOwner);
     }
 
@@ -137,10 +126,5 @@ public class SiteController {
     public ResponseEntity<?> getHeaders(@RequestHeader Map<String, String> headers){//представляет заголовки ввиде мапы,
         //где ключ это наименование заголовка, а значение мапы - это значение заголовка
         return ResponseEntity.ok(headers);
-    }
-    @GetMapping(value = "/get-jwt")
-    public String getJWT(@RequestHeader Map<String, String> headers){//представляет заголовки ввиде мапы,
-        //где ключ это наименование заголовка, а значение мапы - это значение заголовка
-        return getUsernameFromJWT(headers) != null ? getUsernameFromJWT(headers) : "hui";
     }
 }
