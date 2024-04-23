@@ -9,8 +9,8 @@ public class InviteAcceptRequest {
         return invited_fraction;
     }
 
-    public void setInvited_fraction(String inviter_race) {
-        this.invited_fraction = inviter_race;
+    public void setInvited_fraction(String inviter_fraction) {
+        this.invited_fraction = inviter_fraction;
     }
 
     public String getInviter_name() {
