@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS invites
     invite_id INTEGER PRIMARY KEY,
     inviter_name VARCHAR(200) NOT NULL ,
     invited_name VARCHAR(200) NOT NULL,
-    inviter_race VARCHAR(200) NOT NULL
+    inviter_fraction VARCHAR(200) NOT NULL
 );
 DROP SEQUENCE IF EXISTS invite_id_seq;
 CREATE SEQUENCE IF NOT EXISTS invite_id_seq START WITH 1 INCREMENT BY 1;
