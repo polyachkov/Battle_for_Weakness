@@ -1,5 +1,15 @@
 <div *ngIf="isSignedUp; else signupForm">
-  Your registration is successful. Please login!
+  <div
+    style="
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 350px;
+      font-size: 25px;
+    "
+  >
+    Your registration is successful. Please login!
+  </div>
 </div>
 
 <ng-template #signupForm>
@@ -83,7 +93,7 @@
       </div>
       <div class="registerButton">
         <button class="menuButton">Register</button>
-        <div *ngIf="f.submitted && isSignUpFailed" class="alert alert-warning">
+        <div *ngIf="f.submitted && isSignUpFailed" class="alert-warning">
           Signup failed!<br />{{ errorMessage }}
         </div>
       </div>
