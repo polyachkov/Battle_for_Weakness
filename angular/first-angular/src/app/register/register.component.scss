@@ -182,3 +182,12 @@ p {
   transform: scale(0.65) translateY(-1rem) translateX(0.2rem);
   color: #03a9f4;
 }
+
+.alert-warning {
+  margin-bottom: 10px;
+  font-size: 19px;
+  font-weight: bold;
+  color: #800030;
+  margin-left: 15px;
+  margin-right: -120px;
+}
