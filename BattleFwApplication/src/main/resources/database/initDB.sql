@@ -27,9 +27,9 @@ DROP TABLE IF EXISTS game;
 CREATE TABLE IF NOT EXISTS game
 (
     id_game     INTEGER PRIMARY KEY,
-    id_player1  INTEGER NOT NULL,
-    id_player2  INTEGER NOT NULL,
-    id_turn     INTEGER NOT NULL,
+    name_player1  VARCHAR(200) NOT NULL,
+    name_player2  VARCHAR(200) NOT NULL,
+    name_turn     VARCHAR(200) NOT NULL,
     is_ended    BOOLEAN NOT NULL
 );
 DROP SEQUENCE IF EXISTS games_id_seq;
@@ -40,7 +40,7 @@ CREATE TABLE library
 (
     id_library  INTEGER PRIMARY KEY ,
     game_id     INTEGER  NOT NULL,
-    player_id   INTEGER NOT NULL,
+    player_name   VARCHAR(200) NOT NULL,
     cards_cnt   INTEGER NOT NULL,
     rarity      VARCHAR(200) NOT NULL,
     locked      BOOLEAN NOT NULL
@@ -62,7 +62,7 @@ DROP TABLE IF EXISTS hand;
 CREATE TABLE hand
 (
     id_hand   INTEGER PRIMARY KEY ,
-    id_player INTEGER  NOT NULL,
+    name_player VARCHAR(200)  NOT NULL,
     id_game   INTEGER NOT NULL,
     cards_cnt INTEGER NOT NULL
 );
@@ -86,7 +86,7 @@ CREATE TABLE cell
     id_game     INTEGER NOT NULL,
     cell_num    INTEGER NOT NULL,
     id_card     INTEGER,
-    id_owner    INTEGER,
+    name_owner    VARCHAR(200),
     sickness    INTEGER
 );
 DROP SEQUENCE IF EXISTS cell_id_seq;
@@ -96,7 +96,7 @@ DROP TABLE IF EXISTS status;
 CREATE TABLE IF NOT EXISTS status
 (
     id_status   INTEGER PRIMARY KEY ,
-    id_player   INTEGER NOT NULL ,
+    name_player   VARCHAR(200) NOT NULL ,
     id_game     INTEGER NOT NULL,
     babos       INTEGER NOT NULL,
     collectors  INTEGER NOT NULL,
@@ -146,9 +146,9 @@ DROP TABLE IF EXISTS invites;
 CREATE TABLE IF NOT EXISTS invites
 (
     invite_id INTEGER PRIMARY KEY,
-    inviter_id INTEGER NOT NULL ,
-    invited_id INTEGER NOT NULL,
-    inviter_race VARCHAR(200) NOT NULL
+    inviter_name VARCHAR(200) NOT NULL ,
+    invited_name VARCHAR(200) NOT NULL,
+    inviter_fraction VARCHAR(200) NOT NULL
 );
 DROP SEQUENCE IF EXISTS invite_id_seq;
 CREATE SEQUENCE IF NOT EXISTS invite_id_seq START WITH 1 INCREMENT BY 1;

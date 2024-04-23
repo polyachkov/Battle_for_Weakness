@@ -1,4 +1,4 @@
-export interface UInfo {
+export interface IUser {
   id: number
   username: string
 }

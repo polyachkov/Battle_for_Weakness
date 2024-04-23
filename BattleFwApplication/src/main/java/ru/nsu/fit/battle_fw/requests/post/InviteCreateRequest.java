@@ -1,33 +1,24 @@
 package ru.nsu.fit.battle_fw.requests.post;
 
 public class InviteCreateRequest {
-    private int inviter_id;
 
-    private int invited_id;
+    private String invited_name;
 
-    private String inviter_race;
+    private String inviter_fraction;
 
-    public String getInviter_race() {
-        return inviter_race;
+    public String getInviter_fraction() {
+        return inviter_fraction;
     }
 
-    public void setInviter_race(String inviter_race) {
-        this.inviter_race = inviter_race;
+    public void setInviter_fraction(String inviter_fraction) {
+        this.inviter_fraction = inviter_fraction;
     }
 
-    public int getInviter_id() {
-        return inviter_id;
+    public String getInvited_name() {
+        return invited_name;
     }
 
-    public void setInviter_id(int inviter_id) {
-        this.inviter_id = inviter_id;
-    }
-
-    public int getInvited_id() {
-        return invited_id;
-    }
-
-    public void setInvited_id(int invited_id) {
-        this.invited_id = invited_id;
+    public void setInvited_name(String invited_name) {
+        this.invited_name = invited_name;
     }
 }

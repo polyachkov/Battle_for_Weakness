@@ -22,8 +22,8 @@ public class Cell {
     @Column(name = "id_card")
     private Integer id_card;
 
-    @Column(name = "id_owner")
-    private Integer id_owner;
+    @Column(name = "name_owner")
+    private String name_owner;
 
     @Column(name = "sickness")
     private Integer sickness;
@@ -60,12 +60,12 @@ public class Cell {
         this.id_card = id_card;
     }
 
-    public Integer getId_owner() {
-        return id_owner;
+    public String getName_owner() {
+        return name_owner;
     }
 
-    public void setId_owner(Integer id_owner) {
-        this.id_owner = id_owner;
+    public void setName_owner(String id_owner) {
+        this.name_owner = id_owner;
     }
 
     public Integer getSickness() {
