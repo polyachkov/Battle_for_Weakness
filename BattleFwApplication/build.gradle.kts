@@ -7,6 +7,12 @@ plugins {
 group = "ru.nsu.fit.battle_fw"
 version = "0.0.1-SNAPSHOT"
 
+tasks.jar {
+	manifest {
+		attributes["Main-Class"] = "ru.nsu.fit.battle_fw.BattleFwApplication"
+	}
+}
+
 java {
 	sourceCompatibility = JavaVersion.VERSION_17
 }
