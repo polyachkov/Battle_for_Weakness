@@ -18,15 +18,15 @@ public class Invite {
     @Column(name = "invited_name")
     private String invited_name;
 
-    @Column(name = "inviter_race")
-    private String inviter_race;
+    @Column(name = "inviter_fraction")
+    private String inviter_fraction;
 
-    public String getInviter_race() {
-        return inviter_race;
+    public String getInviter_fraction() {
+        return inviter_fraction;
     }
 
-    public void setInviter_race(String inviter_race) {
-        this.inviter_race = inviter_race;
+    public void setInviter_fraction(String inviter_fraction) {
+        this.inviter_fraction = inviter_fraction;
     }
 
     public Integer getInvite_id() {
@@ -53,10 +53,10 @@ public class Invite {
         this.invited_name = invited_name;
     }
 
-    public Invite(String inviter_name, String invited_name, String inviter_race){
+    public Invite(String inviter_name, String invited_name, String inviter_fraction){
         this.inviter_name = inviter_name;
         this.invited_name = invited_name;
-        this.inviter_race = inviter_race;
+        this.inviter_fraction = inviter_fraction;
     }
     public Invite(){
     }

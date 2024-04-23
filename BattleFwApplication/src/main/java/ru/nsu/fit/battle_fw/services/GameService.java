@@ -333,9 +333,9 @@ public class GameService {
      */
     public void createInvite(InviteCreateRequest req, String inviter_name) throws EqualsPlayersException, JustNoPersonException {
         String invited_name = req.getInvited_name();
-        String inviter_race = req.getInviter_race();
+        String inviter_fraction = req.getInviter_fraction();
 
-        Invite inv = new Invite(inviter_name, invited_name, inviter_race);
+        Invite inv = new Invite(inviter_name, invited_name, inviter_fraction);
 
         if(invited_name.equals(inviter_name)){
             throw new EqualsPlayersException("Нельзя пригласить самого себя в игру");
@@ -380,18 +380,22 @@ public class GameService {
      */
     public void acceptInvite(InviteAcceptRequest req, String invited_name) throws InviteIsNullException {
         String inviter_name = req.getInviter_name();
-        String inviter_race;
-        String invited_race = req.getInvited_fraction();
+        String inviter_fraction;
+        String invited_fraction = req.getInvited_fraction();
         Invite toDel = inviteR.getInvite(inviter_name, invited_name);
         if(toDel != null) {
-            inviter_race = toDel.getInviter_race();
+            inviter_fraction = toDel.getInviter_fraction();
             inviteR.delete(toDel);
         }
         else{
             throw new InviteIsNullException("Invite does not exist");
         }
 
-//        InitGameRequest req2 = new InitGameRequest(inviter_race, invited_race, inviter_name, invited_name);
-//        initializeGameAndLibraries(req2);
+        InitGameRequest req2 = new InitGameRequest(inviter_fraction, invited_fraction, inviter_name, invited_name);
+        System.out.println(inviter_fraction);
+        System.out.println(invited_fraction);
+        System.out.println(inviter_name);
+        System.out.println(invited_name);
+        initializeGameAndLibraries(req2);
     }
 }
