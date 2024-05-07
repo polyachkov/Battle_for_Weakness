@@ -18,8 +18,8 @@ export class UserInfoComponent {
   }
 
   inviteUser(invitedName: string): void {
-    const inviterRace: string = 'mountains';
-    this.inviteService.inviteUser(invitedName, inviterRace)
+    const inviterFraction: string = 'mountains';
+    this.inviteService.inviteUser(invitedName, inviterFraction)
       .subscribe(
         () => {
           console.log('Invitation sent successfully.');
