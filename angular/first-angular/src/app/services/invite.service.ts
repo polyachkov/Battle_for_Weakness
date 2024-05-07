@@ -30,16 +30,16 @@ export class InviteService {
     );
   }
 
-  inviteUser(invitedName: string, inviterRace: string): Observable<any> {
-    const body = { invited_name: invitedName, inviter_race: inviterRace };
+  inviteUser(invitedName: string, inviterFraction: string): Observable<any> {
+    const body = { invited_name: invitedName, inviter_fraction: inviterFraction };
 
     return this.http.post(this.inviteUserUrl, body).pipe(
       catchError(this.errorHandler.bind(this))
     );
   }
 
-  acceptInvite(inviterName: string, invitedRace: string): Observable<any> {
-    const body = { inviter_name: inviterName, invited_race: invitedRace };
+  acceptInvite(inviterName: string, invitedFraction: string): Observable<any> {
+    const body = { inviter_name: inviterName, invited_fraction: invitedFraction };
 
     return this.http.post(this.acceptInviteUrl, body).pipe(
       catchError(this.errorHandler.bind(this))

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { GamePhases } from 'src/app/constants';
+import {GamePhases, Pages} from 'src/app/constants';
 import { GameControlService } from 'src/app/services/game-control.service';
 import { Fractions } from './constants';
+import {PageContentService} from "../../../services/page-content.service";
 
 @Component({
   selector: 'app-preparing',
@@ -13,5 +14,11 @@ export class PreparingComponent {
 
   Fraction = Fractions;
 
-  constructor(public gameControlService: GameControlService) {}
+  constructor(
+    public gameControlService: GameControlService,
+    public pageContentService: PageContentService
+  ) {
+  }
+
+  protected readonly Pages = Pages;
 }

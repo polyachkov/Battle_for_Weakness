@@ -17,6 +17,15 @@
       <div class="wrapper2">
         <div class="nameOther">Invitations</div>
         <div class="line2"></div>
+        <div>
+          <div *ngIf="invites | async as invites">
+            <app-invite-info
+              *ngFor="let invite of invites.slice(0, 10); let i = index"
+              [invite]="invite"
+            >
+            </app-invite-info>
+          </div>
+        </div>
       </div>
       <div class="wrapper2">
         <div class="nameOther">Current Games</div>

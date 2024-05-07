@@ -30,15 +30,19 @@
     />
   </button>
 
-  <button class="playButtons">
-    <div class="buttonText">Invite friend</div>
+    <button
+      (click)="pageContentService.handleChangeContent(Pages.AUTHORIZATION_PAGE)"
+      class="menuBtn"
+      routerLink="auth/login"
+    >
+      <div class="buttonText">Invite friend</div>
 
-    <img
-      class="buttonImg"
-      src="../../../../assets/Photoes/preparingButton.jpg"
-      alt="InviteFriend"
-    />
-  </button>
+      <img
+        class="buttonImg"
+        src="../../../../assets/Photoes/preparingButton.jpg"
+        alt="InviteFriend"
+      />
+    </button>
 </div>
 
 <div class="choice">
