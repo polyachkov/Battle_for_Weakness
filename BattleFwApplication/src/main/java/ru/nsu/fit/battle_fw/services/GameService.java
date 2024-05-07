@@ -1,14 +1,20 @@
 // GameService.java
 package ru.nsu.fit.battle_fw.services;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import ru.nsu.fit.battle_fw.database.model.*;
 import ru.nsu.fit.battle_fw.database.repo.*;
 import ru.nsu.fit.battle_fw.exceptions.*;
 import ru.nsu.fit.battle_fw.requests.get.GetGameRequest;
 import ru.nsu.fit.battle_fw.requests.post.*;
+import ru.nsu.fit.battle_fw.responses.AllGamesResponse;
+import ru.nsu.fit.battle_fw.responses.AllUsersResponse;
+import ru.nsu.fit.battle_fw.responses.info.GameInfo;
+import ru.nsu.fit.battle_fw.responses.info.UserInfo;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Данный класс содержит методы для обработки GET И POST запросов
@@ -397,5 +403,16 @@ public class GameService {
         System.out.println(inviter_name);
         System.out.println(invited_name);
         initializeGameAndLibraries(req2);
+    }
+
+    public ResponseEntity<?> getAllGames(String nameOwner) {
+        List<Game> games = gameR.getAllGames(nameOwner);
+
+        List<GameInfo> gameInfoList = games.stream()
+                .map(game -> new GameInfo(game.getName_player1(), game.getName_player2()))
+                .collect(Collectors.toList());
+
+        AllGamesResponse gamesResponse = new AllGamesResponse(gameInfoList);
+        return ResponseEntity.ok(gamesResponse);
     }
 }
