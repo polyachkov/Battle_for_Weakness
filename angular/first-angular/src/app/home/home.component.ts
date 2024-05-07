@@ -4,6 +4,8 @@ import { TokenStorageService } from '../auth/token-storage.service';
 import {Observable, tap} from "rxjs";
 import {IInvite} from "../models/invite-model";
 import {InviteService} from "../services/invite.service";
+import {GameService} from "../services/game.service";
+import {IGame} from "../models/game-model";
 
 @Component({
   selector: 'app-home',
@@ -11,15 +13,17 @@ import {InviteService} from "../services/invite.service";
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  loading = false
+  loading = false;
 
   info: any;
 
-  invites!: Observable<IInvite[]>
+  invites!: Observable<IInvite[]>;
+  games!: Observable<IGame[]>;
 
   constructor(
     private token: TokenStorageService,
-    public inviteSearchService: InviteService
+    public inviteSearchService: InviteService,
+    public gameService: GameService
   ) {
   }
 
@@ -30,7 +34,8 @@ export class HomeComponent implements OnInit {
       username: this.token.getUsername(),
       authorities: this.token.getAuthorities(),
     };
-    this.invites = this.inviteSearchService.getAll().pipe(
+    this.invites = this.inviteSearchService.getAll()
+    this.games = this.gameService.getAll().pipe(
       tap(() => this.loading = false)
     )
   }

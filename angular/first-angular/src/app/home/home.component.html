@@ -30,6 +30,15 @@
       <div class="wrapper2">
         <div class="nameOther">Current Games</div>
         <div class="line2"></div>
+        <div>
+          <div *ngIf="games | async as games">
+            <app-game
+              *ngFor="let game of games.slice(0, 10); let i = index"
+              [game]="game"
+            >
+            </app-game>
+          </div>
+        </div>
       </div>
     </div>
   </div>
