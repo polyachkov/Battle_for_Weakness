@@ -22,8 +22,7 @@ export class InviteComponent {
 
   ngOnInit(): void {
     this.loading = true
-    this.users = this.userSearchService.getAll()
-    this.invites = this.inviteSearchService.getAll().pipe(
+    this.users = this.userSearchService.getAll().pipe(
       tap(() => this.loading = false)
     )
   }

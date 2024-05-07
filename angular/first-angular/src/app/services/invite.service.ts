@@ -38,8 +38,8 @@ export class InviteService {
     );
   }
 
-  acceptInvite(invitedName: string, inviterFraction: string): Observable<any> {
-    const body = { inviter_name: invitedName, invited_fraction: inviterFraction };
+  acceptInvite(inviterName: string, invitedFraction: string): Observable<any> {
+    const body = { inviter_name: inviterName, invited_fraction: invitedFraction };
 
     return this.http.post(this.acceptInviteUrl, body).pipe(
       catchError(this.errorHandler.bind(this))

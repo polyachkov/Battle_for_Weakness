@@ -49,16 +49,16 @@ public class SiteController {
         gameService.addPerson(person);
     }
 
-    @Deprecated
-    @PostMapping("/init")
-    public void init(@RequestHeader Map<String, String> headers, @RequestBody InitGameRequest req) {
-        logger.info("POST /init");
-        logger.info("fraction1 " + req.getFraction1());
-        logger.info("fraction2 " + req.getFraction2());
-        logger.info("player1 " + req.getPlayer1());
-        logger.info("player2 " + req.getPlayer2());
-        gameService.initializeGameAndLibraries(req);
-    }
+//    @Deprecated
+//    @PostMapping("/init")
+//    public void init(@RequestHeader Map<String, String> headers, @RequestBody InitGameRequest req) {
+//        logger.info("POST /init");
+//        logger.info("fraction1 " + req.getFraction1());
+//        logger.info("fraction2 " + req.getFraction2());
+//        logger.info("player1 " + req.getPlayer1());
+//        logger.info("player2 " + req.getPlayer2());
+//        gameService.initializeGameAndLibraries(req);
+//    }
 
     @PostMapping("/putCardInCell")
     public void putCardInCell(@RequestHeader Map<String, String> headers, @RequestBody PutCardInCellRequest req)

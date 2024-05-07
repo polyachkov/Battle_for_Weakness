@@ -26,6 +26,7 @@
 <nav class="navbar navbar-inverse">
   <div class="navbar-header">
     <button
+      *ngIf="!authority"
       class="backButton"
       routerLink="home"
       (click)="pageContentService.handleChangeContent(Pages.MAIN_PAGE)"
@@ -64,8 +65,49 @@
   <div *ngIf="authority" class="container">
     <router-outlet></router-outlet>
   </div>
-  <ul class="nav navbar-nav" routerLinkActive="active">
-    <li *ngIf="authority" class="nav-item">
+  <div class="toolBarHome" *ngIf="authority" routerLinkActive="active">
+    <div class="nameOfGame">Battle For Weakness</div>
+    <div class="containerTool">
+      <button
+        (click)="pageContentService.handleChangeContent(Pages.MAIN_PAGE)"
+        class="menuBtn"
+      >
+        <span class="toolbarButtonText">Main Page</span>
+        <img
+          class="toolbarImg"
+          src="../../assets/Photoes/toolbarButton.jpg"
+          alt="Account"
+        />
+      </button>
+      <a routerLink="home" class="menuBtn">
+        <span class="toolbarButtonText2"> Home</span>
+        <img
+          class="toolbarImg"
+          src="../../assets/Photoes/toolbarButton.jpg"
+          alt="Account"
+        />
+      </a>
+      <a routerLink="invite" class="menuBtn">
+        <span class="toolbarButtonText2">Invite</span>
+        <img
+          class="toolbarImg"
+          src="../../assets/Photoes/toolbarButton.jpg"
+          alt="Account"
+        />
+      </a>
+      <a routerLink="user" class="menuBtn">
+        <span class="toolbarButtonText2">User Board</span>
+        <img
+          class="toolbarImg"
+          src="../../assets/Photoes/toolbarButton.jpg"
+          alt="Account"
+        />
+      </a>
+    </div>
+  </div>
+
+  <ul routerLinkActive="active">
+    <!-- <li *ngIf="authority" class="nav-item">
       <a class="nav-link" routerLink="home">Home</a>
     </li>
     <li *ngIf="authority" class="nav-item">
@@ -73,7 +115,7 @@
     </li>
     <li *ngIf="authority === 'user'" class="nav-item">
       <a class="nav-link" routerLink="user">User Board</a>
-    </li>
+    </li> -->
     <li *ngIf="authority === 'admin'" class="nav-item">
       <a class="nav-link" routerLink="admin">Admin Board</a>
     </li>

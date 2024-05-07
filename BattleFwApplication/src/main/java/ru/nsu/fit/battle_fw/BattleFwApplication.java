@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class BattleFwApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BattleFwApplication.class, args);
+		SpringApplication.run(BattleFwApplication.class,  args);
 	}
 
 }
