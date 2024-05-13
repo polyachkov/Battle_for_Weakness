@@ -39,6 +39,7 @@ import { UserInfoComponent } from './invite/user-info/user-info.component';
 import { FilterUsersPipe } from './pipes/filter-users.pipe';
 import { InviteInfoComponent } from './invite/invite-info/invite-info.component';
 import { GameComponent } from './home/game/game.component';
+import { GamefieldComponent } from './gamefield/gamefield.component';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { GameComponent } from './home/game/game.component';
     FilterUsersPipe,
     InviteInfoComponent,
     GameComponent,
+    GamefieldComponent,
   ],
   imports: [
     BrowserModule,

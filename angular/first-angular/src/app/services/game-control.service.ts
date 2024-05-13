@@ -6,11 +6,35 @@ import {
   field,
   idMoneyCollectorPictures,
 } from '../content/game-page/data-field/constants';
+import {catchError, map, Observable, throwError} from "rxjs";
+import {IGame} from "../models/game-model";
+import {Card} from "../models/card-model";
+import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
+import {ErrorService} from "./error.service";
 
 @Injectable({
   providedIn: 'root',
 })
 export class GameControlService {
+  private id_game!: number;
+
+  private getHandUrl: string = 'http://localhost:8081/get/hand';
+
+  getIdGame() {
+    return this.id_game;
+  }
+
+  setIdGame(id_game: number) {
+    this.id_game = id_game;
+  }
+
+
+  constructor(
+    private http: HttpClient,
+    private errorService: ErrorService
+  ) {
+  }
+
   currentPhase: GamePhases = GamePhases.PREPARING;
   isShowModal: boolean = false;
   cardPos: number[] = [-1, -1];
@@ -135,5 +159,19 @@ export class GameControlService {
     let imgNum = field[this.cardPos[0]][this.cardPos[1]].name;
     url = idMoneyCollectorPictures[imgNum];
     return url;
+  }
+
+  getHand(id_game: string): Observable<Card[]> {
+    const params = new HttpParams().set('id_game', id_game);
+    return this.http.get<{ cards: Card[] }>(this.getHandUrl, { params }).pipe(
+      map(response => response.cards),
+      catchError(this.errorHandler.bind(this))
+    );
+  }
+
+  private errorHandler(error: HttpErrorResponse) {
+    console.error('An error occurred while getting invites:', error.message);
+    this.errorService.handle(error.message)
+    return throwError(() => error.message)
   }
 }

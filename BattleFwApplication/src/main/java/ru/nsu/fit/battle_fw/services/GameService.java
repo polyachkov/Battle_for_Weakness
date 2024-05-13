@@ -10,6 +10,7 @@ import ru.nsu.fit.battle_fw.requests.get.GetGameRequest;
 import ru.nsu.fit.battle_fw.requests.post.*;
 import ru.nsu.fit.battle_fw.responses.AllGamesResponse;
 import ru.nsu.fit.battle_fw.responses.AllUsersResponse;
+import ru.nsu.fit.battle_fw.responses.HandResponse;
 import ru.nsu.fit.battle_fw.responses.info.GameInfo;
 import ru.nsu.fit.battle_fw.responses.info.UserInfo;
 
@@ -409,10 +410,28 @@ public class GameService {
         List<Game> games = gameR.getAllGames(nameOwner);
 
         List<GameInfo> gameInfoList = games.stream()
-                .map(game -> new GameInfo(game.getName_player1(), game.getName_player2()))
+                .map(game -> new GameInfo(
+                        game.getId_game(),
+                        game.getName_player1(),
+                        game.getName_player2())
+                )
                 .collect(Collectors.toList());
 
         AllGamesResponse gamesResponse = new AllGamesResponse(gameInfoList);
         return ResponseEntity.ok(gamesResponse);
+    }
+
+    public ResponseEntity<?> getCardsInHand(Integer id_game, String namePlayer) {
+        Hand hand = handR.getHand(id_game, namePlayer);
+        List<HandComp> handCompCards= handCompR.getCardsId(hand.getId_hand());
+
+        List<Card> cards = new ArrayList<>();
+        for (HandComp handComp : handCompCards) {
+            Card card = cardR.getCardById(handComp.getId_card());
+            cards.add(card);
+        }
+
+        HandResponse handResponse = new HandResponse(cards);
+        return ResponseEntity.ok(handResponse);
     }
 }

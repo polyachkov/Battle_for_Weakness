@@ -7,6 +7,10 @@ import { HomeComponent } from './home/home.component';
 import { UserComponent } from './user/user.component';
 import { AdminComponent } from './admin/admin.component';
 import {InviteComponent} from "./invite/invite.component";
+import {DataFieldComponent} from "./content/game-page/data-field/data-field.component";
+import {GamePageComponent} from "./content/game-page/game-page.component";
+import {ToolbarComponent} from "./toolbar/toolbar.component";
+import {GamefieldComponent} from "./gamefield/gamefield.component";
 
 const routes: Routes = [
   {
@@ -34,8 +38,16 @@ const routes: Routes = [
     component: RegisterComponent
   },
   {
+    path: 'game',
+    component: GamePageComponent
+  },
+  {
+    path: 'game/:id',
+    component: GamefieldComponent
+  },
+  {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'main',
     pathMatch: 'full'
   }
 ];

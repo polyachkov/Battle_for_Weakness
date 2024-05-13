@@ -28,7 +28,7 @@
     <button
       *ngIf="!authority"
       class="backButton"
-      routerLink="home"
+      routerLink="main"
       (click)="pageContentService.handleChangeContent(Pages.MAIN_PAGE)"
     ></button>
   </div>
@@ -71,6 +71,7 @@
       <button
         (click)="pageContentService.handleChangeContent(Pages.MAIN_PAGE)"
         class="menuBtn"
+        routerLink=""
       >
         <span class="toolbarButtonText">Main Page</span>
         <img
@@ -107,21 +108,21 @@
   </div>
 
   <ul routerLinkActive="active">
-    <!-- <li *ngIf="authority" class="nav-item">
-      <a class="nav-link" routerLink="home">Home</a>
-    </li>
-    <li *ngIf="authority" class="nav-item">
-      <a class="nav-link" routerLink="invite">Invite</a>
-    </li>
-    <li *ngIf="authority === 'user'" class="nav-item">
-      <a class="nav-link" routerLink="user">User Board</a>
-    </li> -->
-    <li *ngIf="authority === 'admin'" class="nav-item">
-      <a class="nav-link" routerLink="admin">Admin Board</a>
-    </li>
-    <li *ngIf="authority === 'pm'" class="nav-item">
-      <a class="nav-link" routerLink="pm">PM Board</a>
-    </li>
+<!--    <li *ngIf="authority" class="nav-item">-->
+<!--      <a class="nav-link" routerLink="home">Home</a>-->
+<!--    </li>-->
+<!--    <li *ngIf="authority" class="nav-item">-->
+<!--      <a class="nav-link" routerLink="invite">Invite</a>-->
+<!--    </li>-->
+<!--    <li *ngIf="authority === 'user'" class="nav-item">-->
+<!--      <a class="nav-link" routerLink="user">User Board</a>-->
+<!--    </li>-->
+<!--    <li *ngIf="authority === 'admin'" class="nav-item">-->
+<!--      <a class="nav-link" routerLink="admin">Admin Board</a>-->
+<!--    </li>-->
+<!--    <li *ngIf="authority === 'pm'" class="nav-item">-->
+<!--      <a class="nav-link" routerLink="pm">PM Board</a>-->
+<!--    </li>-->
   </ul>
 </nav>
 <!-- <div class="container">

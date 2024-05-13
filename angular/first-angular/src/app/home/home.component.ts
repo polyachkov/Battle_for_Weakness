@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
 import { TokenStorageService } from '../auth/token-storage.service';
-import {Observable, tap} from "rxjs";
+import {catchError, Observable, tap} from "rxjs";
 import {IInvite} from "../models/invite-model";
 import {InviteService} from "../services/invite.service";
 import {GameService} from "../services/game.service";
 import {IGame} from "../models/game-model";
+import {Card} from "../models/card-model";
 
 @Component({
   selector: 'app-home',
@@ -19,6 +20,7 @@ export class HomeComponent implements OnInit {
 
   invites!: Observable<IInvite[]>;
   games!: Observable<IGame[]>;
+  cards!: Observable<Card[]>;
 
   constructor(
     private token: TokenStorageService,

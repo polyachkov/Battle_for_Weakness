@@ -11,6 +11,7 @@ import ru.nsu.fit.battle_fw.database.model.*;
 import ru.nsu.fit.battle_fw.exceptions.*;
 import ru.nsu.fit.battle_fw.requests.get.GameIdRequest;
 import ru.nsu.fit.battle_fw.requests.get.GetGameRequest;
+import ru.nsu.fit.battle_fw.requests.get.GetHandRequest;
 import ru.nsu.fit.battle_fw.requests.post.*;
 import ru.nsu.fit.battle_fw.responses.AllUsersResponse;
 import ru.nsu.fit.battle_fw.responses.info.UserInfo;
@@ -132,6 +133,20 @@ public class SiteController {
         logger.info("GET /get/field");
         return gameService.getFieldByGame(req.getGameId());
     }
+
+    @GetMapping("/get/hand")
+    public ResponseEntity<?> getHand(
+            @RequestHeader Map<String, String> headers,
+            @RequestParam("id_game") Integer value
+    ) {
+        logger.info("GET /get/hand");
+        String nameOwner = getUsernameFromJWT(headers, jwtUtils);
+        logger.info("nameOwner " + nameOwner);
+        logger.info("game ID " + value);
+        return gameService.getCardsInHand(value, nameOwner);
+    }
+
+
 
     @GetMapping(value = "/get-headers")
     public ResponseEntity<?> getHeaders(@RequestHeader Map<String, String> headers){//представляет заголовки ввиде мапы,
