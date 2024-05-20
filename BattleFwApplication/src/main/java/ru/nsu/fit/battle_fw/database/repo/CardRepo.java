@@ -12,4 +12,7 @@ import java.util.List;
 public interface CardRepo extends JpaRepository<Card, Integer> {
     @Query("select c from Card c where c.rarity = :rarity and c.fraction = :fraction")
     List<Card> getListOfCard(@Param("rarity") String rarity, @Param("fraction") String fraction);
+
+    @Query("select c from Card c where c.id_card = :id_card")
+    Card getCardById(@Param("id_card") Integer id_card);
 }

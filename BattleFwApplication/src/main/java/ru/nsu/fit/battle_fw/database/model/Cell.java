@@ -28,6 +28,30 @@ public class Cell {
     @Column(name = "sickness")
     private Integer sickness;
 
+    @Column(name = "attack")
+    private Integer attack;
+
+    @Column(name = "health")
+    private Integer health;
+
+    @Column(name = "cost")
+    private Integer cost;
+
+    @Column(name = "evasion")
+    private Integer evasion;
+
+    @Column(name = "attack_speed")
+    private Integer attack_speed;
+
+    @Column(name = "movement_speed")
+    private Integer movement_speed;
+
+    @Column(name = "rarity")
+    private String rarity;
+
+    @Column(name = "fraction")
+    private String fraction;
+
     public Integer getId_field() {
         return id_field;
     }
@@ -74,5 +98,69 @@ public class Cell {
 
     public void setSickness(Integer sickness) {
         this.sickness = sickness;
+    }
+
+    public Integer getAttack() {
+        return attack;
+    }
+
+    public void setAttack(Integer attack) {
+        this.attack = attack;
+    }
+
+    public String getFraction() {
+        return fraction;
+    }
+
+    public void setFraction(String fraction) {
+        this.fraction = fraction;
+    }
+
+    public String getRarity() {
+        return rarity;
+    }
+
+    public void setRarity(String rarity) {
+        this.rarity = rarity;
+    }
+
+    public Integer getMovement_speed() {
+        return movement_speed;
+    }
+
+    public void setMovement_speed(Integer movement_speed) {
+        this.movement_speed = movement_speed;
+    }
+
+    public Integer getAttack_speed() {
+        return attack_speed;
+    }
+
+    public void setAttack_speed(Integer attack_speed) {
+        this.attack_speed = attack_speed;
+    }
+
+    public Integer getEvasion() {
+        return evasion;
+    }
+
+    public void setEvasion(Integer evasion) {
+        this.evasion = evasion;
+    }
+
+    public Integer getCost() {
+        return cost;
+    }
+
+    public void setCost(Integer cost) {
+        this.cost = cost;
+    }
+
+    public Integer getHealth() {
+        return health;
+    }
+
+    public void setHealth(Integer health) {
+        this.health = health;
     }
 }

@@ -9,9 +9,11 @@ import ru.nsu.fit.battle_fw.exceptions.*;
 import ru.nsu.fit.battle_fw.requests.get.GetGameRequest;
 import ru.nsu.fit.battle_fw.requests.post.*;
 import ru.nsu.fit.battle_fw.responses.AllGamesResponse;
-import ru.nsu.fit.battle_fw.responses.AllUsersResponse;
+import ru.nsu.fit.battle_fw.responses.CellsResponse;
+import ru.nsu.fit.battle_fw.responses.HandResponse;
+import ru.nsu.fit.battle_fw.responses.OppHandResponse;
+import ru.nsu.fit.battle_fw.responses.info.CellInfo;
 import ru.nsu.fit.battle_fw.responses.info.GameInfo;
-import ru.nsu.fit.battle_fw.responses.info.UserInfo;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -105,8 +107,10 @@ public class GameService {
         Random isFirstPlayer = new Random(); // Случайным образом выбирается тот, кто будет ходить первым
         if (isFirstPlayer.nextBoolean()) {
             game.setName_turn(player1);
+            game.setNon_reverse(player1);
         } else {
             game.setName_turn(player2);
+            game.setNon_reverse(player2);
         }
         gameR.save(game); // Сохранение записи в базу данных
         return game;
@@ -238,7 +242,7 @@ public class GameService {
      * Ничего не возвращает
      */
     private void createField(Integer gameId) {
-        for (int i = 1; i <= 56; i++) { // 56 - кол-во ячеек поля
+        for (int i = 1; i <= 64; i++) { // 64 - кол-во ячеек поля
             Cell cell = new Cell(); // Для каждой ячейки создаём запись
             cell.setCell_num(i);
             cell.setId_card(null); // Изначально в ячейке пусто
@@ -317,8 +321,8 @@ public class GameService {
      * @param gameId - id игры
      * @return - возвращает контейнер Optional, содержащий Объект игры
      */
-    public Optional<Game> getGameById(Integer gameId) {
-        return gameR.findById(gameId);
+    public ResponseEntity<?> getGameById(Integer gameId) {
+        return ResponseEntity.ok(gameR.findById(gameId));
     }
 
     /**
@@ -326,9 +330,21 @@ public class GameService {
      * @param gameId - id игры
      * @return - возвращает контейнер Optional, содержащий список ячеек
      */
-    public Optional<List<Cell>> getFieldByGame(Integer gameId) {
-        return Optional.of(cellR.getCells(gameId));
+    public ResponseEntity<?> getFieldByGame(Integer gameId) {
+        List<Cell> cells = cellR.getCells(gameId);
 
+        List<CellInfo> cellInfoList = cells.stream()
+                .map(cell -> new CellInfo(
+                        cell.getCell_num(),
+                        cell.getId_card(),
+                        cell.getName_owner(),
+                        cell.getSickness())
+                )
+                .collect(Collectors.toList());
+
+        CellsResponse cellsResponse = new CellsResponse(cellInfoList);
+
+        return ResponseEntity.ok(cellsResponse);
     }
 
     /**
@@ -409,10 +425,35 @@ public class GameService {
         List<Game> games = gameR.getAllGames(nameOwner);
 
         List<GameInfo> gameInfoList = games.stream()
-                .map(game -> new GameInfo(game.getName_player1(), game.getName_player2()))
+                .map(game -> new GameInfo(
+                        game.getId_game(),
+                        game.getName_player1(),
+                        game.getName_player2())
+                )
                 .collect(Collectors.toList());
 
         AllGamesResponse gamesResponse = new AllGamesResponse(gameInfoList);
         return ResponseEntity.ok(gamesResponse);
+    }
+
+    public ResponseEntity<?> getCardsInHand(Integer id_game, String namePlayer) {
+        Hand hand = handR.getHand(id_game, namePlayer);
+        List<HandComp> handCompCards= handCompR.getCardsId(hand.getId_hand());
+
+        List<Card> cards = new ArrayList<>();
+        for (HandComp handComp : handCompCards) {
+            Card card = cardR.getCardById(handComp.getId_card());
+            cards.add(card);
+        }
+
+        HandResponse handResponse = new HandResponse(cards);
+        return ResponseEntity.ok(handResponse);
+    }
+
+    public ResponseEntity<?> getOppHand(Integer id_game, String namePlayer) {
+        Hand hand = handR.getOppHand(id_game, namePlayer);
+
+        OppHandResponse oppHandResponse = new OppHandResponse(hand.getCards_cnt());
+        return ResponseEntity.ok(oppHandResponse);
     }
 }

@@ -4,6 +4,7 @@ import {IInvite} from "../models/invite-model";
 import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
 import {ErrorService} from "./error.service";
 import {IUser} from "../models/user-model";
+import {Card} from "../models/card-model";
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ export class InviteService {
   private inviteUserUrl: string = 'http://localhost:8081/invite/create';
   private acceptInviteUrl: string = 'http://localhost:8081/invite/accept';
   private rejectInviteUrl: string = 'http://localhost:8081/invite/delete';
+  private getHandUrl: string = 'http://localhost:8081/get/hand';
   private errorService: any;
   constructor(
     private http: HttpClient,

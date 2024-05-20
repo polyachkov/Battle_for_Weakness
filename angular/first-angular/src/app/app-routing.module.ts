@@ -7,6 +7,8 @@ import { HomeComponent } from './home/home.component';
 import { UserComponent } from './user/user.component';
 import { AdminComponent } from './admin/admin.component';
 import {InviteComponent} from "./invite/invite.component";
+import {ToolbarComponent} from "./toolbar/toolbar.component";
+import {GamefieldComponent} from "./gamefield/gamefield.component";
 
 const routes: Routes = [
   {
@@ -34,8 +36,12 @@ const routes: Routes = [
     component: RegisterComponent
   },
   {
+    path: 'game/:id',
+    component: GamefieldComponent
+  },
+  {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'main',
     pathMatch: 'full'
   }
 ];

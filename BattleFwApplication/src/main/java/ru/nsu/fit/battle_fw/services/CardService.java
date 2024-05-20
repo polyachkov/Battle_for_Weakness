@@ -1,16 +1,20 @@
 package ru.nsu.fit.battle_fw.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import ru.nsu.fit.battle_fw.database.model.*;
 import ru.nsu.fit.battle_fw.database.repo.*;
 import ru.nsu.fit.battle_fw.exceptions.BadCellException;
 import ru.nsu.fit.battle_fw.exceptions.CollectorsLimitException;
 import ru.nsu.fit.battle_fw.exceptions.NoBabosException;
+import ru.nsu.fit.battle_fw.exceptions.NoHandCompException;
 import ru.nsu.fit.battle_fw.requests.post.MoveCardRequest;
 import ru.nsu.fit.battle_fw.requests.post.PutCardInCellRequest;
 import ru.nsu.fit.battle_fw.requests.post.PutCollectorInCellRequest;
 
 import java.util.List;
+
 
 @Component
 public class CardService {
@@ -24,6 +28,8 @@ public class CardService {
     private final HandCompRepo handCompR;
     private final CellRepo cellR;
     private final StatusRepo statusR;
+
+    private static final Logger logger = LoggerFactory.getLogger(CardService.class);
 
     /**
      * Конструктор. Принимает объекты, позволяющие влиять на базу данных.
@@ -60,16 +66,18 @@ public class CardService {
      * Ничего не возвращает
      */
     public void putCardInCell(PutCardInCellRequest req, String playerName)
-            throws NoBabosException, BadCellException {
+            throws NoBabosException, BadCellException, NoHandCompException {
         Integer gameId = req.getGameId();
         Integer cardId = req.getCardId();
         Integer cellId = req.getCellId();
 
-        if (cellId <= 8 || cellId >= 49) { // Если клетка постановки только для сборщиков
+        if (cellId <= 8 || cellId >= 57) { // Если клетка постановки только для сборщиков
             throw new BadCellException();
         } else {  // Если нет, то ставим карту
             Card card = cardR.getReferenceById(cardId);
             Status status = statusR.getStatus(gameId, playerName);
+
+            logger.info("Player: {}, Babos$: {}, Card ID {}, Card cost: {}", playerName, status.getBabos(), card.getId_card(), card.getCost());
 
             if (status.getBabos() < card.getCost()) { // Проверка на наличие бабосов
                 throw new NoBabosException();
@@ -79,12 +87,24 @@ public class CardService {
 
                 List<HandComp> handCompList = handCompR.getHandCard(hand.getId_hand(), cardId); // Берём карту с нужным id
 
+                if (handCompList.isEmpty()) {
+                    throw new NoHandCompException("HandComp list is empty");
+                }
+
                 HandComp handComp = handCompList.get(0);
 
                 Cell cell = cellR.getCell(gameId, cellId); // Постановка карты
-                cell.setId_card(cardId);
+                cell.setId_card(card.getId_card());
                 cell.setName_owner(playerName);
                 cell.setSickness(1); // Установка болезни выхода
+                cell.setAttack(card.getAttack());
+                cell.setHealth(card.getHealth());
+                cell.setCost(card.getCost());
+                cell.setEvasion(card.getEvasion());
+                cell.setAttack_speed(card.getAttack_speed());
+                cell.setMovement_speed(card.getMovement_speed());
+                cell.setRarity(card.getRarity());
+                cell.setFraction(card.getFraction());
 
                 status.setBabos(status.getBabos() - card.getCost()); // Убавление бабосов
 
@@ -111,7 +131,7 @@ public class CardService {
         Integer gameId = req.getGameId();
         Integer cellId = req.getCellId();
 
-        if (cellId > 8 && cellId < 49) { // Сборщики нельзя ставить в обычные клетки
+        if (cellId > 8 && cellId < 57) { // Сборщики нельзя ставить в обычные клетки
             throw new BadCellException();
         } else {
             Card collector = cardR.getReferenceById(49); // 49 - id карты сборщика

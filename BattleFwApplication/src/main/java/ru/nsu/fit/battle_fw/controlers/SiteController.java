@@ -11,6 +11,7 @@ import ru.nsu.fit.battle_fw.database.model.*;
 import ru.nsu.fit.battle_fw.exceptions.*;
 import ru.nsu.fit.battle_fw.requests.get.GameIdRequest;
 import ru.nsu.fit.battle_fw.requests.get.GetGameRequest;
+import ru.nsu.fit.battle_fw.requests.get.GetHandRequest;
 import ru.nsu.fit.battle_fw.requests.post.*;
 import ru.nsu.fit.battle_fw.responses.AllUsersResponse;
 import ru.nsu.fit.battle_fw.responses.info.UserInfo;
@@ -62,7 +63,7 @@ public class SiteController {
 
     @PostMapping("/putCardInCell")
     public void putCardInCell(@RequestHeader Map<String, String> headers, @RequestBody PutCardInCellRequest req)
-            throws NoBabosException, BadCellException, CollectorsLimitException {
+            throws NoBabosException, BadCellException, NoHandCompException {
         String nameOwner = getUsernameFromJWT(headers, jwtUtils);
         logger.info("POST /putCardInCell");
         logger.info("GameId " + req.getGameId());
@@ -121,16 +122,42 @@ public class SiteController {
     }
 
     @GetMapping("/get/game/byid")
-    public Optional<Game> getGameById(@RequestBody GameIdRequest req) {
+    public ResponseEntity<?> getGameById(@RequestParam("id_game") Integer value) {
         logger.info("GET /get/game");
         logger.info("get game by ID");
-        return gameService.getGameById(req.getGameId());
+        return gameService.getGameById(value);
     }
 
-    @GetMapping("/get/filed")
-    public Optional<List<Cell>> getField(@RequestBody GameIdRequest req) {
+    @GetMapping("/get/field")
+    public ResponseEntity<?> getField(@RequestParam("id_game") Integer value) {
         logger.info("GET /get/field");
-        return gameService.getFieldByGame(req.getGameId());
+        return gameService.getFieldByGame(value);
+    }
+
+    @GetMapping("/get/hand")
+    public ResponseEntity<?> getHand(
+            @RequestHeader Map<String, String> headers,
+            @RequestParam("id_game") Integer value
+    ) {
+        logger.info("GET /get/hand");
+        String nameOwner = getUsernameFromJWT(headers, jwtUtils);
+        logger.info("nameOwner " + nameOwner);
+        logger.info("game ID " + value);
+        return gameService.getCardsInHand(value, nameOwner);
+    }
+
+    @GetMapping("/get/opp/hand")
+    public ResponseEntity<?> getOppHand(
+            @RequestHeader Map<String, String> headers,
+            @RequestParam("id_game") Integer value
+    ) {
+        logger.info("GET /get/opp/hand");
+        String nameOwner = getUsernameFromJWT(headers, jwtUtils);
+        logger.info("nameOwner " + nameOwner);
+        logger.info("game ID " + value);
+        var number = gameService.getOppHand(value, nameOwner);
+        logger.info("number " + number);
+        return number;
     }
 
     @GetMapping(value = "/get-headers")
