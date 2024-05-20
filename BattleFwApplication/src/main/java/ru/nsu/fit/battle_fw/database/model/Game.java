@@ -25,6 +25,9 @@ public class Game {
     @Column(name = "is_ended")
     private Boolean is_ended;
 
+    @Column(name = "non_reverse")
+    private String non_reverse;
+
     public String getName_turn() {
         return name_turn;
     }
@@ -63,5 +66,13 @@ public class Game {
 
     public void setIs_ended(Boolean is_ended) {
         this.is_ended = is_ended;
+    }
+
+    public String getNon_reverse() {
+        return non_reverse;
+    }
+
+    public void setNon_reverse(String non_reverse) {
+        this.non_reverse = non_reverse;
     }
 }

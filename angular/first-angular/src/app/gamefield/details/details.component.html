@@ -1,0 +1,15 @@
+<div id="overlay" (click)="gamefieldComponent.isShowModal = false"></div>
+<div id="container">
+  <img class="picture" [src]="showModal()" alt="hearth" />
+  <div
+    class="statHorizontal"
+    *ngFor="let row of [0, 1, 2]; let rowIndex = index"
+  >
+    <div
+      class="statVertical"
+      *ngFor="let column of [0, 1]; let columIndex = index"
+    >
+<!--      {{ determineStat(rowIndex, columIndex) }}-->
+    </div>
+  </div>
+</div>

@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
 import { GamePhases, GameState } from '../constants';
-import { Fractions } from '../content/game-page/preparing/constants';
 import {
   Turn,
-  field,
   idMoneyCollectorPictures,
 } from '../gamefield/constants';
 import {catchError, map, Observable, throwError} from "rxjs";
 import {Card} from "../models/card-model";
 import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
 import {ErrorService} from "./error.service";
-import {OppHand} from "../models/opp-hand-model";
 import {ICell} from "../models/cell-model";
+import {Game} from "../models/game-model";
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +19,7 @@ export class GameControlService {
   isShowModal: boolean = false;
   cardPos: number[] = [-1, -1];
 
-  mySelectedFraction: Fractions | null = null;
+  // mySelectedFraction: Fractions | null = null;
   opponentSelectedFraction: string = 'Swamp';
 
   gameState: GameState = 0;
@@ -35,10 +33,12 @@ export class GameControlService {
 
   private id_game!: number;
 
+  private getGameUrl: string = 'http://localhost:8081/get/game/byid';
   private getHandUrl: string = 'http://localhost:8081/get/hand';
   private getOppHandUrl: string = 'http://localhost:8081/get/opp/hand';
   private getFieldUrl: string = 'http://localhost:8081/get/field';
 
+  private putCardInCellUrl: string = 'http://localhost:8081/putCardInCell';
 
   getIdGame() {
     return this.id_game;
@@ -90,9 +90,9 @@ export class GameControlService {
   turn: Turn = 0;
   turnTitle = 'End the Turn';
 
-  handleFractionChoice(fractionName: Fractions) {
-    this.mySelectedFraction = fractionName;
-  }
+  // handleFractionChoice(fractionName: Fractions) {
+  //   this.mySelectedFraction = fractionName;
+  // }
 
   changeSecondPlayerState() {
     this.secondPlayerIsReady = true;
@@ -118,13 +118,13 @@ export class GameControlService {
     this.gameState = 0;
   }
 
-  determineCard(row: number, cell: number) {
-    if (field[row][cell].name === 0) {
-      return;
-    }
-    this.cardPos = [row, cell];
-    this.isShowModal = true;
-  }
+  // determineCard(row: number, cell: number) {
+  //   if (field[row][cell].name === 0) {
+  //     return;
+  //   }
+  //   this.cardPos = [row, cell];
+  //   this.isShowModal = true;
+  // }
 
   handleTurn() {
     if (this.turn === 0) {
@@ -138,32 +138,32 @@ export class GameControlService {
   getCardImageUrl(row: number, cell: number) {
     let url = '';
     switch (row) {
-      // case 0:
-      // case 7:
-      //   url = idMoneyCollectorPictures[cell];
-      //   break;
-      // case 1:
-      // case 2:
-      //   url = idMoneyCollectorPictures[cell];
-      //   break;
-      // case 3:
-      // case 4:
-      //   url = idMoneyCollectorPictures[cell];
-      //   break;
-      // case 5:
-      // case 6:
-      //   url = idMoneyCollectorPictures[cell];
-      //   break;
+      case 0:
+      case 7:
+        url = idMoneyCollectorPictures[cell];
+        break;
+      case 1:
+      case 2:
+        url = idMoneyCollectorPictures[cell];
+        break;
+      case 3:
+      case 4:
+        url = idMoneyCollectorPictures[cell];
+        break;
+      case 5:
+      case 6:
+        url = idMoneyCollectorPictures[cell];
+        break;
     }
     return url;
   }
 
-  showModal() {
-    let url = '';
-    let imgNum = field[this.cardPos[0]][this.cardPos[1]].name;
-    url = idMoneyCollectorPictures[imgNum];
-    return url;
-  }
+  // showModal() {
+  //   let url = '';
+  //   let imgNum = field[this.cardPos[0]][this.cardPos[1]].name;
+  //   url = idMoneyCollectorPictures[imgNum];
+  //   return url;
+  // }
 
   getHand(id_game: string): Observable<Card[]> {
     const params = new HttpParams().set('id_game', id_game);
@@ -189,9 +189,26 @@ export class GameControlService {
     );
   }
 
+  getGame(id_game: string): Observable<Game> {
+    const params = new HttpParams().set('id_game', id_game);
+    return this.http.get<Game>(this.getGameUrl, { params }).pipe(
+      catchError(this.errorHandler.bind(this))
+    );
+  }
+
+  putCardInCell(gameId: number, cardId: number, cellId: number): Observable<any> {
+    const body = { gameId: gameId, cardId: cardId, cellId: cellId };
+
+    return this.http.post(this.putCardInCellUrl, body).pipe(
+      catchError(this.errorHandler.bind(this))
+    );
+  }
+
   private errorHandler(error: HttpErrorResponse) {
     console.error('An error occurred while getting invites:', error.message);
     this.errorService.handle(error.message)
     return throwError(() => error.message)
   }
+
+
 }

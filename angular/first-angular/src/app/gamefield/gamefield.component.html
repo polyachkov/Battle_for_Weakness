@@ -1,7 +1,7 @@
 <!--<p>gamefield works! {{gameControlService.getIdGame()}}</p>-->
 
 <div class="background">
-  <app-modal *ngIf="gameControlService.isShowModal"></app-modal>
+  <app-details *ngIf="gameControlService.isShowModal"></app-details>
   <div class="container">
     <div [ngStyle]="{ top: '30px' }" class="opponentsInterface">
       <div class="fraction-name">
@@ -20,7 +20,7 @@
   <div class="container">
     <div [ngStyle]="{ bottom: '30px' }" class="myInterface">
       <div class="fraction-name">
-        {{ gameControlService.mySelectedFraction }}
+        Mountains
       </div>
       <div class="money">
         <div class="coin">
@@ -72,6 +72,7 @@
         <img class="image" [src]="idOppHandPictures[1]" alt="" />
       </div>
     </div>
+
     <div class="wrapper">
       <div class="decksBlue" style="flex-wrap: wrap-reverse">
         <div
@@ -83,34 +84,33 @@
           *ngFor="let item of oppsLibraries"
         ></div>
       </div>
+
       <div class="field">
-        <div class="row" *ngFor="let row of field; let rowIndex = index">
-          <div
-            [ngClass]="getRowColor(rowIndex)"
-            *ngFor="let cell of row; let cellIndex = index"
-          >
+        <div class="row" *ngFor="let row of field | async; let rowIndex = index">
+          <div [ngClass]="getRowColor(rowIndex)" *ngFor="let cell of row; let cellIndex = index">
             <div
               class="cardField"
               cdkDropList
-              (click)="gameControlService.determineCard(rowIndex, cellIndex)"
-              (mousedown)="pickCard(rowIndex, cellIndex, cell.name)"
-              (mouseup)="dropCard(rowIndex, cellIndex)"
+              (click)="determineCard(rowIndex, cellIndex)"
+              (mousedown)="pickCard(rowIndex, cellIndex, cell.id_card)"
+              (mouseup)="dropCard(rowIndex, cellIndex, cell)"
             >
               <img
                 cdkDrag
                 class="image"
-                [src]="gameControlService.getCardImageUrl(rowIndex, cell.name)"
+                [src]="gameControlService.getCardImageUrl(rowIndex, cell.id_card)"
                 alt=""
               />
             </div>
           </div>
         </div>
       </div>
+
       <div class="decksRed" style="flex-wrap: wrap">
         <div
           class="deck"
           style="
-            background-image: url('../../assets/Photoes/deckRed.png');
+            background-image: url('../../assets/Photoes/card/back/deck cover red.png');
             background-size: cover;
           "
           *ngFor="let item of myLibraries"
@@ -127,7 +127,7 @@
 <!--        <img class="image" [src]="idHandPictures[id_card]" alt="" />-->
 <!--      </div>-->
 <!--    </div>-->
-    <div class="hand" cdkDropList [cdkDropListData]="myHand">
+    <div class="hand" cdkDropList [cdkDropListData]="">
       <div
         class="myCards"
         *ngFor="let card of hand | async"

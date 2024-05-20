@@ -30,7 +30,8 @@ CREATE TABLE IF NOT EXISTS game
     name_player1  VARCHAR(200) NOT NULL,
     name_player2  VARCHAR(200) NOT NULL,
     name_turn     VARCHAR(200) NOT NULL,
-    is_ended    BOOLEAN NOT NULL
+    is_ended    BOOLEAN NOT NULL,
+    non_reverse     VARCHAR(200) NOT NULL
 );
 DROP SEQUENCE IF EXISTS games_id_seq;
 CREATE SEQUENCE IF NOT EXISTS games_id_seq START WITH 1 INCREMENT BY 1;
@@ -87,7 +88,15 @@ CREATE TABLE cell
     cell_num    INTEGER NOT NULL,
     id_card     INTEGER,
     name_owner    VARCHAR(200),
-    sickness    INTEGER
+    sickness    INTEGER,
+    attack INTEGER,
+    health INTEGER,
+    cost INTEGER,
+    evasion INTEGER,
+    attack_speed INTEGER,
+    movement_speed INTEGER,
+    rarity VARCHAR(200),
+    fraction VARCHAR(200)
 );
 DROP SEQUENCE IF EXISTS cell_id_seq;
 CREATE SEQUENCE IF NOT EXISTS cell_id_seq START WITH 1 INCREMENT BY 1;

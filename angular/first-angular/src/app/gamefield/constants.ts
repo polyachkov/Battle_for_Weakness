@@ -24,8 +24,18 @@ export const idOppHandPictures: DynamicObject<string> = {
 
 export const idMoneyCollectorPictures: DynamicObject<string> = {
   0: '/',
-  1: '../../../../assets/Photoes/hearth.png',
-  2: '../../../../assets/Photoes/FieldPictures/yellowCircle.png',
+  1: '../../../../assets/Photoes/card/arts/kobold.jpg',
+  2: '../../../../assets/Photoes/card/arts/sectarian.jpg',
+  3: '../../../../assets/Photoes/card/arts/dwarf.jpg',
+  4: '../../../../assets/Photoes/card/arts/rat.jpg',
+  5: '../../../../assets/Photoes/card/arts/mice.jpg',
+  6: '../../../../assets/Photoes/card/arts/goats.jpg',
+  7: '../../../../assets/Photoes/card/arts/stoneT.jpg',
+  8: '../../../../assets/Photoes/card/arts/lowest.jpg',
+  9: '../../../../assets/Photoes/card/arts/egorka.jpg',
+  10: '../../../../assets/Photoes/card/arts/proud.jpg',
+  11: '../../../../assets/Photoes/card/arts/stoneC.jpg',
+  12: '../../../../assets/Photoes/card/arts/rich.jpg'
 };
 
 export interface DynamicObject<T> {

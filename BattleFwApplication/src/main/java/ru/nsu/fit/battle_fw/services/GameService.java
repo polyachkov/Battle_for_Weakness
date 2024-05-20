@@ -107,8 +107,10 @@ public class GameService {
         Random isFirstPlayer = new Random(); // Случайным образом выбирается тот, кто будет ходить первым
         if (isFirstPlayer.nextBoolean()) {
             game.setName_turn(player1);
+            game.setNon_reverse(player1);
         } else {
             game.setName_turn(player2);
+            game.setNon_reverse(player2);
         }
         gameR.save(game); // Сохранение записи в базу данных
         return game;
@@ -240,7 +242,7 @@ public class GameService {
      * Ничего не возвращает
      */
     private void createField(Integer gameId) {
-        for (int i = 1; i <= 56; i++) { // 56 - кол-во ячеек поля
+        for (int i = 1; i <= 64; i++) { // 64 - кол-во ячеек поля
             Cell cell = new Cell(); // Для каждой ячейки создаём запись
             cell.setCell_num(i);
             cell.setId_card(null); // Изначально в ячейке пусто
@@ -319,8 +321,8 @@ public class GameService {
      * @param gameId - id игры
      * @return - возвращает контейнер Optional, содержащий Объект игры
      */
-    public Optional<Game> getGameById(Integer gameId) {
-        return gameR.findById(gameId);
+    public ResponseEntity<?> getGameById(Integer gameId) {
+        return ResponseEntity.ok(gameR.findById(gameId));
     }
 
     /**
