@@ -9,10 +9,11 @@ import ru.nsu.fit.battle_fw.exceptions.*;
 import ru.nsu.fit.battle_fw.requests.get.GetGameRequest;
 import ru.nsu.fit.battle_fw.requests.post.*;
 import ru.nsu.fit.battle_fw.responses.AllGamesResponse;
-import ru.nsu.fit.battle_fw.responses.AllUsersResponse;
+import ru.nsu.fit.battle_fw.responses.CellsResponse;
 import ru.nsu.fit.battle_fw.responses.HandResponse;
+import ru.nsu.fit.battle_fw.responses.OppHandResponse;
+import ru.nsu.fit.battle_fw.responses.info.CellInfo;
 import ru.nsu.fit.battle_fw.responses.info.GameInfo;
-import ru.nsu.fit.battle_fw.responses.info.UserInfo;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -327,9 +328,21 @@ public class GameService {
      * @param gameId - id игры
      * @return - возвращает контейнер Optional, содержащий список ячеек
      */
-    public Optional<List<Cell>> getFieldByGame(Integer gameId) {
-        return Optional.of(cellR.getCells(gameId));
+    public ResponseEntity<?> getFieldByGame(Integer gameId) {
+        List<Cell> cells = cellR.getCells(gameId);
 
+        List<CellInfo> cellInfoList = cells.stream()
+                .map(cell -> new CellInfo(
+                        cell.getCell_num(),
+                        cell.getId_card(),
+                        cell.getName_owner(),
+                        cell.getSickness())
+                )
+                .collect(Collectors.toList());
+
+        CellsResponse cellsResponse = new CellsResponse(cellInfoList);
+
+        return ResponseEntity.ok(cellsResponse);
     }
 
     /**
@@ -433,5 +446,12 @@ public class GameService {
 
         HandResponse handResponse = new HandResponse(cards);
         return ResponseEntity.ok(handResponse);
+    }
+
+    public ResponseEntity<?> getOppHand(Integer id_game, String namePlayer) {
+        Hand hand = handR.getOppHand(id_game, namePlayer);
+
+        OppHandResponse oppHandResponse = new OppHandResponse(hand.getCards_cnt());
+        return ResponseEntity.ok(oppHandResponse);
     }
 }

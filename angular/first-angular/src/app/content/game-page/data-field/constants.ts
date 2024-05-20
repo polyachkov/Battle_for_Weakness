@@ -10,8 +10,8 @@ export const idHandPictures: DynamicObject<string> = {
 
 export const idMoneyCollectorPictures: DynamicObject<string> = {
   0: '/',
-  1: '../../../../assets/Photoes/hearth.png',
-  2: '../../../../assets/Photoes/FieldPictures/yellowCircle.png',
+  1: '../../../../assets/Photoes/fieldCard/kobold.png',
+  2: '../../../../assets/Photoes/fieldCard/kobold.png',
 };
 
 export interface DynamicObject<T> {

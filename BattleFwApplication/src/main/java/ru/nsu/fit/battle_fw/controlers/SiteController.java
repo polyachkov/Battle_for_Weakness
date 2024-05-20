@@ -128,10 +128,10 @@ public class SiteController {
         return gameService.getGameById(req.getGameId());
     }
 
-    @GetMapping("/get/filed")
-    public Optional<List<Cell>> getField(@RequestBody GameIdRequest req) {
+    @GetMapping("/get/field")
+    public ResponseEntity<?> getField(@RequestParam("id_game") Integer value) {
         logger.info("GET /get/field");
-        return gameService.getFieldByGame(req.getGameId());
+        return gameService.getFieldByGame(value);
     }
 
     @GetMapping("/get/hand")
@@ -146,7 +146,19 @@ public class SiteController {
         return gameService.getCardsInHand(value, nameOwner);
     }
 
-
+    @GetMapping("/get/opp/hand")
+    public ResponseEntity<?> getOppHand(
+            @RequestHeader Map<String, String> headers,
+            @RequestParam("id_game") Integer value
+    ) {
+        logger.info("GET /get/opp/hand");
+        String nameOwner = getUsernameFromJWT(headers, jwtUtils);
+        logger.info("nameOwner " + nameOwner);
+        logger.info("game ID " + value);
+        var number = gameService.getOppHand(value, nameOwner);
+        logger.info("number " + number);
+        return number;
+    }
 
     @GetMapping(value = "/get-headers")
     public ResponseEntity<?> getHeaders(@RequestHeader Map<String, String> headers){//представляет заголовки ввиде мапы,

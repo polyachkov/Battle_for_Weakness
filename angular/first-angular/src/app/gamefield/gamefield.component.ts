@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 
 
-import { DynamicObject, field, idHandPictures } from './constants';
+import {DynamicObject, field, idHandPictures, idOppHandPictures} from './constants';
 import {GameControlService} from "../services/game-control.service";
 import {GamePhases, Pages} from "../constants";
 import {PageContentService} from "../services/page-content.service";
 import {Card} from "../models/card-model";
 import {Observable} from "rxjs";
+import {OppHand} from "../models/opp-hand-model";
+import {ICell} from "../models/cell-model";
 
 @Component({
   selector: 'app-gamefield',
@@ -17,8 +19,10 @@ import {Observable} from "rxjs";
 export class GamefieldComponent implements OnInit {
   id_game!: string;
   hand!: Observable<Card[]>;
+  oppHand!: Observable<number>;
 
   handCardId!: number[];
+  private cells!: Observable<ICell[]>;
 
   constructor(
     private route: ActivatedRoute,
@@ -33,6 +37,8 @@ export class GamefieldComponent implements OnInit {
 
   ngOnInit(): void {
     this.hand = this.gameControlService.getHand(this.id_game);
+    this.oppHand = this.gameControlService.getOppHand(this.id_game)
+    this.cells = this.gameControlService.getCells(this.id_game)
   }
 
   myHand: number[] = [1, 2, 2, 2, 1];
@@ -89,4 +95,6 @@ export class GamefieldComponent implements OnInit {
 
   protected readonly GamePhases = GamePhases;
   protected readonly Pages = Pages;
+  protected readonly idOppHandPictures = idOppHandPictures;
+  protected readonly Array = Array;
 }

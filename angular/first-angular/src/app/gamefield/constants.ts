@@ -4,7 +4,7 @@ export enum Turn {
 }
 
 export const idHandPictures: DynamicObject<string> = {
-  1: '../../../../assets/Photoes/hearth.png',
+  1: '../../../../assets/Photoes/card/kobold.png',
   2: '../../../../assets/Photoes/card/sectarian.png',
   3: '../../../../assets/Photoes/card/dwarf.png',
   4: '../../../../assets/Photoes/card/rat.png',
@@ -16,10 +16,10 @@ export const idHandPictures: DynamicObject<string> = {
   10: '../../../../assets/Photoes/card/proud.png',
   11: '../../../../assets/Photoes/card/stoneC.png',
   12: '../../../../assets/Photoes/card/rich.png',
-  13: '../../../../assets/Photoes/FieldPictures/yellowCircle.png',
-  14: '../../../../assets/Photoes/FieldPictures/yellowCircle.png',
-  15: '../../../../assets/Photoes/FieldPictures/yellowCircle.png',
-  16: '../../../../assets/Photoes/FieldPictures/yellowCircle.png',
+};
+
+export const idOppHandPictures: DynamicObject<string> = {
+  1: '../../../../assets/Photoes/card/back/deck cover red.png',
 };
 
 export const idMoneyCollectorPictures: DynamicObject<string> = {

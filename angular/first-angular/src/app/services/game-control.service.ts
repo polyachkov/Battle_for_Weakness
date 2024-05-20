@@ -5,36 +5,18 @@ import {
   Turn,
   field,
   idMoneyCollectorPictures,
-} from '../content/game-page/data-field/constants';
+} from '../gamefield/constants';
 import {catchError, map, Observable, throwError} from "rxjs";
-import {IGame} from "../models/game-model";
 import {Card} from "../models/card-model";
 import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
 import {ErrorService} from "./error.service";
+import {OppHand} from "../models/opp-hand-model";
+import {ICell} from "../models/cell-model";
 
 @Injectable({
   providedIn: 'root',
 })
 export class GameControlService {
-  private id_game!: number;
-
-  private getHandUrl: string = 'http://localhost:8081/get/hand';
-
-  getIdGame() {
-    return this.id_game;
-  }
-
-  setIdGame(id_game: number) {
-    this.id_game = id_game;
-  }
-
-
-  constructor(
-    private http: HttpClient,
-    private errorService: ErrorService
-  ) {
-  }
-
   currentPhase: GamePhases = GamePhases.PREPARING;
   isShowModal: boolean = false;
   cardPos: number[] = [-1, -1];
@@ -50,6 +32,28 @@ export class GameControlService {
   opponentsState: string = 'Opponent is not ready';
 
   idMoneyCollectorPictures = idMoneyCollectorPictures;
+
+  private id_game!: number;
+
+  private getHandUrl: string = 'http://localhost:8081/get/hand';
+  private getOppHandUrl: string = 'http://localhost:8081/get/opp/hand';
+  private getFieldUrl: string = 'http://localhost:8081/get/field';
+
+
+  getIdGame() {
+    return this.id_game;
+  }
+
+  setIdGame(id_game: number) {
+    this.id_game = id_game;
+  }
+
+
+  constructor(
+    private http: HttpClient,
+    private errorService: ErrorService
+  ) {
+  }
 
   changeColor() {
     const colorForButton = document.getElementById('exampleButton');
@@ -134,22 +138,22 @@ export class GameControlService {
   getCardImageUrl(row: number, cell: number) {
     let url = '';
     switch (row) {
-      case 0:
-      case 7:
-        url = idMoneyCollectorPictures[cell];
-        break;
-      case 1:
-      case 2:
-        url = idMoneyCollectorPictures[cell];
-        break;
-      case 3:
-      case 4:
-        url = idMoneyCollectorPictures[cell];
-        break;
-      case 5:
-      case 6:
-        url = idMoneyCollectorPictures[cell];
-        break;
+      // case 0:
+      // case 7:
+      //   url = idMoneyCollectorPictures[cell];
+      //   break;
+      // case 1:
+      // case 2:
+      //   url = idMoneyCollectorPictures[cell];
+      //   break;
+      // case 3:
+      // case 4:
+      //   url = idMoneyCollectorPictures[cell];
+      //   break;
+      // case 5:
+      // case 6:
+      //   url = idMoneyCollectorPictures[cell];
+      //   break;
     }
     return url;
   }
@@ -165,6 +169,22 @@ export class GameControlService {
     const params = new HttpParams().set('id_game', id_game);
     return this.http.get<{ cards: Card[] }>(this.getHandUrl, { params }).pipe(
       map(response => response.cards),
+      catchError(this.errorHandler.bind(this))
+    );
+  }
+
+  getOppHand(id_game: string): Observable<number> {
+    const params = new HttpParams().set('id_game', id_game);
+    return this.http.get<{ cards_cnt: number}>(this.getOppHandUrl, { params }).pipe(
+      map(response => response.cards_cnt),
+      catchError(this.errorHandler.bind(this))
+    );
+  }
+
+  getCells(id_game: string): Observable<ICell[]> {
+    const params = new HttpParams().set('id_game', id_game);
+    return this.http.get<{ cells: ICell[]}>(this.getFieldUrl, { params }).pipe(
+      map(response => response.cells),
       catchError(this.errorHandler.bind(this))
     );
   }

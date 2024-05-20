@@ -1,4 +1,5 @@
-<p>gamefield works! {{gameControlService.getIdGame()}}</p>
+<!--<p>gamefield works! {{gameControlService.getIdGame()}}</p>-->
+
 <div class="background">
   <app-modal *ngIf="gameControlService.isShowModal"></app-modal>
   <div class="container">
@@ -64,7 +65,12 @@
   </div>
   <div class="map">
     <div class="hand">
-      <div class="opponentsCards" *ngFor="let item of opponentsHand"></div>
+      <div
+        class="opponentsCards"
+        *ngFor="let _ of [].constructor((oppHand | async))"
+      >
+        <img class="image" [src]="idOppHandPictures[1]" alt="" />
+      </div>
     </div>
     <div class="wrapper">
       <div class="decksBlue" style="flex-wrap: wrap-reverse">
