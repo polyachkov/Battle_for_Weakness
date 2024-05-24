@@ -7,7 +7,7 @@ import {GameControlService} from "../services/game-control.service";
 import {GamePhases, Pages} from "../constants";
 import {PageContentService} from "../services/page-content.service";
 import {Card} from "../models/card-model";
-import {map, Observable, of, switchMap} from "rxjs";
+import {map, Observable, of, switchMap, tap} from "rxjs";
 import {ICell} from "../models/cell-model";
 import {Game, IGame} from "../models/game-model";
 import {TokenStorageService} from "../auth/token-storage.service";
@@ -118,16 +118,24 @@ export class GamefieldComponent implements OnInit {
     this.isShowModal = true;
   }
 
-  showModal() {
-    let url = '';
-    this.field.pipe(
+  showModal(): Observable<string> {
+    return this.field.pipe(
+      tap(cells => console.log('cells:', cells)), // Логирование для проверки
       map((cells: ICell[][]) => {
         const imgNum = cells[this.cardPos[0]][this.cardPos[1]].id_card;
-        url = idMoneyCollectorPictures[imgNum];
-        return url;
+        console.log('imgNum:', imgNum); // Логирование для проверки
+        return idMoneyCollectorPictures[imgNum];
       })
-    ).subscribe();
-    return url;
+    );
+  }
+
+  currentCell(): Observable<ICell> {
+    return this.field.pipe(
+      tap(cells => console.log('cells:', cells)), // Логирование для проверки
+      map((cells: ICell[][]) => {
+        return cells[this.cardPos[0]][this.cardPos[1]];
+      })
+    );
   }
 
   getRowColor(index: number): DynamicObject<boolean> {

@@ -1,7 +1,7 @@
 <!--<p>gamefield works! {{gameControlService.getIdGame()}}</p>-->
 
 <div class="background">
-  <app-details *ngIf="gameControlService.isShowModal"></app-details>
+  <app-details *ngIf="this.isShowModal"></app-details>
   <div class="container">
     <div [ngStyle]="{ top: '30px' }" class="opponentsInterface">
       <div class="fraction-name">
@@ -96,7 +96,6 @@
               (mouseup)="dropCard(rowIndex, cellIndex, cell)"
             >
               <img
-                cdkDrag
                 class="image"
                 [src]="gameControlService.getCardImageUrl(rowIndex, cell.id_card)"
                 alt=""

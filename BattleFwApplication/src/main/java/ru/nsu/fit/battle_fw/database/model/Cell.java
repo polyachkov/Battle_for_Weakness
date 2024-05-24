@@ -11,7 +11,7 @@ public class Cell {
     @Column(name = "id_cell")
     @SequenceGenerator(name = "cellsIdSeq", sequenceName = "cell_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cellsIdSeq")
-    private Integer id_field;
+    private Integer id_cell;
 
     @Column(name = "id_game")
     private Integer id_game;
@@ -52,12 +52,12 @@ public class Cell {
     @Column(name = "fraction")
     private String fraction;
 
-    public Integer getId_field() {
-        return id_field;
+    public Integer getId_cell() {
+        return id_cell;
     }
 
-    public void setId_field(Integer id_field) {
-        this.id_field = id_field;
+    public void setId_cell(Integer id_cell) {
+        this.id_cell = id_cell;
     }
 
     public Integer getId_game() {

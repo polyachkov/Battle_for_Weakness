@@ -335,10 +335,18 @@ public class GameService {
 
         List<CellInfo> cellInfoList = cells.stream()
                 .map(cell -> new CellInfo(
+                        cell.getId_cell(),
                         cell.getCell_num(),
                         cell.getId_card(),
                         cell.getName_owner(),
-                        cell.getSickness())
+                        cell.getSickness(),
+                        cell.getAttack(),
+                        cell.getHealth(),
+                        cell.getCost(),
+                        cell.getEvasion(),
+                        cell.getAttack_speed(),
+                        cell.getMovement_speed()
+                    )
                 )
                 .collect(Collectors.toList());
 
