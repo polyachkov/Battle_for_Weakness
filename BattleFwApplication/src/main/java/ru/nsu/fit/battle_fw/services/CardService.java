@@ -5,10 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import ru.nsu.fit.battle_fw.database.model.*;
 import ru.nsu.fit.battle_fw.database.repo.*;
-import ru.nsu.fit.battle_fw.exceptions.BadCellException;
-import ru.nsu.fit.battle_fw.exceptions.CollectorsLimitException;
-import ru.nsu.fit.battle_fw.exceptions.NoBabosException;
-import ru.nsu.fit.battle_fw.exceptions.NoHandCompException;
+import ru.nsu.fit.battle_fw.exceptions.*;
 import ru.nsu.fit.battle_fw.requests.post.MoveCardRequest;
 import ru.nsu.fit.battle_fw.requests.post.PutCardInCellRequest;
 import ru.nsu.fit.battle_fw.requests.post.PutCollectorInCellRequest;
@@ -66,54 +63,76 @@ public class CardService {
      * Ничего не возвращает
      */
     public void putCardInCell(PutCardInCellRequest req, String playerName)
-            throws NoBabosException, BadCellException, NoHandCompException {
+            throws NoBabosException, BadCellException, NoHandCompException, NotYourTurnException {
         Integer gameId = req.getGameId();
         Integer cardId = req.getCardId();
-        Integer cellId = req.getCellId();
+        Integer cellId = req.getCellId(); // cellId - это cellNum
 
-        if (cellId <= 8 || cellId >= 57) { // Если клетка постановки только для сборщиков
+        Card card = cardR.getReferenceById(cardId);
+        Status status = statusR.getStatus(gameId, playerName);
+        Game game = gameR.getReferenceById(gameId);
+
+        if (!game.getName_turn().equals(playerName)) {
+            throw new NotYourTurnException("Not your turn, dude...");
+        }
+
+        logger.info("Player: {}, Babos$: {}, Card ID {}, Card cost: {}", playerName, status.getBabos(), card.getId_card(), card.getCost());
+
+        if (status.getBabos() < card.getCost()) { // Проверка на наличие бабосов
+            throw new NoBabosException();
+        } else {
+            Hand hand = handR.getHand(gameId, playerName);
+            hand.setCards_cnt(hand.getCards_cnt() - 1); // Удаление карты из руки
+
+            List<HandComp> handCompList = handCompR.getHandCard(hand.getId_hand(), cardId); // Берём карту с нужным id
+
+            if (handCompList.isEmpty()) {
+                throw new NoHandCompException("No card in hand");
+            }
+
+            HandComp handComp = handCompList.get(0);
+
+            Cell cell = cellR.getCell(gameId, cellId); // Постановка карты
+            checkCell(cell, game, playerName);
+            setCardInCell(cell, card, playerName);
+
+            status.setBabos(status.getBabos() - card.getCost()); // Убавление бабосов
+
+            handCompR.deleteById(handComp.getId_hand_card()); // Удаляем 1 экземпляр
+            statusR.save(status);
+            handR.save(hand);
+            cellR.save(cell);
+        }
+    }
+
+    private void checkCell(Cell cell, Game game, String playerName) throws BadCellException {
+        if (cell.getId_card() != null || cell.getCell_num() <= 8 || cell.getCell_num() >= 57) {
             throw new BadCellException();
-        } else {  // Если нет, то ставим карту
-            Card card = cardR.getReferenceById(cardId);
-            Status status = statusR.getStatus(gameId, playerName);
+        }
 
-            logger.info("Player: {}, Babos$: {}, Card ID {}, Card cost: {}", playerName, status.getBabos(), card.getId_card(), card.getCost());
-
-            if (status.getBabos() < card.getCost()) { // Проверка на наличие бабосов
-                throw new NoBabosException();
-            } else {
-                Hand hand = handR.getHand(gameId, playerName);
-                hand.setCards_cnt(hand.getCards_cnt() - 1); // Удаление карты из руки
-
-                List<HandComp> handCompList = handCompR.getHandCard(hand.getId_hand(), cardId); // Берём карту с нужным id
-
-                if (handCompList.isEmpty()) {
-                    throw new NoHandCompException("HandComp list is empty");
-                }
-
-                HandComp handComp = handCompList.get(0);
-
-                Cell cell = cellR.getCell(gameId, cellId); // Постановка карты
-                cell.setId_card(card.getId_card());
-                cell.setName_owner(playerName);
-                cell.setSickness(1); // Установка болезни выхода
-                cell.setAttack(card.getAttack());
-                cell.setHealth(card.getHealth());
-                cell.setCost(card.getCost());
-                cell.setEvasion(card.getEvasion());
-                cell.setAttack_speed(card.getAttack_speed());
-                cell.setMovement_speed(card.getMovement_speed());
-                cell.setRarity(card.getRarity());
-                cell.setFraction(card.getFraction());
-
-                status.setBabos(status.getBabos() - card.getCost()); // Убавление бабосов
-
-                handCompR.deleteById(handComp.getId_hand_card()); // Удаляем 1 экземпляр
-                statusR.save(status);
-                handR.save(hand);
-                cellR.save(cell);
+        if (game.getNon_reverse().equals(playerName)) {
+            if (cell.getCell_num() <= 40 || cell.getCell_num() >= 57) {
+                throw new BadCellException("Not your cells, dude...");
+            }
+        } else {
+            if (cell.getCell_num() <= 8 || cell.getCell_num() >= 25) {
+                throw new BadCellException("Not your cells, dude...");
             }
         }
+    }
+
+    private void setCardInCell(Cell cell, Card card, String playerName) {
+        cell.setId_card(card.getId_card());
+        cell.setName_owner(playerName);
+        cell.setSickness(1); // Установка болезни выхода
+        cell.setAttack(card.getAttack());
+        cell.setHealth(card.getHealth());
+        cell.setCost(card.getCost());
+        cell.setEvasion(card.getEvasion());
+        cell.setAttack_speed(card.getAttack_speed());
+        cell.setMovement_speed(card.getMovement_speed());
+        cell.setRarity(card.getRarity());
+        cell.setFraction(card.getFraction());
     }
 
     /**

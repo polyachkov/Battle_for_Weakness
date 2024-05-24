@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {GamefieldComponent} from "../gamefield.component";
-import {map} from "rxjs";
+import {map, Observable} from "rxjs";
 import {ICell} from "../../models/cell-model";
 import {idMoneyCollectorPictures} from "../constants";
 
@@ -11,48 +11,55 @@ import {idMoneyCollectorPictures} from "../constants";
 })
 export class DetailsComponent {
   pickedCard: number[] = [0, 0];
+  url!: Observable<string>;
+  currentCell!: Observable<ICell>;
 
   constructor(
     public gamefieldComponent: GamefieldComponent
   ) {}
 
   showModal() {
-    this.pickedCard[0] = this.gamefieldComponent.cardPos[0];
-    this.pickedCard[1] = this.gamefieldComponent.cardPos[1];
-    let answer = this.gamefieldComponent.showModal();
-    return answer;
+
   }
 
-  // determineStat(row: number, cell: number) {
-  //   this.gamefieldComponent.field.pipe(
-  //     map((cells: ICell[][]) => {
-  //       switch (true) {
-  //         case row == 0 && cell == 0:
-  //           return cells[this.pickedCard[0]][this.pickedCard[1]].attack;
-  //         case row == 0 && cell == 1:
-  //           return cells[this.pickedCard[0]][this.pickedCard[1]].health;
-  //         case row == 1 && cell == 0:
-  //           return cells[this.pickedCard[0]][this.pickedCard[1]].evasion;
-  //         case row == 1 && cell == 1:
-  //           return cells[this.pickedCard[0]][this.pickedCard[1]].cost;
-  //         case row == 2 && cell == 0:
-  //           return cells[this.pickedCard[0]][this.pickedCard[1]].attackSpeed;
-  //         case row == 2 && cell == 1:
-  //           return cells[this.pickedCard[0]][this.pickedCard[1]].moveSpeed;
-  //
-  //         default:
-  //           break;
-  //       }
-  //     })
-  //   ).subscribe();
-  //
-  //   this.field.pipe(
-  //     map((cells: ICell[][]) => {
-  //       const imgNum = cells[this.cardPos[0]][this.cardPos[1]].id_card;
-  //       url = idMoneyCollectorPictures[imgNum];
-  //       return url;
-  //     })
-  //   ).subscribe();
-  //
-  // }
+  ngOnInit(): void {
+    this.pickedCard[0] = this.gamefieldComponent.cardPos[0];
+    this.pickedCard[1] = this.gamefieldComponent.cardPos[1];
+    this.url = this.gamefieldComponent.showModal();
+    this.currentCell = this.gamefieldComponent.currentCell();
+  }
+
+  determineStat(row: number, cell: number, cellObj: ICell | null) {
+    if (!cellObj) return '';
+    switch (true) {
+      case row == 0 && cell == 0:
+        return 'Attack: ' + cellObj.attack;
+      case row == 0 && cell == 1:
+        return 'Health: ' + cellObj.health;
+      case row == 1 && cell == 0:
+        return 'Cost: ' + cellObj.cost;
+      case row == 1 && cell == 1:
+        return 'Evasion: ' + cellObj.evasion;
+      case row == 2 && cell == 0:
+        return 'Attack_speed: ' + this.attackSpeedToString(cellObj.attack_speed);
+      case row == 2 && cell == 1:
+        return 'Movement_speed: ' + cellObj.movement_speed;
+
+      default:
+        return undefined;
+    }
+  }
+
+  private attackSpeedToString(attack_speed: number): string {
+    switch (attack_speed) {
+      case 1:
+        return 'Slow';
+      case 2:
+        return 'Medium';
+      case 3:
+        return 'Fast';
+      default:
+        return 'None';
+    }
+  }
 }

@@ -63,7 +63,7 @@ public class SiteController {
 
     @PostMapping("/putCardInCell")
     public void putCardInCell(@RequestHeader Map<String, String> headers, @RequestBody PutCardInCellRequest req)
-            throws NoBabosException, BadCellException, NoHandCompException {
+            throws NoBabosException, BadCellException, NoHandCompException, NotYourTurnException {
         String nameOwner = getUsernameFromJWT(headers, jwtUtils);
         logger.info("POST /putCardInCell");
         logger.info("GameId " + req.getGameId());
