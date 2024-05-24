@@ -10,4 +10,7 @@ import ru.nsu.fit.battle_fw.database.model.Status;
 public interface StatusRepo extends JpaRepository<Status, Integer> {
     @Query("select s from Status s where s.id_game = :id_game and s.name_player = :name_player")
     Status getStatus(@Param("id_game") Integer id_game, @Param("name_player") String name_player);
+
+    @Query("select s from Status s where s.id_game = :id_game and s.name_player != :name_player")
+    Status getOppStatus(@Param("id_game") Integer id_game, @Param("name_player") String name_player);
 }

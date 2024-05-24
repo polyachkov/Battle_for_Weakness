@@ -10,6 +10,7 @@ import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
 import {ErrorService} from "./error.service";
 import {ICell} from "../models/cell-model";
 import {Game} from "../models/game-model";
+import {IStatus} from "../models/status-model";
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +21,7 @@ export class GameControlService {
   cardPos: number[] = [-1, -1];
 
   // mySelectedFraction: Fractions | null = null;
-  opponentSelectedFraction: string = 'Swamp';
+  opponentSelectedFraction: string = 'Mountains';
 
   gameState: GameState = 0;
 
@@ -37,6 +38,8 @@ export class GameControlService {
   private getHandUrl: string = 'http://localhost:8081/get/hand';
   private getOppHandUrl: string = 'http://localhost:8081/get/opp/hand';
   private getFieldUrl: string = 'http://localhost:8081/get/field';
+  private getStatusUrl: string = 'http://localhost:8081/get/status';
+  private getOppStatusUrl: string = 'http://localhost:8081/get/opp/status';
 
   private putCardInCellUrl: string = 'http://localhost:8081/putCardInCell';
 
@@ -158,13 +161,6 @@ export class GameControlService {
     return url;
   }
 
-  // showModal() {
-  //   let url = '';
-  //   let imgNum = field[this.cardPos[0]][this.cardPos[1]].name;
-  //   url = idMoneyCollectorPictures[imgNum];
-  //   return url;
-  // }
-
   getHand(id_game: string): Observable<Card[]> {
     const params = new HttpParams().set('id_game', id_game);
     return this.http.get<{ cards: Card[] }>(this.getHandUrl, { params }).pipe(
@@ -200,6 +196,16 @@ export class GameControlService {
     const body = { gameId: gameId, cardId: cardId, cellId: cellId };
 
     return this.http.post(this.putCardInCellUrl, body).pipe(
+      catchError(this.errorHandler.bind(this))
+    );
+  }
+
+  getStatus(id_game: string, isOpponent: boolean): Observable<IStatus> {
+    const params = new HttpParams().set('id_game', id_game);
+    return this.http.get<{ status: IStatus }>(
+      isOpponent ? this.getOppStatusUrl : this.getStatusUrl, { params }
+    ).pipe(
+      map(response => response.status),
       catchError(this.errorHandler.bind(this))
     );
   }

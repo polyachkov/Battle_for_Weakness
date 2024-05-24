@@ -18,10 +18,6 @@ export class DetailsComponent {
     public gamefieldComponent: GamefieldComponent
   ) {}
 
-  showModal() {
-
-  }
-
   ngOnInit(): void {
     this.pickedCard[0] = this.gamefieldComponent.cardPos[0];
     this.pickedCard[1] = this.gamefieldComponent.cardPos[1];

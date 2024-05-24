@@ -160,6 +160,26 @@ public class SiteController {
         return number;
     }
 
+    @GetMapping("/get/status")
+    public ResponseEntity<?> getStatus(
+            @RequestHeader Map<String, String> headers,
+            @RequestParam("id_game") Integer value
+    ) {
+        logger.info("GET /get/status");
+        String nameOwner = getUsernameFromJWT(headers, jwtUtils);
+        return gameService.getStatus(value, nameOwner, false);
+    }
+
+    @GetMapping("/get/opp/status")
+    public ResponseEntity<?> getOppStatus(
+            @RequestHeader Map<String, String> headers,
+            @RequestParam("id_game") Integer value
+    ) {
+        logger.info("GET /get/opp/status");
+        String nameOwner = getUsernameFromJWT(headers, jwtUtils);
+        return gameService.getStatus(value, nameOwner, true);
+    }
+
     @GetMapping(value = "/get-headers")
     public ResponseEntity<?> getHeaders(@RequestHeader Map<String, String> headers){//представляет заголовки ввиде мапы,
         //где ключ это наименование заголовка, а значение мапы - это значение заголовка

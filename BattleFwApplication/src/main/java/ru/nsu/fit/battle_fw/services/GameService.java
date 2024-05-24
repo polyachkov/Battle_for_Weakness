@@ -8,12 +8,10 @@ import ru.nsu.fit.battle_fw.database.repo.*;
 import ru.nsu.fit.battle_fw.exceptions.*;
 import ru.nsu.fit.battle_fw.requests.get.GetGameRequest;
 import ru.nsu.fit.battle_fw.requests.post.*;
-import ru.nsu.fit.battle_fw.responses.AllGamesResponse;
-import ru.nsu.fit.battle_fw.responses.CellsResponse;
-import ru.nsu.fit.battle_fw.responses.HandResponse;
-import ru.nsu.fit.battle_fw.responses.OppHandResponse;
+import ru.nsu.fit.battle_fw.responses.*;
 import ru.nsu.fit.battle_fw.responses.info.CellInfo;
 import ru.nsu.fit.battle_fw.responses.info.GameInfo;
+import ru.nsu.fit.battle_fw.responses.info.StatusInfo;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -463,5 +461,23 @@ public class GameService {
 
         OppHandResponse oppHandResponse = new OppHandResponse(hand.getCards_cnt());
         return ResponseEntity.ok(oppHandResponse);
+    }
+
+    public ResponseEntity<?> getStatus(Integer id_game, String namePlayer, boolean isOpponent) {
+        Status status;
+        if (isOpponent){
+            status = statusR.getOppStatus(id_game, namePlayer);
+        } else {
+            status = statusR.getStatus(id_game, namePlayer);
+        }
+
+        StatusResponse statusResponse = new StatusResponse(
+                new StatusInfo(
+                        status.getBabos(),
+                        status.getCollectors(),
+                        status.getHealth()
+                )
+        );
+        return ResponseEntity.ok(statusResponse);
     }
 }
