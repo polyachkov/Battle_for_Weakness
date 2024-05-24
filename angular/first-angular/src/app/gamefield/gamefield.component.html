@@ -7,13 +7,22 @@
       <div class="fraction-name">
         {{ gameControlService.opponentSelectedFraction }}
       </div>
+      <div class="money">
+        <div class="coin">
+          <div class="coin__front"></div>
+          <div class="coin__edge"></div>
+          <div class="coin__back"></div>
+          <div class="coin__shadow"></div>
+        </div>
+        <div class="countOfMoney">{{(oppStatus | async)?.babos}}</div>
+      </div>
       <div class="health">
         <img
           class="heart"
           src="../../assets/Photoes/hearth.png"
           alt="hearths"
         />
-        <div class="countOfHeart">3</div>
+        <div class="countOfHeart">{{(oppStatus | async)?.health}}</div>
       </div>
     </div>
   </div>
@@ -29,7 +38,7 @@
           <div class="coin__back"></div>
           <div class="coin__shadow"></div>
         </div>
-        <div class="countOfMoney">10</div>
+        <div class="countOfMoney">{{(status | async)?.babos}}</div>
       </div>
       <div class="health">
         <img
@@ -37,7 +46,7 @@
           src="../../assets/Photoes/hearth.png"
           alt="hearths"
         />
-        <div class="countOfHeart">3</div>
+        <div class="countOfHeart">{{(status | async)?.health}}</div>
       </div>
     </div>
   </div>

@@ -11,6 +11,7 @@ import {map, Observable, of, switchMap, tap} from "rxjs";
 import {ICell} from "../models/cell-model";
 import {Game, IGame} from "../models/game-model";
 import {TokenStorageService} from "../auth/token-storage.service";
+import {IStatus} from "../models/status-model";
 
 @Component({
   selector: 'app-gamefield',
@@ -22,6 +23,8 @@ export class GamefieldComponent implements OnInit {
   hand!: Observable<Card[]>;
   oppHand!: Observable<number>;
   game!: Observable<Game>;
+  status!: Observable<IStatus>;
+  oppStatus!: Observable<IStatus>;
   username: string = this.token.getUsername();
   isShowModal: boolean = false;
   cardPos: number[] = [-1, -1];
@@ -43,7 +46,7 @@ export class GamefieldComponent implements OnInit {
 
   ngOnInit(): void {
     this.game = this.gameControlService.getGame(this.id_game);
-    this.initializeHandAndField();
+    this.initializeState();
   }
 
   transformField(cells: ICell[], isReverse: boolean): ICell[][] {
@@ -79,7 +82,7 @@ export class GamefieldComponent implements OnInit {
     this.gameControlService.putCardInCell(Number(this.id_game), this.currentCard, cell.cell_num).subscribe(
       response => {
         console.log('Card placed successfully', response);
-        this.initializeHandAndField();
+        this.initializeState();
         this.currentCard = 0;
       },
       error => {
@@ -102,9 +105,11 @@ export class GamefieldComponent implements OnInit {
     });
   }
 
-  private initializeHandAndField(): void {
+  private initializeState(): void {
     this.hand = this.gameControlService.getHand(this.id_game);
     this.oppHand = this.gameControlService.getOppHand(this.id_game);
+    this.status = this.gameControlService.getStatus(this.id_game, false);
+    this.oppStatus = this.gameControlService.getStatus(this.id_game, true);
     this.field = this.gameControlService.getCells(this.id_game).pipe(
       map(cells => cells.sort((a, b) => a.cell_num - b.cell_num)), // Сортируем ячейки по cell_num
       switchMap(cells => this.checkReverse(this.username).pipe(
@@ -120,10 +125,8 @@ export class GamefieldComponent implements OnInit {
 
   showModal(): Observable<string> {
     return this.field.pipe(
-      tap(cells => console.log('cells:', cells)), // Логирование для проверки
       map((cells: ICell[][]) => {
         const imgNum = cells[this.cardPos[0]][this.cardPos[1]].id_card;
-        console.log('imgNum:', imgNum); // Логирование для проверки
         return idMoneyCollectorPictures[imgNum];
       })
     );
@@ -131,7 +134,6 @@ export class GamefieldComponent implements OnInit {
 
   currentCell(): Observable<ICell> {
     return this.field.pipe(
-      tap(cells => console.log('cells:', cells)), // Логирование для проверки
       map((cells: ICell[][]) => {
         return cells[this.cardPos[0]][this.cardPos[1]];
       })
