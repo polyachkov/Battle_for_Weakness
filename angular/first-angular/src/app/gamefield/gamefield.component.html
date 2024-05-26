@@ -2,6 +2,7 @@
 
 <div class="background">
   <app-details *ngIf="this.isShowModal"></app-details>
+  <app-choose-fraction *ngIf="this.isShowChooseFraction"></app-choose-fraction>
   <div class="container">
     <div [ngStyle]="{ top: '30px' }" class="opponentsInterface">
       <div class="fraction-name">
@@ -68,8 +69,8 @@
   </div>
 
   <div class="endTurnButtonField">
-    <button (click)="gameControlService.handleTurn()" class="endTurnButton">
-      {{ gameControlService.turnTitle }}
+    <button (click)="handleTurn()" class="endTurnButton">
+      {{ turnTitle }}
     </button>
   </div>
   <div class="map">

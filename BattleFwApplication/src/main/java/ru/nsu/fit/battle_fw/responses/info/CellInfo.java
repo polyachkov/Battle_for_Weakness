@@ -1,11 +1,11 @@
 package ru.nsu.fit.battle_fw.responses.info;
 
 public class CellInfo {
-    private Integer id_cell;
     private Integer cell_num;
     private Integer id_card;
     private String name_owner;
     private Integer sickness;
+    private String card_name;
     private Integer attack;
     private Integer health;
     private Integer cost;
@@ -13,23 +13,63 @@ public class CellInfo {
     private Integer attack_speed;
     private Integer movement_speed;
 
-    public CellInfo(Integer id_cell, Integer cell_num,
-                    Integer id_card, String name_owner,
-                    Integer sickness, Integer attack,
+    public CellInfo(Integer cell_num, Integer id_card,
+                    String name_owner, Integer sickness,
+                    String card_name, Integer attack,
                     Integer health, Integer cost,
                     Integer evasion, Integer attack_speed,
                     Integer movement_speed) {
-        this.id_cell = id_cell;
         this.cell_num = cell_num;
         this.id_card = id_card;
         this.name_owner = name_owner;
         this.sickness = sickness;
+        this.card_name = card_name;
         this.attack = attack;
         this.health = health;
         this.cost = cost;
         this.evasion = evasion;
         this.attack_speed = attack_speed;
         this.movement_speed = movement_speed;
+    }
+
+    public Integer getCell_num() {
+        return cell_num;
+    }
+
+    public void setCell_num(Integer cell_num) {
+        this.cell_num = cell_num;
+    }
+
+    public Integer getId_card() {
+        return id_card;
+    }
+
+    public void setId_card(Integer id_card) {
+        this.id_card = id_card;
+    }
+
+    public String getName_owner() {
+        return name_owner;
+    }
+
+    public void setName_owner(String name_owner) {
+        this.name_owner = name_owner;
+    }
+
+    public Integer getSickness() {
+        return sickness;
+    }
+
+    public void setSickness(Integer sickness) {
+        this.sickness = sickness;
+    }
+
+    public String getCard_name() {
+        return card_name;
+    }
+
+    public void setCard_name(String card_name) {
+        this.card_name = card_name;
     }
 
     public Integer getAttack() {
@@ -78,45 +118,5 @@ public class CellInfo {
 
     public void setMovement_speed(Integer movement_speed) {
         this.movement_speed = movement_speed;
-    }
-
-    public Integer getId_cell() {
-        return id_cell;
-    }
-
-    public void setId_cell(Integer id_cell) {
-        this.id_cell = id_cell;
-    }
-
-    public Integer getCell_num() {
-        return cell_num;
-    }
-
-    public void setCell_num(Integer cell_num) {
-        this.cell_num = cell_num;
-    }
-
-    public Integer getId_card() {
-        return id_card;
-    }
-
-    public void setId_card(Integer id_card) {
-        this.id_card = id_card;
-    }
-
-    public String getName_owner() {
-        return name_owner;
-    }
-
-    public void setName_owner(String name_owner) {
-        this.name_owner = name_owner;
-    }
-
-    public Integer getSickness() {
-        return sickness;
-    }
-
-    public void setSickness(Integer sickness) {
-        this.sickness = sickness;
     }
 }

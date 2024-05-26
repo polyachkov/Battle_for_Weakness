@@ -1,7 +1,9 @@
 // GameService.java
 package ru.nsu.fit.battle_fw.services;
 
+import org.aspectj.weaver.ast.Not;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.stereotype.Component;
 import ru.nsu.fit.battle_fw.database.model.*;
 import ru.nsu.fit.battle_fw.database.repo.*;
@@ -11,6 +13,7 @@ import ru.nsu.fit.battle_fw.requests.post.*;
 import ru.nsu.fit.battle_fw.responses.*;
 import ru.nsu.fit.battle_fw.responses.info.CellInfo;
 import ru.nsu.fit.battle_fw.responses.info.GameInfo;
+import ru.nsu.fit.battle_fw.responses.info.LibraryInfo;
 import ru.nsu.fit.battle_fw.responses.info.StatusInfo;
 
 import java.util.*;
@@ -102,6 +105,7 @@ public class GameService {
         game.setName_player1(player1); // Задание Id игроков
         game.setName_player2(player2);
         game.setIs_ended(false); // Показать что игра не окончена
+        game.setTurn_ended(false);
         Random isFirstPlayer = new Random(); // Случайным образом выбирается тот, кто будет ходить первым
         if (isFirstPlayer.nextBoolean()) {
             game.setName_turn(player1);
@@ -158,8 +162,8 @@ public class GameService {
      * Ничего не возвращает
      */
     private void createHands(Game game, String player1, String player2) {
-        createHand(libR.getLibId(player1, game.getId_game(), "common"), game.getId_game(), player1);
-        createHand(libR.getLibId(player2, game.getId_game(), "common"), game.getId_game(), player2);
+        createHand(libR.getLib(player1, game.getId_game(), "common").getId_library(), game.getId_game(), player1);
+        createHand(libR.getLib(player2, game.getId_game(), "common").getId_library(), game.getId_game(), player2);
     }
 
     /**
@@ -252,20 +256,50 @@ public class GameService {
     /**
      * Передача хода другому игроку
      * @param req - Сам запрос
-     * @param nextTurnName - name игрока, который ходит следующим
+     * @param turnName - name игрока, который ходит сейчас
      * Ничего не возвращает
      */
-    public void nextTurn(NextTurnRequest req, String nextTurnName) {
+    public void nextTurn(NextTurnRequest req, String turnName) throws NotYourTurnException {
+        Integer gameId = req.getGameId(); // id игры
+
+        Game game = gameR.getReferenceById(gameId);
+        if (!game.getName_turn().equals(turnName)) {
+            throw new NotYourTurnException("You cannot pass a turn during an opponent's turn");
+        }
+
+        String nextTurnName = game.getOppName(turnName);
+        game.setName_turn(nextTurnName); // Задаём ход
+        game.setTurn_ended(true);
+        gameR.save(game);
+    }
+
+    /**
+     * Принятие хода от другого игрока
+     * @param req - Сам запрос
+     * @param turnName - name игрока, который ходит сейчас
+     * Ничего не возвращает
+     */
+    public void takeTurn(TakeTurnRequest req, String turnName)
+            throws NotYourTurnException, LockedLibraryException {
         Integer gameId = req.getGameId(); // id игры
         String rarity = req.getRarity(); // редкость колоды, из которой следующий игрок берёт карту
 
         Game game = gameR.getReferenceById(gameId);
-        game.setName_turn(nextTurnName); // Задаём ход
+        if (!game.getName_turn().equals(turnName)) {
+            throw new NotYourTurnException("You cannot take a turn during an opponent's turn");
+        }
 
-        Status status = statusR.getStatus(gameId, nextTurnName);
+        Library library = libR.getLib(turnName, gameId, rarity);
+        if (library.getLocked()) {
+            throw new LockedLibraryException("You cannot take a card from a locked library");
+        }
+
+        game.setTurn_ended(false);
+
+        Status status = statusR.getStatus(gameId, turnName);
         status.setBabos(status.getBabos() + 2); // Увеличиваем кол-во денег следующего игрока
 
-        Hand hand = handR.getHand(gameId, nextTurnName); // Даём в руку карту указанной редкости
+        Hand hand = handR.getHand(gameId, turnName); // Даём в руку карту указанной редкости
         hand.setCards_cnt(hand.getCards_cnt() + 1);
 
         List<Cell> cells = cellR.getCells(gameId); // Устанавливаем болезнь выхода всех карт в 0
@@ -273,8 +307,7 @@ public class GameService {
             c.setSickness(0);
         }
 
-        Integer library_id = libR.getLibId(nextTurnName, gameId, rarity);
-        getCardToHand(library_id, hand.getId_hand()); // Даём карту в руку
+        getCardToHand(library.getId_library(), hand.getId_hand()); // Даём карту в руку
 
         gameR.save(game);
         statusR.save(status);
@@ -333,11 +366,11 @@ public class GameService {
 
         List<CellInfo> cellInfoList = cells.stream()
                 .map(cell -> new CellInfo(
-                        cell.getId_cell(),
                         cell.getCell_num(),
                         cell.getId_card(),
                         cell.getName_owner(),
                         cell.getSickness(),
+                        cell.getCard_name(),
                         cell.getAttack(),
                         cell.getHealth(),
                         cell.getCost(),
@@ -479,5 +512,20 @@ public class GameService {
                 )
         );
         return ResponseEntity.ok(statusResponse);
+    }
+
+    public ResponseEntity<?> getLibraries(Integer id_game, String namePlayer) {
+        List<Library> libraries = libR.getLibs(namePlayer, id_game);
+
+        List<LibraryInfo> librariesInfo = libraries.stream()
+                .filter(library -> !library.getLocked())
+                .map(
+                    library -> new LibraryInfo(
+                        library.getRarity()
+                    )
+                ).collect(Collectors.toList());
+
+        LibrariesResponse librariesResponse = new LibrariesResponse(librariesInfo);
+        return ResponseEntity.ok(librariesResponse);
     }
 }

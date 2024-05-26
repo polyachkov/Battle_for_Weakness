@@ -29,16 +29,20 @@ export class DetailsComponent {
     if (!cellObj) return '';
     switch (true) {
       case row == 0 && cell == 0:
-        return 'Attack: ' + cellObj.attack;
+        return cellObj.card_name;
       case row == 0 && cell == 1:
-        return 'Health: ' + cellObj.health;
+        return;
       case row == 1 && cell == 0:
-        return 'Cost: ' + cellObj.cost;
+        return 'Attack: ' + cellObj.attack;
       case row == 1 && cell == 1:
-        return 'Evasion: ' + cellObj.evasion;
+        return 'Health: ' + cellObj.health;
       case row == 2 && cell == 0:
-        return 'Attack_speed: ' + this.attackSpeedToString(cellObj.attack_speed);
+        return 'Cost: ' + cellObj.cost;
       case row == 2 && cell == 1:
+        return 'Evasion: ' + cellObj.evasion;
+      case row == 3 && cell == 0:
+        return 'Attack_speed: ' + this.attackSpeedToString(cellObj.attack_speed);
+      case row == 3 && cell == 1:
         return 'Movement_speed: ' + cellObj.movement_speed;
 
       default:

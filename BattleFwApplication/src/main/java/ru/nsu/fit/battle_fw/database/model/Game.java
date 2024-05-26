@@ -28,6 +28,9 @@ public class Game {
     @Column(name = "non_reverse")
     private String non_reverse;
 
+    @Column(name = "turn_ended")
+    private Boolean turn_ended;
+
     public String getName_turn() {
         return name_turn;
     }
@@ -74,5 +77,17 @@ public class Game {
 
     public void setNon_reverse(String non_reverse) {
         this.non_reverse = non_reverse;
+    }
+
+    public Boolean getTurn_ended() {
+        return turn_ended;
+    }
+
+    public void setTurn_ended(Boolean turn_ended) {
+        this.turn_ended = turn_ended;
+    }
+
+    public String getOppName(String name_player) {
+        return name_player.equals(name_player1) ? name_player2 : name_player1;
     }
 }
