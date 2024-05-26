@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GamePhases, GameState } from '../constants';
+import {GamePhases, GameState, hostName} from '../constants';
 import {
   Turn,
   idMoneyCollectorPictures,
@@ -35,16 +35,17 @@ export class GameControlService {
 
   private id_game!: number;
 
-  private getGameUrl: string = 'http://localhost:8081/get/game/byid';
-  private getHandUrl: string = 'http://localhost:8081/get/hand';
-  private getOppHandUrl: string = 'http://localhost:8081/get/opp/hand';
-  private getFieldUrl: string = 'http://localhost:8081/get/field';
-  private getStatusUrl: string = 'http://localhost:8081/get/status';
-  private getOppStatusUrl: string = 'http://localhost:8081/get/opp/status';
-  private putCardInCellUrl: string = 'http://localhost:8081/putCardInCell';
-  private nextTurnUrl: string = 'http://localhost:8081/nextTurn';
-  private takeTurnUrl: string = 'http://localhost:8081/takeTurn';
-  private getLibrariesUrl: string = 'http://localhost:8081/get/libraries';
+  private getGameUrl: string            = hostName + 'get/game/byid';
+  private getHandUrl: string            = hostName + 'get/hand';
+  private getOppHandUrl: string         = hostName + 'get/opp/hand';
+  private getFieldUrl: string           = hostName + 'get/field';
+  private getStatusUrl: string          = hostName + 'get/status';
+  private getOppStatusUrl: string       = hostName + 'get/opp/status';
+  private putCardInCellUrl: string      = hostName + 'putCardInCell';
+  private putCollectorInCellUrl: string = hostName + 'putCollectorInCell';
+  private nextTurnUrl: string           = hostName + 'nextTurn';
+  private takeTurnUrl: string           = hostName + 'takeTurn';
+  private getLibrariesUrl: string       = hostName + 'get/libraries';
 
   getIdGame() {
     return this.id_game;
@@ -190,6 +191,14 @@ export class GameControlService {
     const body = { gameId: gameId, cardId: cardId, cellId: cellId };
 
     return this.http.post(this.putCardInCellUrl, body).pipe(
+      catchError(this.errorHandler.bind(this))
+    );
+  }
+
+  putCollectorInCell(gameId: number, cellId: number): Observable<any> {
+    const body = { gameId: gameId, cellId: cellId };
+
+    return this.http.post(this.putCollectorInCellUrl, body).pipe(
       catchError(this.errorHandler.bind(this))
     );
   }

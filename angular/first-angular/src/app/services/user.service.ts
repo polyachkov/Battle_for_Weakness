@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {hostName} from "../constants";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  private userUrl = 'http://localhost:8081/api/test/user';
-  private modUrl = 'http://localhost:8081/api/test/mod';
-  private adminUrl = 'http://localhost:8081/api/test/admin';
+  private userUrl   = hostName + 'api/test/user';
+  private modUrl    = hostName + 'api/test/mod';
+  private adminUrl  = hostName + 'api/test/admin';
 
   constructor(private http: HttpClient) { }
 

@@ -21,6 +21,7 @@ import {IStatus} from "../models/status-model";
 export class GamefieldComponent implements OnInit, OnDestroy {
   id_game!: string;
   hand!: Observable<Card[]>;
+  collectorId: number = 49;
   oppHand!: Observable<number>;
   game!: Observable<Game>;
   status!: Observable<IStatus>;
@@ -104,16 +105,29 @@ export class GamefieldComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.gameControlService.putCardInCell(Number(this.id_game), this.currentCard, cell.cell_num).subscribe(
-      response => {
-        console.log('Card placed successfully', response);
-        this.initializeState();
-        this.currentCard = 0;
-      },
-      error => {
-        console.error('Error placing card', error);
-      }
-    );
+    if (this.currentCard == 49) {
+      this.gameControlService.putCollectorInCell(Number(this.id_game), cell.cell_num).subscribe(
+        response => {
+          console.log('Card placed successfully', response);
+          this.initializeState();
+          this.currentCard = 0;
+        },
+        error => {
+          console.error('Error placing card', error);
+        }
+      );
+    } else {
+      this.gameControlService.putCardInCell(Number(this.id_game), this.currentCard, cell.cell_num).subscribe(
+        response => {
+          console.log('Card placed successfully', response);
+          this.initializeState();
+          this.currentCard = 0;
+        },
+        error => {
+          console.error('Error placing card', error);
+        }
+      );
+    }
   }
 
   private updateField(row: number, cell_id: number) : void{

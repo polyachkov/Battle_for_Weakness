@@ -5,16 +5,17 @@ import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
 import {ErrorService} from "./error.service";
 import {IUser} from "../models/user-model";
 import {Card} from "../models/card-model";
+import {hostName} from "../constants";
 
 @Injectable({
   providedIn: 'root'
 })
 export class InviteService {
-  private getAllInvitesUrl: string = 'http://localhost:8081/get/all/invites';
-  private inviteUserUrl: string = 'http://localhost:8081/invite/create';
-  private acceptInviteUrl: string = 'http://localhost:8081/invite/accept';
-  private rejectInviteUrl: string = 'http://localhost:8081/invite/delete';
-  private getHandUrl: string = 'http://localhost:8081/get/hand';
+  private getAllInvitesUrl: string  = hostName + 'get/all/invites';
+  private inviteUserUrl: string     = hostName + 'invite/create';
+  private acceptInviteUrl: string   = hostName + 'invite/accept';
+  private rejectInviteUrl: string   = hostName + 'invite/delete';
+  private getHandUrl: string        = hostName + 'get/hand';
   private errorService: any;
   constructor(
     private http: HttpClient,

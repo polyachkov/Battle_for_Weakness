@@ -147,5 +147,19 @@
         </div>
       </div>
     </div>
+    <div class="hand" cdkDropList [cdkDropListData]="">
+      <div
+        class="myCards"
+        cdkDrag
+        (mousedown)="pickCardByHand(collectorId)"
+      >
+        <img class="image" [src]="idHandPictures[collectorId]" alt="" />
+        <div
+          class="statHorizontal"
+        >
+          Cost: {{ 3 + (((status | async)?.collectors ?? 0) * 2) }}
+        </div>
+      </div>
+    </div>
   </div>
 </div>
