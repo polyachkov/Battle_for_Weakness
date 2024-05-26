@@ -41,25 +41,12 @@ export class DetailsComponent {
       case row == 2 && cell == 1:
         return 'Evasion: ' + cellObj.evasion;
       case row == 3 && cell == 0:
-        return 'Attack_speed: ' + this.attackSpeedToString(cellObj.attack_speed);
+        return 'Attack_speed: ' + this.gamefieldComponent.attackSpeedToString(cellObj.attack_speed);
       case row == 3 && cell == 1:
         return 'Movement_speed: ' + cellObj.movement_speed;
 
       default:
         return undefined;
-    }
-  }
-
-  private attackSpeedToString(attack_speed: number): string {
-    switch (attack_speed) {
-      case 1:
-        return 'Slow';
-      case 2:
-        return 'Medium';
-      case 3:
-        return 'Fast';
-      default:
-        return 'None';
     }
   }
 }

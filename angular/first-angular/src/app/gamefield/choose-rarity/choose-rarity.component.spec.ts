@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ChooseFractionComponent } from './choose-fraction.component';
+import { ChooseRarityComponent } from './choose-rarity.component';
 
 describe('ChooseFractionComponent', () => {
-  let component: ChooseFractionComponent;
-  let fixture: ComponentFixture<ChooseFractionComponent>;
+  let component: ChooseRarityComponent;
+  let fixture: ComponentFixture<ChooseRarityComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ChooseFractionComponent]
+      declarations: [ChooseRarityComponent]
     });
-    fixture = TestBed.createComponent(ChooseFractionComponent);
+    fixture = TestBed.createComponent(ChooseRarityComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

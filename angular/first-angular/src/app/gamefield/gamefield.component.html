@@ -2,7 +2,7 @@
 
 <div class="background">
   <app-details *ngIf="this.isShowModal"></app-details>
-  <app-choose-fraction *ngIf="this.isShowChooseFraction"></app-choose-fraction>
+  <app-choose-rarity *ngIf="this.isShowChooseFraction"></app-choose-rarity>
   <div class="container">
     <div [ngStyle]="{ top: '30px' }" class="opponentsInterface">
       <div class="fraction-name">
@@ -126,16 +126,6 @@
         ></div>
       </div>
     </div>
-<!--    <div class="hand" cdkDropList [cdkDropListData]="myHand">-->
-<!--      <div-->
-<!--        class="myCards"-->
-<!--        *ngFor="let id_card of handCardId"-->
-<!--        cdkDrag-->
-<!--        (mousedown)="pickCardByHand(id_card)"-->
-<!--      >-->
-<!--        <img class="image" [src]="idHandPictures[id_card]" alt="" />-->
-<!--      </div>-->
-<!--    </div>-->
     <div class="hand" cdkDropList [cdkDropListData]="">
       <div
         class="myCards"
@@ -144,6 +134,17 @@
         (mousedown)="pickCardByHand(card.id_card)"
       >
         <img class="image" [src]="idHandPictures[card.id_card]" alt="" />
+        <div
+          class="statHorizontal"
+          *ngFor="let row of [0, 1, 2, 3]; let rowIndex = index"
+        >
+          <div
+            class="statVertical"
+            *ngFor="let column of [0, 1]; let columIndex = index"
+          >
+            {{ determineStat(rowIndex, columIndex, card) }}
+          </div>
+        </div>
       </div>
     </div>
   </div>

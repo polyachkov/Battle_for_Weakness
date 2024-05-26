@@ -6,11 +6,11 @@ import {ILibrary} from "../../models/library-model";
 import {GameControlService} from "../../services/game-control.service";
 
 @Component({
-  selector: 'app-choose-fraction',
-  templateUrl: './choose-fraction.component.html',
-  styleUrls: ['./choose-fraction.component.scss']
+  selector: 'app-choose-rarity',
+  templateUrl: './choose-rarity.component.html',
+  styleUrls: ['./choose-rarity.component.scss']
 })
-export class ChooseFractionComponent implements OnInit {
+export class ChooseRarityComponent implements OnInit {
   libraries!: Observable<ILibrary[]>;
 
   constructor(
