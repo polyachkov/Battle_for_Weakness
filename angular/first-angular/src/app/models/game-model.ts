@@ -11,4 +11,5 @@ export interface Game {
   name_turn: string
   is_ended: boolean
   non_reverse: string
+  turn_ended: boolean
 }

@@ -1,13 +1,13 @@
-import {booleanAttribute, Component, OnInit} from '@angular/core';
+import {booleanAttribute, Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 
 
-import {DynamicObject, field, idHandPictures, idMoneyCollectorPictures, idOppHandPictures} from './constants';
+import {DynamicObject, field, idHandPictures, idMoneyCollectorPictures, idOppHandPictures, Turn} from './constants';
 import {GameControlService} from "../services/game-control.service";
 import {GamePhases, Pages} from "../constants";
 import {PageContentService} from "../services/page-content.service";
 import {Card} from "../models/card-model";
-import {map, Observable, of, switchMap, tap} from "rxjs";
+import {interval, map, Observable, of, Subscription, switchMap, tap} from "rxjs";
 import {ICell} from "../models/cell-model";
 import {Game, IGame} from "../models/game-model";
 import {TokenStorageService} from "../auth/token-storage.service";
@@ -18,7 +18,7 @@ import {IStatus} from "../models/status-model";
   templateUrl: './gamefield.component.html',
   styleUrls: ['./gamefield.component.scss']
 })
-export class GamefieldComponent implements OnInit {
+export class GamefieldComponent implements OnInit, OnDestroy {
   id_game!: string;
   hand!: Observable<Card[]>;
   oppHand!: Observable<number>;
@@ -27,7 +27,11 @@ export class GamefieldComponent implements OnInit {
   oppStatus!: Observable<IStatus>;
   username: string = this.token.getUsername();
   isShowModal: boolean = false;
+  isShowChooseFraction: boolean = false;
   cardPos: number[] = [-1, -1];
+  turn: Turn = 0;
+  turnTitle = 'End the Turn';
+  private subscription!: Subscription;
 
   handCardId!: number[];
   field!: Observable<ICell[][]>;
@@ -45,8 +49,29 @@ export class GamefieldComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.game = this.gameControlService.getGame(this.id_game);
+    this.game = interval(1000).pipe(
+      switchMap(() => this.gameControlService.getGame(this.id_game)),
+      tap((game: Game) => {
+        if(game.name_turn == this.token.getUsername()) {
+          this.isShowChooseFraction = game.turn_ended;
+        }
+      })
+    );
+    this.subscription = this.game.subscribe(
+      () => {},
+      (error) => {
+        console.error('Error fetching game:', error);
+      }
+    );
+
     this.initializeState();
+  }
+
+  ngOnDestroy(): void {
+    // Отписка от интервала при уничтожении компонента
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   transformField(cells: ICell[], isReverse: boolean): ICell[][] {
@@ -167,6 +192,40 @@ export class GamefieldComponent implements OnInit {
   checkReverse(username: string): Observable<boolean> {
     return this.game.pipe(
       map(game => game.non_reverse !== username)
+    );
+  }
+
+  handleTurn() {
+    if (this.turn === 0) {
+      this.turnTitle = "Opponent's Turn";
+      this.turn = 1;
+    } else {
+      this.turnTitle = 'End the Turn';
+      this.turn = 0;
+    }
+    this.gameControlService.nextTurn(this.id_game).subscribe(
+      response => {
+        console.log('Turn transmitted successfully', response);
+        this.initializeState();
+        this.currentCard = 0;
+      },
+      error => {
+        console.error('Error transmitting turn', error);
+      }
+    );
+  }
+
+  handleLibraryChoose(rarity: string): void {
+    this.isShowChooseFraction = false;
+    this.gameControlService.takeTurn(this.id_game, rarity).subscribe(
+      response => {
+        console.log('Turn taken successfully', response);
+        this.initializeState();
+        this.currentCard = 0;
+      },
+      error => {
+        console.error('Error taking turn', error);
+      }
     );
   }
 

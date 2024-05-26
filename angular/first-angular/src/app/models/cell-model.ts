@@ -1,9 +1,9 @@
 export interface ICell {
-  id_cell: number
   cell_num: number
   id_card: number
   name_owner: string
   sickness: number
+  card_name: string
   attack: number
   health: number
   cost: number

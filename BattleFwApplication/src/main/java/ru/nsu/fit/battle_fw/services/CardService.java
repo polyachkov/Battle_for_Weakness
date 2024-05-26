@@ -125,6 +125,7 @@ public class CardService {
         cell.setId_card(card.getId_card());
         cell.setName_owner(playerName);
         cell.setSickness(1); // Установка болезни выхода
+        cell.setCard_name(card.getName());
         cell.setAttack(card.getAttack());
         cell.setHealth(card.getHealth());
         cell.setCost(card.getCost());

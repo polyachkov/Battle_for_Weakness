@@ -96,13 +96,25 @@ public class SiteController {
     }
 
     @PostMapping("/nextTurn")
-    public void nextTurn(@RequestHeader Map<String, String> headers, @RequestBody NextTurnRequest req) {
+    public void nextTurn(@RequestHeader Map<String, String> headers,
+                         @RequestBody NextTurnRequest req) throws NotYourTurnException {
         String nameOwner = getUsernameFromJWT(headers, jwtUtils);
         logger.info("POST /nextTurn");
         logger.info("GameId " + req.getGameId());
         logger.info("NextTurnId " + nameOwner);
-        logger.info("Rarity " + req.getRarity());
         gameService.nextTurn(req, nameOwner);
+    }
+
+    @PostMapping("/takeTurn")
+    public void takeTurn(@RequestHeader Map<String, String> headers,
+                         @RequestBody TakeTurnRequest req)
+            throws NotYourTurnException, LockedLibraryException {
+        String nameOwner = getUsernameFromJWT(headers, jwtUtils);
+        logger.info("POST /takeTurn");
+        logger.info("GameId " + req.getGameId());
+        logger.info("NextTurnId " + nameOwner);
+        logger.info("Rarity " + req.getRarity());
+        gameService.takeTurn(req, nameOwner);
     }
 
     @GetMapping("/get/game/byplayers")
@@ -178,6 +190,16 @@ public class SiteController {
         logger.info("GET /get/opp/status");
         String nameOwner = getUsernameFromJWT(headers, jwtUtils);
         return gameService.getStatus(value, nameOwner, true);
+    }
+
+    @GetMapping("/get/libraries")
+    public ResponseEntity<?> getLibraries(
+            @RequestHeader Map<String, String> headers,
+            @RequestParam("id_game") Integer value
+    ) {
+        logger.info("GET /get/libraries");
+        String nameOwner = getUsernameFromJWT(headers, jwtUtils);
+        return gameService.getLibraries(value, nameOwner);
     }
 
     @GetMapping(value = "/get-headers")

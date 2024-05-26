@@ -11,6 +11,7 @@ import {ErrorService} from "./error.service";
 import {ICell} from "../models/cell-model";
 import {Game} from "../models/game-model";
 import {IStatus} from "../models/status-model";
+import {ILibrary} from "../models/library-model";
 
 @Injectable({
   providedIn: 'root',
@@ -40,8 +41,10 @@ export class GameControlService {
   private getFieldUrl: string = 'http://localhost:8081/get/field';
   private getStatusUrl: string = 'http://localhost:8081/get/status';
   private getOppStatusUrl: string = 'http://localhost:8081/get/opp/status';
-
   private putCardInCellUrl: string = 'http://localhost:8081/putCardInCell';
+  private nextTurnUrl: string = 'http://localhost:8081/nextTurn';
+  private takeTurnUrl: string = 'http://localhost:8081/takeTurn';
+  private getLibrariesUrl: string = 'http://localhost:8081/get/libraries';
 
   getIdGame() {
     return this.id_game;
@@ -90,8 +93,6 @@ export class GameControlService {
     }
   }
 
-  turn: Turn = 0;
-  turnTitle = 'End the Turn';
 
   // handleFractionChoice(fractionName: Fractions) {
   //   this.mySelectedFraction = fractionName;
@@ -129,15 +130,8 @@ export class GameControlService {
   //   this.isShowModal = true;
   // }
 
-  handleTurn() {
-    if (this.turn === 0) {
-      this.turnTitle = "Opponent's Turn";
-      this.turn = 1;
-    } else {
-      this.turnTitle = 'End the Turn';
-      this.turn = 0;
-    }
-  }
+
+
   getCardImageUrl(row: number, cell: number) {
     let url = '';
     switch (row) {
@@ -206,6 +200,30 @@ export class GameControlService {
       isOpponent ? this.getOppStatusUrl : this.getStatusUrl, { params }
     ).pipe(
       map(response => response.status),
+      catchError(this.errorHandler.bind(this))
+    );
+  }
+
+  nextTurn(gameId: string): Observable<any> {
+    const body = { gameId: gameId };
+
+    return this.http.post(this.nextTurnUrl, body).pipe(
+      catchError(this.errorHandler.bind(this))
+    );
+  }
+
+  takeTurn(gameId: string, rarity: string): Observable<any> {
+    const body = { gameId: gameId, rarity: rarity };
+
+    return this.http.post(this.takeTurnUrl, body).pipe(
+      catchError(this.errorHandler.bind(this))
+    );
+  }
+
+  getLibraries(id_game: string): Observable<ILibrary[]> {
+    const params = new HttpParams().set('id_game', id_game);
+    return this.http.get<{ libraries: ILibrary[]}>(this.getLibrariesUrl, { params }).pipe(
+      map(response => response.libraries),
       catchError(this.errorHandler.bind(this))
     );
   }

@@ -28,6 +28,9 @@ public class Cell {
     @Column(name = "sickness")
     private Integer sickness;
 
+    @Column(name = "card_name")
+    private String card_name;
+
     @Column(name = "attack")
     private Integer attack;
 
@@ -98,6 +101,14 @@ public class Cell {
 
     public void setSickness(Integer sickness) {
         this.sickness = sickness;
+    }
+
+    public String getCard_name() {
+        return card_name;
+    }
+
+    public void setCard_name(String card_name) {
+        this.card_name = card_name;
     }
 
     public Integer getAttack() {
