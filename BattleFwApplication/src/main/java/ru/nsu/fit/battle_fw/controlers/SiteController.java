@@ -63,7 +63,8 @@ public class SiteController {
 
     @PostMapping("/putCardInCell")
     public void putCardInCell(@RequestHeader Map<String, String> headers, @RequestBody PutCardInCellRequest req)
-            throws NoBabosException, BadCellException, NoHandCompException, NotYourTurnException {
+            throws NoBabosException, BadCellException,
+            NoHandCompException, NotYourTurnException {
         String nameOwner = getUsernameFromJWT(headers, jwtUtils);
         logger.info("POST /putCardInCell");
         logger.info("GameId " + req.getGameId());
@@ -75,7 +76,8 @@ public class SiteController {
 
     @PostMapping("/putCollectorInCell")
     public void putCollectorInCell(@RequestHeader Map<String, String> headers, @RequestBody PutCollectorInCellRequest req)
-            throws NoBabosException, BadCellException, CollectorsLimitException {
+            throws NoBabosException, BadCellException,
+            NotYourTurnException, CollectorsLimitException {
         String nameOwner = getUsernameFromJWT(headers, jwtUtils);
         logger.info("POST /putCollectorInCell");
         logger.info("GameId " + req.getGameId());

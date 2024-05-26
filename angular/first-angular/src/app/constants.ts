@@ -21,3 +21,5 @@ export enum GameState {
   NOPROCESS,
   PROCESS,
 }
+
+export const hostName: string = 'http://localhost:8081/'

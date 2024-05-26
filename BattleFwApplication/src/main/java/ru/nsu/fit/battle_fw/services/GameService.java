@@ -297,7 +297,7 @@ public class GameService {
         game.setTurn_ended(false);
 
         Status status = statusR.getStatus(gameId, turnName);
-        status.setBabos(status.getBabos() + 2); // Увеличиваем кол-во денег следующего игрока
+        status.setBabos(status.getBabos() + 2 + status.getCollectors()); // Увеличиваем кол-во денег следующего игрока
 
         Hand hand = handR.getHand(gameId, turnName); // Даём в руку карту указанной редкости
         hand.setCards_cnt(hand.getCards_cnt() + 1);

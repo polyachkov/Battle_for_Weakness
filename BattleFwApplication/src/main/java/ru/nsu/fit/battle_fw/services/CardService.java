@@ -76,7 +76,8 @@ public class CardService {
             throw new NotYourTurnException("Not your turn, dude...");
         }
 
-        logger.info("Player: {}, Babos$: {}, Card ID {}, Card cost: {}", playerName, status.getBabos(), card.getId_card(), card.getCost());
+        logger.info("Player: {}, Babos$: {}, Card ID {}, Card cost: {}",
+                playerName, status.getBabos(), card.getId_card(), card.getCost());
 
         if (status.getBabos() < card.getCost()) { // Проверка на наличие бабосов
             throw new NoBabosException();
@@ -93,7 +94,7 @@ public class CardService {
             HandComp handComp = handCompList.get(0);
 
             Cell cell = cellR.getCell(gameId, cellId); // Постановка карты
-            checkCell(cell, game, playerName);
+            checkCell(cell, game, playerName, false);
             setCardInCell(cell, card, playerName);
 
             status.setBabos(status.getBabos() - card.getCost()); // Убавление бабосов
@@ -105,18 +106,84 @@ public class CardService {
         }
     }
 
-    private void checkCell(Cell cell, Game game, String playerName) throws BadCellException {
-        if (cell.getId_card() != null || cell.getCell_num() <= 8 || cell.getCell_num() >= 57) {
-            throw new BadCellException();
+    /**
+     * Установка сборщика бабосов.
+     * Отдельным запросом т.к. это особенная карта. Её нет в руке, она открывается по мере открытия библиотек.
+     * Данный метод обрабатывает запрос на постановку нового сборщика
+     * @param req - Сам запрос
+     * @throws NoBabosException - Кидается, если не хватает бабосов
+     * @throws BadCellException - Кидается, если клетка некорректна
+     * @throws CollectorsLimitException - Кидается, если достигнут лимит сборщиков, и ставить больше нельзя
+     * Ничего не возвращает
+     */
+    public void putCollectorInCell(PutCollectorInCellRequest req, String playerName)
+            throws NoBabosException, BadCellException,
+            NotYourTurnException, CollectorsLimitException {
+        Integer gameId = req.getGameId();
+        Integer cellId = req.getCellId(); // cellId - это cellNum
+        Integer collectorId = 49;
+        Integer collectorsLimit = 4;
+
+        Card collector = cardR.getReferenceById(collectorId);
+        Status status = statusR.getStatus(gameId, playerName);
+        Game game = gameR.getReferenceById(gameId);
+
+        if (status.getCollectors() >= collectorsLimit) {
+            throw new CollectorsLimitException("Too many collectors");
         }
 
-        if (game.getNon_reverse().equals(playerName)) {
-            if (cell.getCell_num() <= 40 || cell.getCell_num() >= 57) {
-                throw new BadCellException("Not your cells, dude...");
+        if (!game.getName_turn().equals(playerName)) {
+            throw new NotYourTurnException("Not your turn, dude...");
+        }
+
+        logger.info("Player: {}, Babos$: {}, Collector ID {}, Card cost: {}",
+                playerName, status.getBabos(), collector.getId_card(), collector.getCost());
+
+        Integer actualCollectorCost = collector.getCost() + (status.getCollectors() * 2);
+        if (status.getBabos() < actualCollectorCost) { // Проверка на наличие бабосов
+            throw new NoBabosException();
+        } else {
+            Cell cell = cellR.getCell(gameId, cellId); // Постановка карты
+            checkCell(cell, game, playerName, true);
+            setCardInCell(cell, collector, playerName);
+            cell.setSickness(0); // У сборщиков нет болезни выстава
+
+            status.setBabos(status.getBabos() - actualCollectorCost); // Убавление бабосов
+            status.setCollectors(status.getCollectors() + 1); // Увеличиваем кол-во сборщиков
+
+            cellR.save(cell);
+            statusR.save(status);
+        }
+    }
+
+    private void checkCell(Cell cell, Game game, String playerName, boolean isCollector) throws BadCellException {
+        if (!isCollector) {
+            if (cell.getId_card() != null || cell.getCell_num() <= 8 || cell.getCell_num() >= 57) {
+                throw new BadCellException("Wrong cells, dude...");
+            }
+
+            if (game.getNon_reverse().equals(playerName)) {
+                if (cell.getCell_num() <= 40 || cell.getCell_num() >= 57) {
+                    throw new BadCellException("Not your cells, dude...");
+                }
+            } else {
+                if (cell.getCell_num() <= 8 || cell.getCell_num() >= 25) {
+                    throw new BadCellException("Not your cells, dude...");
+                }
             }
         } else {
-            if (cell.getCell_num() <= 8 || cell.getCell_num() >= 25) {
-                throw new BadCellException("Not your cells, dude...");
+            if (cell.getId_card() != null || (cell.getCell_num() > 8 && cell.getCell_num() < 57)) {
+                throw new BadCellException("Wrong cells, dude...");
+            }
+
+            if (game.getNon_reverse().equals(playerName)) {
+                if (cell.getCell_num() <= 56 || cell.getCell_num() >= 65) {
+                    throw new BadCellException("Not your cells, dude...");
+                }
+            } else {
+                if (cell.getCell_num() <= 0 || cell.getCell_num() >= 9) {
+                    throw new BadCellException("Not your cells, dude...");
+                }
             }
         }
     }
@@ -134,46 +201,6 @@ public class CardService {
         cell.setMovement_speed(card.getMovement_speed());
         cell.setRarity(card.getRarity());
         cell.setFraction(card.getFraction());
-    }
-
-    /**
-     * Установка сборщика бабосов.
-     * Отдельным запросом т.к. это особенная карта. Её нет в руке, она открывается по мере открытия библиотек.
-     * Данный метод обрабатывает запрос на постановку нового сборщика
-     * @param req - Сам запрос
-     * @throws NoBabosException - Кидается, если не хватает бабосов
-     * @throws BadCellException - Кидается, если клетка некорректна
-     * @throws CollectorsLimitException - Кидается, если достигнут лимит сборщиков, и ставить больше нельзя
-     * Ничего не возвращает
-     */
-    public void putCollectorInCell(PutCollectorInCellRequest req, String playerName)
-            throws NoBabosException, BadCellException, CollectorsLimitException {
-        Integer gameId = req.getGameId();
-        Integer cellId = req.getCellId();
-
-        if (cellId > 8 && cellId < 57) { // Сборщики нельзя ставить в обычные клетки
-            throw new BadCellException();
-        } else {
-            Card collector = cardR.getReferenceById(49); // 49 - id карты сборщика
-
-            Status status = statusR.getStatus(gameId, playerName);
-
-            if (status.getBabos() < collector.getCost()) { // Проверка на наличие денег
-                throw new NoBabosException();
-            } else if (status.getCollectors() >= 4) { // Проверка на кол-во сейчас стоящих сборщиков
-                throw new CollectorsLimitException();
-            } else {
-                Cell cell = cellR.getCell(gameId, cellId);
-                cell.setId_card(49);
-                cell.setName_owner(playerName);
-                cell.setSickness(0); // У сборщиков нет болезни выстава
-
-                status.setCollectors(status.getCollectors() + 1); // Увеличиваем кол-во сборщиков
-
-                cellR.save(cell);
-                statusR.save(status);
-            }
-        }
     }
 
     /**
