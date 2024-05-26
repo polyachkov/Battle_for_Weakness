@@ -36,7 +36,7 @@ import { InviteInfoComponent } from './invite/invite-info/invite-info.component'
 import { GameComponent } from './home/game/game.component';
 import { GamefieldComponent } from './gamefield/gamefield.component';
 import { DetailsComponent } from './gamefield/details/details.component';
-import { ChooseFractionComponent } from './gamefield/choose-fraction/choose-fraction.component';
+import { ChooseRarityComponent } from './gamefield/choose-rarity/choose-rarity.component';
 
 @NgModule({
   declarations: [
@@ -64,7 +64,7 @@ import { ChooseFractionComponent } from './gamefield/choose-fraction/choose-frac
     GameComponent,
     GamefieldComponent,
     DetailsComponent,
-    ChooseFractionComponent,
+    ChooseRarityComponent,
   ],
   imports: [
     BrowserModule,
