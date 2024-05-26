@@ -32,7 +32,8 @@ CREATE TABLE IF NOT EXISTS game
     name_turn       VARCHAR(200) NOT NULL,
     is_ended        BOOLEAN NOT NULL,
     non_reverse     VARCHAR(200) NOT NULL,
-    turn_ended      BOOLEAN NOT NULL
+    turn_ended      BOOLEAN NOT NULL,
+    is_fight_phase  BOOLEAN NOT NULL
 );
 DROP SEQUENCE IF EXISTS games_id_seq;
 CREATE SEQUENCE IF NOT EXISTS games_id_seq START WITH 1 INCREMENT BY 1;
@@ -98,7 +99,9 @@ CREATE TABLE cell
     attack_speed    INTEGER,
     movement_speed  INTEGER,
     rarity          VARCHAR(200),
-    fraction        VARCHAR(200)
+    fraction        VARCHAR(200),
+    revenged        BOOLEAN,
+    attacked      BOOLEAN
 );
 DROP SEQUENCE IF EXISTS cell_id_seq;
 CREATE SEQUENCE IF NOT EXISTS cell_id_seq START WITH 1 INCREMENT BY 1;

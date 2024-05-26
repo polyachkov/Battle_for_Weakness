@@ -63,7 +63,7 @@ public class CardService {
      * Ничего не возвращает
      */
     public void putCardInCell(PutCardInCellRequest req, String playerName)
-            throws NoBabosException, BadCellException, NoHandCompException, NotYourTurnException {
+            throws NoBabosException, BadCellException, NoHandCompException, NotYourTurnException, PutInFightException {
         Integer gameId = req.getGameId();
         Integer cardId = req.getCardId();
         Integer cellId = req.getCellId(); // cellId - это cellNum
@@ -74,6 +74,9 @@ public class CardService {
 
         if (!game.getName_turn().equals(playerName)) {
             throw new NotYourTurnException("Not your turn, dude...");
+        }
+        if(game.getIs_fight_phase()){
+            throw new PutInFightException("Нельзя ставить карту в fight phase");
         }
 
         logger.info("Player: {}, Babos$: {}, Card ID {}, Card cost: {}",
@@ -118,7 +121,7 @@ public class CardService {
      */
     public void putCollectorInCell(PutCollectorInCellRequest req, String playerName)
             throws NoBabosException, BadCellException,
-            NotYourTurnException, CollectorsLimitException {
+            NotYourTurnException, CollectorsLimitException, PutInFightException {
         Integer gameId = req.getGameId();
         Integer cellId = req.getCellId(); // cellId - это cellNum
         Integer collectorId = 49;
@@ -127,6 +130,10 @@ public class CardService {
         Card collector = cardR.getReferenceById(collectorId);
         Status status = statusR.getStatus(gameId, playerName);
         Game game = gameR.getReferenceById(gameId);
+
+        if(game.getIs_fight_phase()){
+            throw new PutInFightException("Нельзя ставить карту в fight phase");
+        }
 
         if (status.getCollectors() >= collectorsLimit) {
             throw new CollectorsLimitException("Too many collectors");
@@ -201,6 +208,25 @@ public class CardService {
         cell.setMovement_speed(card.getMovement_speed());
         cell.setRarity(card.getRarity());
         cell.setFraction(card.getFraction());
+        cell.setRevenged(false);
+        cell.setAttacked(false);
+    }
+
+    private void copyCell(Cell cell1, Cell cell2) {
+        cell1.setId_card(cell2.getId_card());
+        cell1.setName_owner(cell2.getName_owner());
+        cell1.setSickness(cell2.getSickness()); // Установка болезни выхода
+        cell1.setCard_name(cell2.getCard_name());
+        cell1.setAttack(cell2.getAttack());
+        cell1.setHealth(cell2.getHealth());
+        cell1.setCost(cell2.getCost());
+        cell1.setEvasion(cell2.getEvasion());
+        cell1.setAttack_speed(cell2.getAttack_speed());
+        cell1.setMovement_speed(cell2.getMovement_speed() - 1);
+        cell1.setRarity(cell2.getRarity());
+        cell1.setFraction(cell2.getFraction());
+        cell1.setRevenged(cell2.isRevenged());
+        cell1.setAttacked(cell2.isAttacked());
     }
 
     /**
@@ -208,19 +234,84 @@ public class CardService {
      * @param req - Сам запрос
      * Ничего не возвращает
      */
-    public void moveCard(MoveCardRequest req, String playerName) {
+    public void moveCard(MoveCardRequest req, String playerName) throws BadCellException {
         Integer gameId = req.getGameId(); // Начальные данные
         Integer cellId1 = req.getCellId1();
         Integer cellId2 = req.getCellId2();
+        Game game = gameR.getReferenceById(gameId);
 
         Cell cell1 = cellR.getCell(gameId, cellId1);
         Cell cell2 = cellR.getCell(gameId, cellId2);
-        cell2.setId_card(cell1.getId_card()); // Установка карты
-        cell2.setName_owner(playerName);
-        cell1.setId_card(null); // Очищение предыдущей клетки
-        cell1.setName_owner(null);
+
+        if(!areNeighbors(cellId1, cellId2)){
+            throw new BadCellException("Не соседние клетки");
+        }
+        if (cell1.getCard_name() == null) {
+            throw new BadCellException("В клетке нет карты");
+        }
+        if(game.getIs_fight_phase()){
+            if (cell2.getCard_name() != null) {
+                attack(cell1, cell2);
+            }
+            else {
+                throw new BadCellException("Нельзя передвигаться в боевой фазе");
+            }
+        } else {
+            if(cell1.getMovement_speed() > 0 && cell2.getCard_name() == null) {
+                copyCell(cell1, cell2);
+                Cell newCell = new Cell();
+                copyCell(newCell, cell1);
+            } else if (cell2.getCard_name() != null) {
+                throw new BadCellException("Нельзя перемещать на клетку где что-то есть");
+            } else if (cell1.getMovement_speed() <= 0){
+                throw new BadCellException("У карты не хватает очков передвижения");
+            }
+        }
+
+
 
         cellR.save(cell1);
         cellR.save(cell2);
+    }
+
+    private void attack(Cell cell1, Cell cell2) {
+        int newHp2 = cell2.getHealth() - cell1.getAttack();
+        if(newHp2 <= 0){
+            Cell newCell = new Cell();
+            copyCell(newCell, cell2);
+        } else {
+            if(!cell2.isRevenged()){
+                cell2.setRevenged(true);
+                int newHp1 = cell1.getHealth() - cell2.getAttack();
+                if(newHp1<=0){
+                    Cell newCell = new Cell();
+                    copyCell(newCell, cell1);
+                }else {
+                    cell1.setHealth(newHp1);
+                }
+            }
+            cell2.setHealth(newHp2);
+        }
+        cell1.setAttacked(true);
+    }
+
+    public static boolean areNeighbors(int id1, int id2) {
+        // Вычисляем индексы (i, j) для id1
+        int i1 = id1 / 8;
+        int j1 = id1 % 8;
+
+        // Вычисляем индексы (i, j) для id2
+        int i2 = id2 / 8;
+        int j2 = id2 % 8;
+
+        // Проверяем условия соседства
+        if (i1 == i2 && Math.abs(j1 - j2) == 1) {
+            return true;
+        }
+        if (j1 == j2 && Math.abs(i1 - i2) == 1) {
+            return true;
+        }
+
+        return false;
     }
 }

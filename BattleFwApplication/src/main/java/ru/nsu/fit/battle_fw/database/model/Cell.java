@@ -55,6 +55,12 @@ public class Cell {
     @Column(name = "fraction")
     private String fraction;
 
+    @Column(name = "revenged")
+    private boolean revenged;
+
+    @Column(name = "attacked")
+    private boolean attacked;
+
     public Integer getId_cell() {
         return id_cell;
     }
@@ -173,5 +179,21 @@ public class Cell {
 
     public void setHealth(Integer health) {
         this.health = health;
+    }
+
+    public boolean isRevenged() {
+        return revenged;
+    }
+
+    public void setRevenged(boolean revenged) {
+        this.revenged = revenged;
+    }
+
+    public boolean isAttacked() {
+        return attacked;
+    }
+
+    public void setAttacked(boolean attacked) {
+        this.attacked = attacked;
     }
 }

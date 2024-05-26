@@ -31,6 +31,9 @@ public class Game {
     @Column(name = "turn_ended")
     private Boolean turn_ended;
 
+    @Column(name = "is_fight_phase")
+    private Boolean is_fight_phase;
+
     public String getName_turn() {
         return name_turn;
     }
@@ -89,5 +92,13 @@ public class Game {
 
     public String getOppName(String name_player) {
         return name_player.equals(name_player1) ? name_player2 : name_player1;
+    }
+
+    public Boolean getIs_fight_phase() {
+        return is_fight_phase;
+    }
+
+    public void setIs_fight_phase(Boolean is_fight_phase) {
+        this.is_fight_phase = is_fight_phase;
     }
 }

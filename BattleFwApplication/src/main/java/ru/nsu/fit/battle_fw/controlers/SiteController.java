@@ -64,7 +64,7 @@ public class SiteController {
     @PostMapping("/putCardInCell")
     public void putCardInCell(@RequestHeader Map<String, String> headers, @RequestBody PutCardInCellRequest req)
             throws NoBabosException, BadCellException,
-            NoHandCompException, NotYourTurnException {
+            NoHandCompException, NotYourTurnException, PutInFightException {
         String nameOwner = getUsernameFromJWT(headers, jwtUtils);
         logger.info("POST /putCardInCell");
         logger.info("GameId " + req.getGameId());
@@ -77,7 +77,7 @@ public class SiteController {
     @PostMapping("/putCollectorInCell")
     public void putCollectorInCell(@RequestHeader Map<String, String> headers, @RequestBody PutCollectorInCellRequest req)
             throws NoBabosException, BadCellException,
-            NotYourTurnException, CollectorsLimitException {
+            NotYourTurnException, CollectorsLimitException, PutInFightException {
         String nameOwner = getUsernameFromJWT(headers, jwtUtils);
         logger.info("POST /putCollectorInCell");
         logger.info("GameId " + req.getGameId());
@@ -87,7 +87,7 @@ public class SiteController {
     }
 
     @PostMapping("/moveCard")
-    public void moveCardRequest(@RequestHeader Map<String, String> headers, @RequestBody MoveCardRequest req) {
+    public void moveCardRequest(@RequestHeader Map<String, String> headers, @RequestBody MoveCardRequest req) throws BadCellException {
         String nameOwner = getUsernameFromJWT(headers, jwtUtils);
         logger.info("POST /moveCard");
         logger.info("GameId " + req.getGameId());

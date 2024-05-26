@@ -114,6 +114,7 @@ public class GameService {
             game.setName_turn(player2);
             game.setNon_reverse(player2);
         }
+        game.setIs_fight_phase(false);
         gameR.save(game); // Сохранение записи в базу данных
         return game;
     }
@@ -270,6 +271,7 @@ public class GameService {
         String nextTurnName = game.getOppName(turnName);
         game.setName_turn(nextTurnName); // Задаём ход
         game.setTurn_ended(true);
+        game.setIs_fight_phase(false);
         gameR.save(game);
     }
 
@@ -302,9 +304,14 @@ public class GameService {
         Hand hand = handR.getHand(gameId, turnName); // Даём в руку карту указанной редкости
         hand.setCards_cnt(hand.getCards_cnt() + 1);
 
-        List<Cell> cells = cellR.getCells(gameId); // Устанавливаем болезнь выхода всех карт в 0
+        List<Cell> cells = cellR.getCells(gameId);
         for (Cell c : cells) {
-            c.setSickness(0);
+            if(c.getCard_name() != null){
+                c.setSickness(0); // Устанавливаем болезнь выхода всех карт в 0
+                c.setRevenged(false); // Все карты не отвечали на атаку
+                c.setMovement_speed(cardR.getCardById(c.getId_card()).getMovement_speed()); // Все карты снова могут ходить (movement speed не 0)
+            }
+
         }
 
         getCardToHand(library.getId_library(), hand.getId_hand()); // Даём карту в руку
@@ -528,4 +535,19 @@ public class GameService {
         LibrariesResponse librariesResponse = new LibrariesResponse(librariesInfo);
         return ResponseEntity.ok(librariesResponse);
     }
+
+    public void changePhase(Integer id_game, String namePlayer) throws AlreadyFightException, NotYourTurnException {
+        Game game = gameR.getReferenceById(id_game);
+        if(game.getIs_fight_phase()){
+            throw new AlreadyFightException("Вы уже в боевой фазе");
+        }
+        if(namePlayer.equals(game.getName_turn())) {
+            game.setIs_fight_phase(true);
+        }
+        else{
+            throw new NotYourTurnException("Нельзя перейти в боевую фазу в чужой ход");
+        }
+
+    }
+
 }
