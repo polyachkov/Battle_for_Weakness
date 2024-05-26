@@ -423,3 +423,13 @@ $turn-time: 6s;
     transform: translateX(0px) rotate(0deg);
   }
 }
+
+.statVertical {
+  display: flex;
+  flex-direction: column;
+}
+
+.statHorizontal {
+  display: flex;
+  justify-content: space-around;
+}

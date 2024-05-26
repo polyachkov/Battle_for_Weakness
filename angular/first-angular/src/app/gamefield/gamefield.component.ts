@@ -229,6 +229,44 @@ export class GamefieldComponent implements OnInit, OnDestroy {
     );
   }
 
+  determineStat(row: number, cell: number, card: Card | null) {
+    if (!card) return '';
+    switch (true) {
+      case row == 0 && cell == 0:
+        return card.name;
+      case row == 0 && cell == 1:
+        return;
+      case row == 1 && cell == 0:
+        return 'Attack: ' + card.attack;
+      case row == 1 && cell == 1:
+        return 'Health: ' + card.health;
+      case row == 2 && cell == 0:
+        return 'Cost: ' + card.cost;
+      case row == 2 && cell == 1:
+        return 'Evasion: ' + card.evasion;
+      case row == 3 && cell == 0:
+        return 'Attack_speed: ' + this.attackSpeedToString(card.attack_speed);
+      case row == 3 && cell == 1:
+        return 'Movement_speed: ' + card.movement_speed;
+
+      default:
+        return undefined;
+    }
+  }
+
+  public attackSpeedToString(attack_speed: number): string {
+    switch (attack_speed) {
+      case 1:
+        return 'Slow';
+      case 2:
+        return 'Medium';
+      case 3:
+        return 'Fast';
+      default:
+        return 'None';
+    }
+  }
+
   protected readonly GamePhases = GamePhases;
   protected readonly Pages = Pages;
   protected readonly idOppHandPictures = idOppHandPictures;
