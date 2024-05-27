@@ -9,6 +9,7 @@ import ru.nsu.fit.battle_fw.exceptions.*;
 import ru.nsu.fit.battle_fw.requests.post.MoveCardRequest;
 import ru.nsu.fit.battle_fw.requests.post.PutCardInCellRequest;
 import ru.nsu.fit.battle_fw.requests.post.PutCollectorInCellRequest;
+import ru.nsu.fit.battle_fw.services.cardService.DiceRoller;
 
 import java.util.List;
 
@@ -281,16 +282,33 @@ public class CardService {
 
         checkMoveCells(cell1, cell2);
 
-        if(cell1.getMovement_speed() > 0 && cell2.getCard_name() == null) {
-            copyCardToCell(cell1, cell2);
-            deleteCardInCell(cell1);
-        } else if (cell1.getMovement_speed() <= 0){
-            logger.error("У карты не хватает очков передвижения");
-            throw new BadCellException("У карты не хватает очков передвижения");
-        } else if (cell2.getCard_name() != null) {
-            attack(cell1, cell2);
+        boolean isOpponent = false;
+        if (cell2.getCell_num() <= 8 || cell2.getCell_num() >= 57) {
+            if (!game.getNon_reverse().equals(playerName)) {
+                if (cell2.getCell_num() <= 56 || cell2.getCell_num() >= 65) {
+                    logger.error("Not your cells, dude...");
+                    throw new BadCellException("Not your cells, dude...");
+                }
+            } else {
+                if (cell2.getCell_num() <= 0 || cell2.getCell_num() >= 9) {
+                    logger.error("Not your cells, dude...");
+                    throw new BadCellException("Not your cells, dude...");
+                }
+            }
+            isOpponent = true;
         }
 
+        if (cell1.getMovement_speed() > 0 && cell2.getCard_name() == null && !isOpponent) {
+            copyCardToCell(cell1, cell2);
+            deleteCardInCell(cell1);
+        } else if (cell2.getCard_name() != null) {
+            attack(cell1, cell2);
+        } else if (isOpponent) {
+            attackOpponent(cell1, game, playerName);
+        } else if (cell1.getMovement_speed() <= 0) {
+            logger.error("У карты не хватает очков передвижения");
+            throw new BadCellException("У карты не хватает очков передвижения");
+        }
         cellR.save(cell1);
         cellR.save(cell2);
     }
@@ -300,10 +318,7 @@ public class CardService {
             logger.error("Card Has Sickness");
             throw new BadCellException("Card Has Sickness");
         }
-        if (cell2.getCell_num() <= 8 || cell2.getCell_num() >= 57) {
-            logger.error("Collector zone, dude...");
-            throw new BadCellException("Collector zone, dude...");
-        }
+
         if(!areNeighbors(cell1.getCell_num(), cell2.getCell_num())){
             logger.error("Не соседние клетки");
             throw new BadCellException("Не соседние клетки");
@@ -315,24 +330,44 @@ public class CardService {
     }
 
     private void attack(Cell cell1, Cell cell2) {
-        int newHp2 = cell2.getHealth() - cell1.getAttack();
-        if(newHp2 <= 0){
-            Cell newCell = new Cell();
-            copyCardToCell(newCell, cell2);
+        if (cell1.isAttacked()) {
+            return;
+        }
+        cell1.setMovement_speed(0);
+        cell1.setAttacked(true);
+        int newHp2 = cell2.getHealth();
+        if (DiceRoller.rollDice() >= cell2.getEvasion()) {
+            newHp2 -= cell1.getAttack();
+        }
+        if (newHp2 <= 0) {
+            deleteCardInCell(cell2);
         } else {
             if(!cell2.isRevenged()){
                 cell2.setRevenged(true);
                 int newHp1 = cell1.getHealth() - cell2.getAttack();
-                if(newHp1<=0){
-                    Cell newCell = new Cell();
-                    copyCardToCell(newCell, cell1);
-                }else {
+                if (newHp1 <= 0) {
+                    deleteCardInCell(cell1);
+                } else {
                     cell1.setHealth(newHp1);
                 }
             }
             cell2.setHealth(newHp2);
         }
-        cell1.setAttacked(true);
+    }
+
+    private void attackOpponent(Cell cell, Game game, String playerName) {
+        if (cell.isAttacked()) {
+            return;
+        }
+        Status status = statusR.getOppStatus(game.getId_game(), playerName);
+        int newOppHp = status.getHealth() - cell.getAttack();
+        if (newOppHp <= 0) {
+            game.setIs_ended(true);
+            status.setHealth(0);
+            statusR.save(status);
+        }
+        status.setHealth(newOppHp);
+        statusR.save(status);
     }
 
     public static boolean areNeighbors(int id1, int id2) {

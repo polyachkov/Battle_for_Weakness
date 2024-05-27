@@ -11,6 +11,9 @@ import {IInvite} from "../../models/invite-model";
 export class InviteInfoComponent {
   @Input() invite!: IInvite
 
+  accepted = false
+  rejected = false
+
   constructor(
     private inviteService: InviteService
   ) {

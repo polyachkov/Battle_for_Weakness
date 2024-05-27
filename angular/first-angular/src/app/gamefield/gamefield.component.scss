@@ -471,6 +471,23 @@ $turn-time: 6s;
   border-radius: 37%; /* Закругление всех углов для подсвеченного состояния */
 }
 
+@keyframes pulse_red {
+  0% {
+    box-shadow: 0 0 10px 2px rgba(255, 0, 0, 0.8);
+  }
+  50% {
+    box-shadow: 0 0 15px 5px rgba(255, 0, 0, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 10px 2px rgba(255, 0, 0, 0.8);
+  }
+}
+
+.highlight_red {
+  animation: pulse_red 1s infinite; /* Применение анимации */
+  border-radius: 37%; /* Закругление всех углов для подсвеченного состояния */
+}
+
 .myOwnCard {
   box-shadow: 0 0 0 3px rgba(0, 255, 0, 1);
   border-radius: 37%;
