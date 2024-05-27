@@ -536,8 +536,9 @@ public class GameService {
         return ResponseEntity.ok(librariesResponse);
     }
 
-    public void changePhase(Integer id_game, String namePlayer) throws AlreadyFightException, NotYourTurnException {
-        Game game = gameR.getReferenceById(id_game);
+    public void changePhase(MoveCombatRequest req, String namePlayer) throws AlreadyFightException, NotYourTurnException {
+        Integer gameId = req.getGameId();
+        Game game = gameR.getReferenceById(gameId);
         if(game.getIs_fight_phase()){
             throw new AlreadyFightException("Вы уже в боевой фазе");
         }
@@ -547,7 +548,7 @@ public class GameService {
         else{
             throw new NotYourTurnException("Нельзя перейти в боевую фазу в чужой ход");
         }
-
+        gameR.save(game);
     }
 
 }

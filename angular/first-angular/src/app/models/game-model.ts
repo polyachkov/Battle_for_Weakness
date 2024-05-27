@@ -12,4 +12,5 @@ export interface Game {
   is_ended: boolean
   non_reverse: string
   turn_ended: boolean
+  is_fight_phase: boolean
 }

@@ -119,6 +119,17 @@ public class SiteController {
         gameService.takeTurn(req, nameOwner);
     }
 
+    @PostMapping("/moveCombat")
+    public void moveCombat(@RequestHeader Map<String, String> headers,
+                         @RequestBody MoveCombatRequest req)
+            throws NotYourTurnException, AlreadyFightException {
+        String nameOwner = getUsernameFromJWT(headers, jwtUtils);
+        logger.info("POST /takeTurn");
+        logger.info("GameId " + req.getGameId());
+        logger.info("NextTurnId " + nameOwner);
+        gameService.changePhase(req, nameOwner);
+    }
+
     @GetMapping("/get/game/byplayers")
     public Optional<Game> getGameId(@RequestHeader Map<String, String> headers, @RequestBody GetGameRequest req) {
         logger.info("GET /get/Game");
