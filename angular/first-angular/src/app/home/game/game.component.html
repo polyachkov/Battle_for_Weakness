@@ -1,15 +1,10 @@
-<p>
+<div class="users-choice">
   {{ game.id_game }} game: {{ game.name_player1 }} VS {{ game.name_player2 }}
-
   <button
+    class="button-invite"
     (click)="pageContentService.handleChangeContent(Pages.GAMEFIELD_PAGE)"
-    class="menuBtn"
     [routerLink]="['../game', game.id_game]"
   >
-    <div class="butonText">{{ gameControlService.playButton }}</div>
-
+    <span class="button-invite-text">{{ gameControlService.playButton }}</span>
   </button>
-
-</p>
-
-
+</div>
