@@ -37,6 +37,7 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   highlightCell: boolean[][] = [];
   private subscription!: Subscription;
   currentCellVal: ICell | null = null;
+  reverseField: boolean = false;
 
   handCardId!: number[];
   field!: Observable<ICell[][]>;
@@ -90,6 +91,7 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   }
 
   transformField(cells: ICell[], isReverse: boolean): ICell[][] {
+    this.reverseField = isReverse;
     const rows: ICell[][] = [];
     for (let i = 0; i < cells.length; i += 8) {
       let row = cells.slice(i, i + 8);
@@ -325,8 +327,8 @@ export class GamefieldComponent implements OnInit, OnDestroy {
     }
   }
 
-  handleCellClick(rowIndex: number, cellIndex: number) {
-    if (this.isCombat) {
+  handleCellClick(rowIndex: number, cellIndex: number, isNotOpponent: boolean): void {
+    if (this.isCombat && isNotOpponent) {
       this.initializeHighlightCell();
       const neighbors = [
         {row: rowIndex - 1, column: cellIndex}, // Верхняя ячейка
@@ -340,13 +342,15 @@ export class GamefieldComponent implements OnInit, OnDestroy {
           this.highlightCell[neighbor.row][neighbor.column] = true;
         }
       });
+      let cardPosTmp: number[] = this.cardPos;
       this.cardPos = [rowIndex, cellIndex];
+
       console.log('Current Row', this.cardPos[0]);
       console.log('Current Cell:', this.cardPos[1]);
       this.currentCell().subscribe(cell => {
         this.currentCellVal = cell;
       });
-      if (this.isMoving) {
+      if (this.isMoving && (cardPosTmp[0] == this.cardPos[0] && cardPosTmp[1] == this.cardPos[1])) {
         this.determineCard(rowIndex, cellIndex);
       }
       this.isMoving = true;
@@ -356,7 +360,7 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   }
 
   private isValidCell(rowIndex: number, cellIndex: number) {
-    return !(rowIndex < 1 || rowIndex > 6 || cellIndex < 0 || cellIndex > 7);
+      return !(rowIndex < 0 || rowIndex > 6 || cellIndex < 0 || cellIndex > 7);
   }
 
   highlightOff() {

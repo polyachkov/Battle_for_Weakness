@@ -1,9 +1,9 @@
 <div class="users-choice">
   {{ invite.inviter_name }}
-  <button class="button-invite" (click)="acceptInvite(invite.inviter_name)">
-    <span class="button-invite-text">Accept</span>
+  <button class="button-invite" (click)="acceptInvite(invite.inviter_name); accepted = true">
+    <span class="button-invite-text"> {{ accepted ? "Accepted" : "Accept" }} </span>
   </button>
   <button class="button-invite" (click)="rejectInvite(invite.inviter_name)">
-    <span class="button-invite-text">Reject</span>
+    <span class="button-invite-text"> {{ rejected ? "Rejected" : "Reject" }} </span>
   </button>
 </div>
