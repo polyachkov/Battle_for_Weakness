@@ -77,7 +77,8 @@ public class SiteController {
     @PostMapping("/putCollectorInCell")
     public void putCollectorInCell(@RequestHeader Map<String, String> headers, @RequestBody PutCollectorInCellRequest req)
             throws NoBabosException, BadCellException,
-            NotYourTurnException, CollectorsLimitException, PutInFightException {
+            NotYourTurnException, CollectorsLimitException,
+            PutInFightException, WrongPhaseException {
         String nameOwner = getUsernameFromJWT(headers, jwtUtils);
         logger.info("POST /putCollectorInCell");
         logger.info("GameId " + req.getGameId());
@@ -87,7 +88,9 @@ public class SiteController {
     }
 
     @PostMapping("/moveCard")
-    public void moveCardRequest(@RequestHeader Map<String, String> headers, @RequestBody MoveCardRequest req) throws BadCellException {
+    public void moveCardRequest(@RequestHeader Map<String, String> headers,
+                                @RequestBody MoveCardRequest req)
+            throws BadCellException, NotYourTurnException, WrongPhaseException {
         String nameOwner = getUsernameFromJWT(headers, jwtUtils);
         logger.info("POST /moveCard");
         logger.info("GameId " + req.getGameId());
@@ -99,7 +102,8 @@ public class SiteController {
 
     @PostMapping("/nextTurn")
     public void nextTurn(@RequestHeader Map<String, String> headers,
-                         @RequestBody NextTurnRequest req) throws NotYourTurnException {
+                         @RequestBody NextTurnRequest req)
+            throws NotYourTurnException, WrongPhaseException {
         String nameOwner = getUsernameFromJWT(headers, jwtUtils);
         logger.info("POST /nextTurn");
         logger.info("GameId " + req.getGameId());
@@ -148,8 +152,6 @@ public class SiteController {
 
     @GetMapping("/get/game/byid")
     public ResponseEntity<?> getGameById(@RequestParam("id_game") Integer value) {
-        logger.info("GET /get/game");
-        logger.info("get game by ID");
         return gameService.getGameById(value);
     }
 

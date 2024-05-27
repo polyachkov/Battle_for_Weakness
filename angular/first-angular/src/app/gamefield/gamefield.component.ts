@@ -1,4 +1,4 @@
-import {booleanAttribute, Component, OnDestroy, OnInit} from '@angular/core';
+import {booleanAttribute, Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 
 
@@ -31,9 +31,12 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   isShowChooseRarity: boolean = false;
   cardPos: number[] = [-1, -1];
   isCombat: boolean = false;
+  isMoving: boolean = false;
   turnTitle = 'End The Turn';
   combatTitle = 'Move To Combat';
+  highlightCell: boolean[][] = [];
   private subscription!: Subscription;
+  currentCellVal: ICell | null = null;
 
   handCardId!: number[];
   field!: Observable<ICell[][]>;
@@ -56,6 +59,7 @@ export class GamefieldComponent implements OnInit, OnDestroy {
       tap((game: Game) => {
         if(game.name_turn == this.token.getUsername()) {
           this.isShowChooseRarity = game.turn_ended;
+
         }
         this.updateTurnButton(game);
         this.updateCombatButton(game);
@@ -69,6 +73,13 @@ export class GamefieldComponent implements OnInit, OnDestroy {
     );
 
     this.initializeState();
+  }
+
+  @HostListener('document:click', ['$event'])
+  handleClickOutside(event: Event) {
+    if (!(event.target as HTMLElement).closest('.cardField')) {
+      this.highlightOff();
+    }
   }
 
   ngOnDestroy(): void {
@@ -104,7 +115,7 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   }
 
   dropCard(row: number, cell_id: number, cell: ICell) {
-    if (this.currentCard === 0) {
+    if (this.currentCard === 0 || this.isMoving) {
       return;
     }
 
@@ -133,20 +144,6 @@ export class GamefieldComponent implements OnInit, OnDestroy {
     }
   }
 
-  private updateField(row: number, cell_id: number) : void{
-    this.field.pipe(
-      map(field => {
-        // Создаем копию текущего поля
-        const newField = field.map(row => row.slice());
-        newField[row][cell_id].id_card = this.currentCard;
-        return newField;
-      })
-    ).subscribe(updatedField => {
-      // Обновляем поле с новым значением
-      this.field = of(updatedField);
-    });
-  }
-
   private initializeState(): void {
     this.hand = this.gameControlService.getHand(this.id_game);
     this.oppHand = this.gameControlService.getOppHand(this.id_game);
@@ -158,6 +155,8 @@ export class GamefieldComponent implements OnInit, OnDestroy {
         map(isReverse => this.transformField(cells, isReverse))
       ))
     );
+    this.isMoving = false;
+    this.highlightCell = [];
   }
 
   determineCard(row: number, cell: number) {
@@ -323,6 +322,83 @@ export class GamefieldComponent implements OnInit, OnDestroy {
         return 'Fast';
       default:
         return 'None';
+    }
+  }
+
+  handleCellClick(rowIndex: number, cellIndex: number) {
+    if (this.isCombat) {
+      this.initializeHighlightCell();
+      const neighbors = [
+        {row: rowIndex - 1, column: cellIndex}, // Верхняя ячейка
+        {row: rowIndex + 1, column: cellIndex}, // Нижняя ячейка
+        {row: rowIndex, column: cellIndex - 1}, // Левая ячейка
+        {row: rowIndex, column: cellIndex + 1}, // Правая ячейка
+      ];
+
+      neighbors.forEach(neighbor => {
+        if (this.isValidCell(neighbor.row, neighbor.column)) {
+          this.highlightCell[neighbor.row][neighbor.column] = true;
+        }
+      });
+      this.cardPos = [rowIndex, cellIndex];
+      console.log('Current Row', this.cardPos[0]);
+      console.log('Current Cell:', this.cardPos[1]);
+      this.currentCell().subscribe(cell => {
+        this.currentCellVal = cell;
+      });
+      if (this.isMoving) {
+        this.determineCard(rowIndex, cellIndex);
+      }
+      this.isMoving = true;
+    } else {
+      this.determineCard(rowIndex, cellIndex);
+    }
+  }
+
+  private isValidCell(rowIndex: number, cellIndex: number) {
+    return !(rowIndex < 1 || rowIndex > 6 || cellIndex < 0 || cellIndex > 7);
+  }
+
+  highlightOff() {
+    this.highlightCell = [];
+    this.isMoving = false;
+  }
+
+  private initializeHighlightCell() {
+    // Очищаем массив highlightCell перед инициализацией
+    this.highlightCell = [];
+
+    // Создаем массив highlightCell размером 8 на 8 и заполняем его значениями false
+    for (let i = 0; i < 8; i++) {
+      const newRow: boolean[] = [];
+      for (let j = 0; j < 8; j++) {
+        newRow.push(false);
+      }
+      this.highlightCell.push(newRow);
+    }
+  }
+
+  chechHighlight(rowIndex: number, cellIndex: number) {
+    if (this.highlightCell.length > 1) {
+      return this.highlightCell[rowIndex][cellIndex];
+    }
+    return false;
+  }
+
+  handleMoveCard(nextCell: ICell) {
+    if (this.currentCellVal) {
+      console.log('Current Cell Num:', this.currentCellVal.cell_num);
+      console.log('Next Cell Num:', nextCell.cell_num);
+      this.gameControlService.moveCard(this.id_game, this.currentCellVal.cell_num, nextCell.cell_num).subscribe(
+        response => {
+          console.log('Card placed successfully', response);
+          this.initializeState();
+          this.currentCard = 0;
+        },
+        error => {
+          console.error('Error placing card', error);
+        }
+      );
     }
   }
 

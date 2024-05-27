@@ -106,12 +106,14 @@
             <div
               class="cardField"
               cdkDropList
-              (click)="determineCard(rowIndex, cellIndex)"
-              (mousedown)="pickCard(rowIndex, cellIndex, cell.id_card)"
-              (mouseup)="dropCard(rowIndex, cellIndex, cell)"
+              (click)="cell.id_card ? handleCellClick(rowIndex, cellIndex) : handleMoveCard(cell)"
+              (mousedown)="!cell.id_card ? pickCard(rowIndex, cellIndex, cell.id_card) : ''"
+              (mouseup)="!cell.id_card ? dropCard(rowIndex, cellIndex, cell) : ''"
 
               [ngClass]="{
-                'highlight': isCombat && cell.id_card && cell.movement_speed && cell.name_owner == username,
+                'highlight':
+                (isCombat && cell.id_card && cell.movement_speed && cell.name_owner == username && !cell.sickness) ||
+                (chechHighlight(rowIndex, cellIndex) && !cell.id_card),
                 'myOwnCard': cell.name_owner == username,
                 'oppOwnCard': cell.name_owner != username && cell.id_card
               }"

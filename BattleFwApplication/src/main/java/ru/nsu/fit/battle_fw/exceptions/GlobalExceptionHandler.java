@@ -17,4 +17,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleBadCellException(BadCellException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad cell selected");
     }
+
+//    @ExceptionHandler(WrongPhaseException.class)
+//    public ResponseEntity<String> handleWrongPhaseException(WrongPhaseException ex) {
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You can not do that in this phase");
+//    }
+//
+//    @ExceptionHandler(NotYourTurnException.class)
+//    public ResponseEntity<String> handleNotYourTurnException(NotYourTurnException ex) {
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Not your turn now");
+//    }
 }

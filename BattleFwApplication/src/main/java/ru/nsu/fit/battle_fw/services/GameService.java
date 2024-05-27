@@ -2,6 +2,8 @@
 package ru.nsu.fit.battle_fw.services;
 
 import org.aspectj.weaver.ast.Not;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.stereotype.Component;
@@ -37,6 +39,8 @@ public class GameService {
     private final StatusRepo statusR;
     private final InviteRepo inviteR;
     private final UserRepo userR;
+
+    private static final Logger logger = LoggerFactory.getLogger(GameService.class);
 
     /**
      * Конструктор. Принимает объекты, позволяющие влиять на базу данных.
@@ -260,10 +264,15 @@ public class GameService {
      * @param turnName - name игрока, который ходит сейчас
      * Ничего не возвращает
      */
-    public void nextTurn(NextTurnRequest req, String turnName) throws NotYourTurnException {
+    public void nextTurn(NextTurnRequest req, String turnName)
+            throws NotYourTurnException, WrongPhaseException {
         Integer gameId = req.getGameId(); // id игры
 
         Game game = gameR.getReferenceById(gameId);
+        if (game.getTurn_ended()) {
+            logger.error("Please, choose a rarity...");
+            throw new WrongPhaseException("Please, choose a rarity...");
+        }
         if (!game.getName_turn().equals(turnName)) {
             throw new NotYourTurnException("You cannot pass a turn during an opponent's turn");
         }
