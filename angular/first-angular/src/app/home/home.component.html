@@ -1,13 +1,48 @@
- <div *ngIf="info.token; else loggedOut">
-  <h5 class="text-primary">Hello, Home!</h5>
-  <p>
+<div *ngIf="info.token; else loggedOut">
+  <div class="homepage">
+    <div class="wrapper">
+      <div class="nameProfile">Profile</div>
+      <div class="line"></div>
+      <div class="text"><strong>Username: </strong> {{ info.username }}</div>
+      <div class="text"><strong>Id: </strong> {{ info.id }} <br /></div>
+      <div class="text">
+        <strong>Roles:</strong> {{ info.authorities }} <br />
+      </div>
+      <!-- <div class="text">
+        <strong>Token:</strong> {{ info.token }} <br />
+      </div> -->
+      <button class="btn-secondary" (click)="logout()">Logout</button>
+    </div>
+    <div>
+      <div class="wrapper2">
+        <div class="nameOther">Invitations</div>
+        <div class="line2"></div>
+        <div>
+          <div *ngIf="invites | async as invites">
+            <app-invite-info
+              *ngFor="let invite of invites.slice(0, 10); let i = index"
+              [invite]="invite"
+            >
+            </app-invite-info>
+          </div>
+        </div>
+      </div>
+      <div class="wrapper2">
+        <div class="nameOther">Current Games</div>
+        <div class="line2"></div>
+        <div>
+          <div *ngIf="games | async as games">
+            <app-game
+              *ngFor="let game of games.slice(0, 10); let i = index"
+              [game]="game"
+            >
+            </app-game>
+          </div>
 
-    <strong>Username: </strong> {{info.username}} <br/>
-    <strong>Id: </strong> {{info.id}} <br/>
-    <strong>Roles:</strong> {{info.authorities}} <br/>
-    <strong>Token:</strong> {{info.token}} <br/>
-  </p>
-  <button class="btn btn-secondary" (click)="logout()">Logout</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <ng-template #loggedOut> Please login or sign up. </ng-template>

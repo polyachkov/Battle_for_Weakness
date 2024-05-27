@@ -1,0 +1,85 @@
+.wrapper {
+  border-radius: 55px;
+  border: 5px solid #000;
+  background: linear-gradient(
+    180deg,
+    rgba(121, 85, 72, 0.62) 0%,
+    rgba(121, 85, 72, 0) 49.85%,
+    rgba(121, 85, 72, 0.62) 100%
+  );
+  border: 1;
+  margin-left: 11%;
+  width: 28%;
+  height: 62%;
+  max-width: 28%;
+}
+
+.wrapper2 {
+  border-radius: 55px;
+  border: 5px solid #000;
+  background: linear-gradient(
+    180deg,
+    rgba(121, 85, 72, 0.62) 0%,
+    rgba(121, 85, 72, 0) 49.85%,
+    rgba(121, 85, 72, 0.62) 100%
+  );
+  border: 1;
+  height: 46%;
+  margin-left: 33%;
+  margin-bottom: 20px;
+  width: 500px;
+}
+
+.homepage {
+  display: flex;
+  margin-top: calc(150px + 5%);
+}
+
+.nameProfile {
+  height: 29px;
+  margin-top: 9%;
+  font-size: 30px;
+  text-align: center;
+}
+
+.nameOther {
+  height: 29px;
+  margin-top: 2%;
+  font-size: 30px;
+  text-align: center;
+}
+
+.line {
+  // width: 385px;
+  height: 4px;
+  background-color: black;
+}
+
+.line2 {
+  // width: 500px;
+  height: 4px;
+  background-color: black;
+}
+
+.btn-secondary {
+  font-size: 17px;
+  background-image: url("../../assets/Photoes/registrSignButton.png");
+  background-size: cover;
+  min-width: 100px;
+  border-radius: 55px;
+  border: 0;
+  color: white;
+
+  padding-block: 20px;
+  padding-left: 70px;
+  padding-right: 70px;
+  margin-left: 86px;
+  margin-top: calc(215px + 5%);
+  //   margin-top: 233px;
+}
+
+.text {
+  font-size: 25px;
+  margin-top: 18px;
+  margin-left: 10px;
+}

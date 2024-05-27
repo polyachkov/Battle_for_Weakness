@@ -7,10 +7,16 @@
   <ng-container
     *ngIf="
       gameControlService.gameState === 0 &&
-      pageContentService.currentPage !== Pages.AUTHORIZATION_PAGE
+      pageContentService.currentPage !== Pages.AUTHORIZATION_PAGE &&
+      pageContentService.currentPage !== Pages.GAMEFIELD_PAGE
     "
   >
     <app-toolbar></app-toolbar>
+  </ng-container>
+  <ng-container
+    *ngIf="pageContentService.currentPage === Pages.GAMEFIELD_PAGE"
+  >
+    <router-outlet></router-outlet>
   </ng-container>
   <app-content></app-content>
 </div>

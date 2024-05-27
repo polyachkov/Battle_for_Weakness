@@ -1,0 +1,25 @@
+<div>
+  <router-outlet></router-outlet>
+</div>
+
+<div
+  routerLink="active"
+>
+
+  <ng-container [ngSwitch]="gameControlService.currentPhase">
+
+    <div *ngSwitchCase="GamePhases.PREPARING">
+      <app-preparing> </app-preparing>
+    </div>
+    <div *ngSwitchCase="GamePhases.START_GAME">
+      <app-data-field></app-data-field>
+    </div>
+    <div *ngSwitchCase="GamePhases.FINISH_GAME">
+      <app-game-over></app-game-over>
+    </div>
+  </ng-container>
+  <a routerLink="game">
+  </a>
+</div>
+
+

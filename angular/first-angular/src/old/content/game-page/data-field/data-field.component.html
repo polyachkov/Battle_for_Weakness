@@ -1,0 +1,123 @@
+<!--<div class="background">-->
+<!--  <app-modal *ngIf="gameControlService.isShowModal"></app-modal>-->
+<!--  <div class="container">-->
+<!--    <div [ngStyle]="{ top: '30px' }" class="opponentsInterface">-->
+<!--      <div class="fraction-name">-->
+<!--        {{ gameControlService.opponentSelectedFraction }}-->
+<!--      </div>-->
+<!--      <div class="health">-->
+<!--        <img-->
+<!--          class="heart"-->
+<!--          src="../../../../assets/Photoes/hearth.png"-->
+<!--          alt="hearths"-->
+<!--        />-->
+<!--        <div class="countOfHeart">3</div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--  <div class="container">-->
+<!--    <div [ngStyle]="{ bottom: '30px' }" class="myInterface">-->
+<!--      <div class="fraction-name">-->
+<!--        {{ gameControlService.mySelectedFraction }}-->
+<!--      </div>-->
+<!--      <div class="money">-->
+<!--        <div class="coin">-->
+<!--          <div class="coin__front"></div>-->
+<!--          <div class="coin__edge"></div>-->
+<!--          <div class="coin__back"></div>-->
+<!--          <div class="coin__shadow"></div>-->
+<!--        </div>-->
+<!--        <div class="countOfMoney">10</div>-->
+<!--      </div>-->
+<!--      <div class="health">-->
+<!--        <img-->
+<!--          class="heart"-->
+<!--          src="../../../../assets/Photoes/hearth.png"-->
+<!--          alt="hearths"-->
+<!--        />-->
+<!--        <div class="countOfHeart">3</div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  <div class="giveUpField">-->
+<!--    <a-->
+<!--      (click)="gameControlService.handleChangeContent(GamePhases.FINISH_GAME)"-->
+<!--      class="btn-slide"-->
+<!--    >-->
+<!--      <span class="circle">-->
+<!--        <i class="fa-solid fa-film"></i>-->
+<!--      </span>-->
+
+<!--      <span class="title">Give up</span>-->
+<!--      <span class="title title-hover">Оффнуть с позором</span>-->
+<!--    </a>-->
+<!--  </div>-->
+
+<!--  <div class="endTurnButtonField">-->
+<!--    <button (click)="gameControlService.handleTurn()" class="endTurnButton">-->
+<!--      {{ gameControlService.turnTitle }}-->
+<!--    </button>-->
+<!--  </div>-->
+<!--  <div class="map">-->
+<!--    <div class="hand">-->
+<!--      <div class="opponentsCards" *ngFor="let item of opponentsHand"></div>-->
+<!--    </div>-->
+<!--    <div class="wrapper">-->
+<!--      <div class="decksBlue" style="flex-wrap: wrap-reverse">-->
+<!--        <div-->
+<!--          class="deck"-->
+<!--          style="-->
+<!--            background-image: url('../../../../assets/Photoes/deckBlue.png');-->
+<!--            background-size: cover;-->
+<!--          "-->
+<!--          *ngFor="let item of oppsLibraries"-->
+<!--        ></div>-->
+<!--      </div>-->
+<!--      <div class="field">-->
+<!--        <div class="row" *ngFor="let row of field; let rowIndex = index">-->
+<!--          <div-->
+<!--            [ngClass]="getRowColor(rowIndex)"-->
+<!--            *ngFor="let cell of row; let cellIndex = index"-->
+<!--          >-->
+<!--            <div-->
+<!--              class="cardField"-->
+<!--              cdkDropList-->
+<!--              (click)="gameControlService.determineCard(rowIndex, cellIndex)"-->
+<!--              (mousedown)="pickCard(rowIndex, cellIndex, cell.name)"-->
+<!--              (mouseup)="dropCard(rowIndex, cellIndex)"-->
+<!--            >-->
+<!--              <img-->
+<!--                cdkDrag-->
+<!--                class="image"-->
+<!--                [src]="gameControlService.getCardImageUrl(rowIndex, cell.name)"-->
+<!--                alt=""-->
+<!--              />-->
+
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="decksRed" style="flex-wrap: wrap">-->
+<!--        <div-->
+<!--          class="deck"-->
+<!--          style="-->
+<!--            background-image: url('../../../../assets/Photoes/deckRed.png');-->
+<!--            background-size: cover;-->
+<!--          "-->
+<!--          *ngFor="let item of myLibraries"-->
+<!--        ></div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div class="hand" cdkDropList [cdkDropListData]="myHand">-->
+<!--      <div-->
+<!--        class="myCards"-->
+<!--        *ngFor="let item of myHand"-->
+<!--        cdkDrag-->
+<!--        (mousedown)="pickCardByHand(item)"-->
+<!--      >-->
+<!--        <img class="image" [src]="idHandPictures[item]" alt="" />-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->

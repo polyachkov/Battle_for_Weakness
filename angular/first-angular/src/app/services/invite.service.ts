@@ -4,15 +4,18 @@ import {IInvite} from "../models/invite-model";
 import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
 import {ErrorService} from "./error.service";
 import {IUser} from "../models/user-model";
+import {Card} from "../models/card-model";
+import {hostName} from "../constants";
 
 @Injectable({
   providedIn: 'root'
 })
 export class InviteService {
-  private getAllInvitesUrl: string = 'http://localhost:8081/get/all/invites';
-  private inviteUserUrl: string = 'http://localhost:8081/invite/create';
-  private acceptInviteUrl: string = 'http://localhost:8081/invite/accept';
-  private rejectInviteUrl: string = 'http://localhost:8081/invite/delete';
+  private getAllInvitesUrl: string  = hostName + 'get/all/invites';
+  private inviteUserUrl: string     = hostName + 'invite/create';
+  private acceptInviteUrl: string   = hostName + 'invite/accept';
+  private rejectInviteUrl: string   = hostName + 'invite/delete';
+  private getHandUrl: string        = hostName + 'get/hand';
   private errorService: any;
   constructor(
     private http: HttpClient,
@@ -30,16 +33,16 @@ export class InviteService {
     );
   }
 
-  inviteUser(invitedName: string, inviterRace: string): Observable<any> {
-    const body = { invited_name: invitedName, inviter_race: inviterRace };
+  inviteUser(invitedName: string, inviterFraction: string): Observable<any> {
+    const body = { invited_name: invitedName, inviter_fraction: inviterFraction };
 
     return this.http.post(this.inviteUserUrl, body).pipe(
       catchError(this.errorHandler.bind(this))
     );
   }
 
-  acceptInvite(inviterName: string, invitedRace: string): Observable<any> {
-    const body = { inviter_name: inviterName, invited_race: invitedRace };
+  acceptInvite(inviterName: string, invitedFraction: string): Observable<any> {
+    const body = { inviter_name: inviterName, invited_fraction: invitedFraction };
 
     return this.http.post(this.acceptInviteUrl, body).pipe(
       catchError(this.errorHandler.bind(this))

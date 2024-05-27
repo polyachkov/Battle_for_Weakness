@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
 import { TokenStorageService } from '../auth/token-storage.service';
+import {catchError, Observable, tap} from "rxjs";
+import {IInvite} from "../models/invite-model";
+import {InviteService} from "../services/invite.service";
+import {GameService} from "../services/game.service";
+import {IGame} from "../models/game-model";
+import {Card} from "../models/card-model";
 
 @Component({
   selector: 'app-home',
@@ -8,18 +14,32 @@ import { TokenStorageService } from '../auth/token-storage.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  loading = false;
 
   info: any;
 
-  constructor(private token: TokenStorageService) { }
+  invites!: Observable<IInvite[]>;
+  games!: Observable<IGame[]>;
+  cards!: Observable<Card[]>;
+
+  constructor(
+    private token: TokenStorageService,
+    public inviteSearchService: InviteService,
+    public gameService: GameService
+  ) {
+  }
 
   ngOnInit(): void {
     this.info = {
       id: this.token.getId(),
       token: this.token.getToken(),
       username: this.token.getUsername(),
-      authorities: this.token.getAuthorities()
+      authorities: this.token.getAuthorities(),
     };
+    this.invites = this.inviteSearchService.getAll()
+    this.games = this.gameService.getAll().pipe(
+      tap(() => this.loading = false)
+    )
   }
 
   logout() {

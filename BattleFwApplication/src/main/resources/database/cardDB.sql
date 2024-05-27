@@ -1,5 +1,5 @@
 INSERT INTO card VALUES
-    (1, 'Kobold', 1, 2, 0, 1, 3, 1, 'common', 'mountains', 8),
+    (1, 'Kobold', 1, 2, 1, 1, 3, 1, 'common', 'mountains', 8),
     (2, 'The Bald Mountain Sectarian', 1, 2, 1, 2, 2, 1, 'common', 'mountains', 8),
     (3, 'Dwarf', 2, 3, 2, 0, 1, 1, 'common', 'mountains', 4),
     (4, 'Rat', 2, 1, 1, 0, 1, 1, 'common', 'mountains', 4),
@@ -52,4 +52,4 @@ INSERT INTO card VALUES
     (47, 'Creator of golems', 3, 4, 7, 0, 1, 1, 'legendary', 'mountains', 1),
     (48, 'Egondon pah', 6, 40, 27, 0, 1, 1, 'legendary', 'mountains', 1),
 
-    (49, 'Babos$ collector', 0, 0, 0, 0, 0, 0, 'collector', 'collector', 0);
+    (49, 'Babos$ collector', 0, 0, 3, 0, 0, 0, 'collector', 'collector', 0);

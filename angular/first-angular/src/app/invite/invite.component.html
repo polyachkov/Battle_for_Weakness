@@ -1,29 +1,20 @@
-<div>
-  <input
-    type="text"
-    class="mb-2 border py-2 px-4 w-full"
-    placeholder="Search users..."
-    [(ngModel)]="term"
-  >
-
-  <div *ngIf="users | async as users">
-    <app-user-info
-      *ngFor="let user of (users | filterUsers: term).slice(0, 10); let i = index"
-      [user]="user">
-    </app-user-info>
+<div class="invitePage">
+  <div>
+    <input
+      type="text"
+      class="search"
+      placeholder="Search users..."
+      [(ngModel)]="term"
+    />
   </div>
-
-</div>
-
-
-<div>
-  <h1>
-    Invites
-  </h1>
-  <div *ngIf="invites | async as invites">
-    <app-invite-info
-      *ngFor="let invite of invites.slice(0, 10); let i = index"
-      [invite]="invite">
-    </app-invite-info>
+  <div *ngIf="users | async as users" class="users">
+    <app-user-info
+      *ngFor="
+        let user of (users | filterUsers : term).slice(0, 10);
+        let i = index
+      "
+      [user]="user"
+    >
+    </app-user-info>
   </div>
 </div>

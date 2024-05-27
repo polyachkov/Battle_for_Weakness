@@ -1,7 +1,7 @@
 package ru.nsu.fit.battle_fw.responses.info;
 
 public class InviteInfo {
-    String inviter_name;
+    private String inviter_name;
 
     public InviteInfo(String inviter_name) {
         this.inviter_name = inviter_name;

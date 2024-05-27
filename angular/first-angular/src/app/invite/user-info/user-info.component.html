@@ -1,7 +1,9 @@
-<p>
+<div class="users-choice">
   {{ user.id }} - {{ user.username }}
-  <button (click)="inviteUser(user.username);invited = true">
-    {{ invited ? 'Invited' : 'Invite'}}
+  <button
+    class="button-invite"
+    (click)="inviteUser(user.username); invited = true"
+  >
+    <span class="button-invite-text">{{ invited ? "Invited" : "Invite" }}</span>
   </button>
-</p>
-
+</div>

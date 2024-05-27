@@ -13,18 +13,13 @@ import { MatCardModule } from '@angular/material/card';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ContentComponent } from './content/content.component';
 import { FirstPageComponent } from './content/first-page/first-page.component';
-import { GamePageComponent } from './content/game-page/game-page.component';
 import { RulesPageComponent } from './content/rules-page/rules-page.component';
 import { DevelopersPageComponent } from './content/developers-page/developers-page.component';
-import { DataFieldComponent } from './content/game-page/data-field/data-field.component';
-import { PreparingComponent } from './content/game-page/preparing/preparing.component';
-import { GameOverComponent } from './content/game-page/game-over/game-over.component';
 import { AuthorizationPageComponent } from './content/authorization-page/authorization-page.component';
 import { AccountCreatingComponent } from './content/authorization-page/account-creating/account-creating.component';
 import { AccountSettingsComponent } from './content/authorization-page/account-settings/account-settings.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { ModalComponent } from './content/game-page/data-field/modal/modal.component';
 import { SigninComponent } from './content/authorization-page/account-creating/signin/signin.component';
 import { SignupComponent } from './content/authorization-page/account-creating/signup/signup.component';
 import { LoginComponent } from './login/login.component';
@@ -38,6 +33,10 @@ import { InviteComponent } from './invite/invite.component';
 import { UserInfoComponent } from './invite/user-info/user-info.component';
 import { FilterUsersPipe } from './pipes/filter-users.pipe';
 import { InviteInfoComponent } from './invite/invite-info/invite-info.component';
+import { GameComponent } from './home/game/game.component';
+import { GamefieldComponent } from './gamefield/gamefield.component';
+import { DetailsComponent } from './gamefield/details/details.component';
+import { ChooseRarityComponent } from './gamefield/choose-rarity/choose-rarity.component';
 
 @NgModule({
   declarations: [
@@ -45,16 +44,11 @@ import { InviteInfoComponent } from './invite/invite-info/invite-info.component'
     ToolbarComponent,
     ContentComponent,
     FirstPageComponent,
-    GamePageComponent,
     RulesPageComponent,
     DevelopersPageComponent,
-    DataFieldComponent,
-    PreparingComponent,
-    GameOverComponent,
     AuthorizationPageComponent,
     AccountCreatingComponent,
     AccountSettingsComponent,
-    ModalComponent,
     SigninComponent,
     SignupComponent,
     LoginComponent,
@@ -67,6 +61,10 @@ import { InviteInfoComponent } from './invite/invite-info/invite-info.component'
     UserInfoComponent,
     FilterUsersPipe,
     InviteInfoComponent,
+    GameComponent,
+    GamefieldComponent,
+    DetailsComponent,
+    ChooseRarityComponent,
   ],
   imports: [
     BrowserModule,

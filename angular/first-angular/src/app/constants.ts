@@ -4,6 +4,7 @@ export enum Pages {
   GAME_PAGE = 'GAME_PAGE',
   RULES_PAGE = 'RULES_PAGE',
   AUTHORIZATION_PAGE = 'AUTHORIZATION_PAGE',
+  GAMEFIELD_PAGE = 'GAMEFIELD_PAGE',
 }
 export enum GamePhases {
   PREPARING = 'PREPARING',
@@ -20,3 +21,5 @@ export enum GameState {
   NOPROCESS,
   PROCESS,
 }
+
+export const hostName: string = 'http://localhost:8081/'

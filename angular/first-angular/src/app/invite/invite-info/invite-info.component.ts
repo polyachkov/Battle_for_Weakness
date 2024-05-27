@@ -11,14 +11,17 @@ import {IInvite} from "../../models/invite-model";
 export class InviteInfoComponent {
   @Input() invite!: IInvite
 
+  accepted = false
+  rejected = false
+
   constructor(
     private inviteService: InviteService
   ) {
   }
 
   acceptInvite(inviterName: string): void {
-    const invitedRace: string = 'mountains';
-    this.inviteService.acceptInvite(inviterName, invitedRace)
+    const invitedFraction: string = 'mountains';
+    this.inviteService.acceptInvite(inviterName, invitedFraction)
       .subscribe(
         () => {
           console.log('Invitation accept successfully.');

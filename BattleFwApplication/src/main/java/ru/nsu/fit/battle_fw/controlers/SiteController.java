@@ -11,13 +11,17 @@ import ru.nsu.fit.battle_fw.database.model.*;
 import ru.nsu.fit.battle_fw.exceptions.*;
 import ru.nsu.fit.battle_fw.requests.get.GameIdRequest;
 import ru.nsu.fit.battle_fw.requests.get.GetGameRequest;
+import ru.nsu.fit.battle_fw.requests.get.GetHandRequest;
 import ru.nsu.fit.battle_fw.requests.post.*;
+import ru.nsu.fit.battle_fw.responses.AllUsersResponse;
+import ru.nsu.fit.battle_fw.responses.info.UserInfo;
 import ru.nsu.fit.battle_fw.services.CardService;
 import ru.nsu.fit.battle_fw.services.GameService;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static ru.nsu.fit.battle_fw.helpers.GetFromHeaders.getUsernameFromJWT;
 
@@ -59,7 +63,8 @@ public class SiteController {
 
     @PostMapping("/putCardInCell")
     public void putCardInCell(@RequestHeader Map<String, String> headers, @RequestBody PutCardInCellRequest req)
-            throws NoBabosException, BadCellException, CollectorsLimitException {
+            throws NoBabosException, BadCellException,
+            NoHandCompException, NotYourTurnException, PutInFightException {
         String nameOwner = getUsernameFromJWT(headers, jwtUtils);
         logger.info("POST /putCardInCell");
         logger.info("GameId " + req.getGameId());
@@ -71,7 +76,9 @@ public class SiteController {
 
     @PostMapping("/putCollectorInCell")
     public void putCollectorInCell(@RequestHeader Map<String, String> headers, @RequestBody PutCollectorInCellRequest req)
-            throws NoBabosException, BadCellException, CollectorsLimitException {
+            throws NoBabosException, BadCellException,
+            NotYourTurnException, CollectorsLimitException,
+            PutInFightException, WrongPhaseException {
         String nameOwner = getUsernameFromJWT(headers, jwtUtils);
         logger.info("POST /putCollectorInCell");
         logger.info("GameId " + req.getGameId());
@@ -81,7 +88,9 @@ public class SiteController {
     }
 
     @PostMapping("/moveCard")
-    public void moveCardRequest(@RequestHeader Map<String, String> headers, @RequestBody MoveCardRequest req) {
+    public void moveCardRequest(@RequestHeader Map<String, String> headers,
+                                @RequestBody MoveCardRequest req)
+            throws BadCellException, NotYourTurnException, WrongPhaseException {
         String nameOwner = getUsernameFromJWT(headers, jwtUtils);
         logger.info("POST /moveCard");
         logger.info("GameId " + req.getGameId());
@@ -92,13 +101,37 @@ public class SiteController {
     }
 
     @PostMapping("/nextTurn")
-    public void nextTurn(@RequestHeader Map<String, String> headers, @RequestBody NextTurnRequest req) {
+    public void nextTurn(@RequestHeader Map<String, String> headers,
+                         @RequestBody NextTurnRequest req)
+            throws NotYourTurnException, WrongPhaseException {
         String nameOwner = getUsernameFromJWT(headers, jwtUtils);
         logger.info("POST /nextTurn");
         logger.info("GameId " + req.getGameId());
         logger.info("NextTurnId " + nameOwner);
-        logger.info("Rarity " + req.getRarity());
         gameService.nextTurn(req, nameOwner);
+    }
+
+    @PostMapping("/takeTurn")
+    public void takeTurn(@RequestHeader Map<String, String> headers,
+                         @RequestBody TakeTurnRequest req)
+            throws NotYourTurnException, LockedLibraryException {
+        String nameOwner = getUsernameFromJWT(headers, jwtUtils);
+        logger.info("POST /takeTurn");
+        logger.info("GameId " + req.getGameId());
+        logger.info("NextTurnId " + nameOwner);
+        logger.info("Rarity " + req.getRarity());
+        gameService.takeTurn(req, nameOwner);
+    }
+
+    @PostMapping("/moveCombat")
+    public void moveCombat(@RequestHeader Map<String, String> headers,
+                         @RequestBody MoveCombatRequest req)
+            throws NotYourTurnException, AlreadyFightException {
+        String nameOwner = getUsernameFromJWT(headers, jwtUtils);
+        logger.info("POST /takeTurn");
+        logger.info("GameId " + req.getGameId());
+        logger.info("NextTurnId " + nameOwner);
+        gameService.changePhase(req, nameOwner);
     }
 
     @GetMapping("/get/game/byplayers")
@@ -109,17 +142,79 @@ public class SiteController {
         return gameService.getGameByPlayers(req, nameOwner);
     }
 
-    @GetMapping("/get/game/byid")
-    public Optional<Game> getGameById(@RequestBody GameIdRequest req) {
-        logger.info("GET /get/game");
-        logger.info("get game by ID");
-        return gameService.getGameById(req.getGameId());
+    @GetMapping("/get/all/games")
+    public ResponseEntity<?> getAllGames(@RequestHeader Map<String, String> headers) {
+        logger.info("GET /get/all/games");
+
+        String nameOwner = getUsernameFromJWT(headers, jwtUtils);
+        return gameService.getAllGames(nameOwner);
     }
 
-    @GetMapping("/get/filed")
-    public Optional<List<Cell>> getField(@RequestBody GameIdRequest req) {
+    @GetMapping("/get/game/byid")
+    public ResponseEntity<?> getGameById(@RequestParam("id_game") Integer value) {
+        return gameService.getGameById(value);
+    }
+
+    @GetMapping("/get/field")
+    public ResponseEntity<?> getField(@RequestParam("id_game") Integer value) {
         logger.info("GET /get/field");
-        return gameService.getFieldByGame(req.getGameId());
+        return gameService.getFieldByGame(value);
+    }
+
+    @GetMapping("/get/hand")
+    public ResponseEntity<?> getHand(
+            @RequestHeader Map<String, String> headers,
+            @RequestParam("id_game") Integer value
+    ) {
+        logger.info("GET /get/hand");
+        String nameOwner = getUsernameFromJWT(headers, jwtUtils);
+        logger.info("nameOwner " + nameOwner);
+        logger.info("game ID " + value);
+        return gameService.getCardsInHand(value, nameOwner);
+    }
+
+    @GetMapping("/get/opp/hand")
+    public ResponseEntity<?> getOppHand(
+            @RequestHeader Map<String, String> headers,
+            @RequestParam("id_game") Integer value
+    ) {
+        logger.info("GET /get/opp/hand");
+        String nameOwner = getUsernameFromJWT(headers, jwtUtils);
+        logger.info("nameOwner " + nameOwner);
+        logger.info("game ID " + value);
+        var number = gameService.getOppHand(value, nameOwner);
+        logger.info("number " + number);
+        return number;
+    }
+
+    @GetMapping("/get/status")
+    public ResponseEntity<?> getStatus(
+            @RequestHeader Map<String, String> headers,
+            @RequestParam("id_game") Integer value
+    ) {
+        logger.info("GET /get/status");
+        String nameOwner = getUsernameFromJWT(headers, jwtUtils);
+        return gameService.getStatus(value, nameOwner, false);
+    }
+
+    @GetMapping("/get/opp/status")
+    public ResponseEntity<?> getOppStatus(
+            @RequestHeader Map<String, String> headers,
+            @RequestParam("id_game") Integer value
+    ) {
+        logger.info("GET /get/opp/status");
+        String nameOwner = getUsernameFromJWT(headers, jwtUtils);
+        return gameService.getStatus(value, nameOwner, true);
+    }
+
+    @GetMapping("/get/libraries")
+    public ResponseEntity<?> getLibraries(
+            @RequestHeader Map<String, String> headers,
+            @RequestParam("id_game") Integer value
+    ) {
+        logger.info("GET /get/libraries");
+        String nameOwner = getUsernameFromJWT(headers, jwtUtils);
+        return gameService.getLibraries(value, nameOwner);
     }
 
     @GetMapping(value = "/get-headers")

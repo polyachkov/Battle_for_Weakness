@@ -1,0 +1,14 @@
+<div id="container">
+  <div
+    *ngFor="let library of libraries | async; let rarityIndex = index"
+  >
+    <button
+      class="button-rarity"
+      (click)="gamefieldComponent.handleLibraryChoose(library.rarity)"
+    >
+      <span class="button-rarity-text">
+        {{ library.rarity }}
+      </span>
+    </button>
+  </div>
+</div>
