@@ -61,6 +61,9 @@ public class Cell {
     @Column(name = "attacked")
     private boolean attacked;
 
+    @Column(name = "moved")
+    private Boolean moved;
+
     public Integer getId_cell() {
         return id_cell;
     }
@@ -195,5 +198,13 @@ public class Cell {
 
     public void setAttacked(boolean attacked) {
         this.attacked = attacked;
+    }
+
+    public Boolean getMoved() {
+        return moved;
+    }
+
+    public void setMoved(Boolean moved) {
+        this.moved = moved;
     }
 }

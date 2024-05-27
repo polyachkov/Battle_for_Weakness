@@ -2,7 +2,7 @@
 
 <div class="background">
   <app-details *ngIf="this.isShowModal"></app-details>
-  <app-choose-rarity *ngIf="this.isShowChooseFraction"></app-choose-rarity>
+  <app-choose-rarity *ngIf="this.isShowChooseRarity"></app-choose-rarity>
   <div class="container">
     <div [ngStyle]="{ top: '30px' }" class="opponentsInterface">
       <div class="fraction-name">
@@ -73,6 +73,11 @@
       {{ turnTitle }}
     </button>
   </div>
+  <div class="moveCombatButtonField">
+    <button (click)="handleCombat()" class="moveCombatButton">
+      {{ combatTitle }}
+    </button>
+  </div>
   <div class="map">
     <div class="hand">
       <div
@@ -104,9 +109,15 @@
               (click)="determineCard(rowIndex, cellIndex)"
               (mousedown)="pickCard(rowIndex, cellIndex, cell.id_card)"
               (mouseup)="dropCard(rowIndex, cellIndex, cell)"
+
+              [ngClass]="{
+                'highlight': isCombat && cell.id_card && cell.movement_speed && cell.name_owner == username,
+                'myOwnCard': cell.name_owner == username,
+                'oppOwnCard': cell.name_owner != username && cell.id_card
+              }"
             >
               <img
-                class="image"
+                class="fieldImage"
                 [src]="gameControlService.getCardImageUrl(rowIndex, cell.id_card)"
                 alt=""
               />
@@ -157,7 +168,12 @@
         <div
           class="statHorizontal"
         >
-          Cost: {{ 3 + (((status | async)?.collectors ?? 0) * 2) }}
+          <ng-container *ngIf="((status | async)?.collectors ?? 0) < 4; else limit">
+            Cost: {{ 3 + (((status | async)?.collectors ?? 0) * 2) }}
+          </ng-container>
+          <ng-template #limit>
+            Collectors Limit
+          </ng-template>
         </div>
       </div>
     </div>

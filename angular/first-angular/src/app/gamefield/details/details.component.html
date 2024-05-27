@@ -1,6 +1,6 @@
 <div id="overlay" (click)="gamefieldComponent.isShowModal = false"></div>
 <div id="container">
-  <img class="picture" [src]="url | async" alt="hearth" />
+  <img class="picture" [src]="url | async" alt="Loading..." />
   <div
     class="statHorizontal"
     *ngFor="let row of [0, 1, 2, 3]; let rowIndex = index"

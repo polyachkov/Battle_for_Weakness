@@ -101,7 +101,8 @@ CREATE TABLE cell
     rarity          VARCHAR(200),
     fraction        VARCHAR(200),
     revenged        BOOLEAN,
-    attacked      BOOLEAN
+    attacked        BOOLEAN,
+    moved           BOOLEAN
 );
 DROP SEQUENCE IF EXISTS cell_id_seq;
 CREATE SEQUENCE IF NOT EXISTS cell_id_seq START WITH 1 INCREMENT BY 1;

@@ -28,10 +28,11 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   oppStatus!: Observable<IStatus>;
   username: string = this.token.getUsername();
   isShowModal: boolean = false;
-  isShowChooseFraction: boolean = false;
+  isShowChooseRarity: boolean = false;
   cardPos: number[] = [-1, -1];
-  turn: Turn = 0;
-  turnTitle = 'End the Turn';
+  isCombat: boolean = false;
+  turnTitle = 'End The Turn';
+  combatTitle = 'Move To Combat';
   private subscription!: Subscription;
 
   handCardId!: number[];
@@ -54,8 +55,10 @@ export class GamefieldComponent implements OnInit, OnDestroy {
       switchMap(() => this.gameControlService.getGame(this.id_game)),
       tap((game: Game) => {
         if(game.name_turn == this.token.getUsername()) {
-          this.isShowChooseFraction = game.turn_ended;
+          this.isShowChooseRarity = game.turn_ended;
         }
+        this.updateTurnButton(game);
+        this.updateCombatButton(game);
       })
     );
     this.subscription = this.game.subscribe(
@@ -210,13 +213,10 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   }
 
   handleTurn() {
-    if (this.turn === 0) {
-      this.turnTitle = "Opponent's Turn";
-      this.turn = 1;
-    } else {
-      this.turnTitle = 'End the Turn';
-      this.turn = 0;
-    }
+    this.game.subscribe(
+      (game: Game) => {
+        this.updateTurnButton(game);
+      });
     this.gameControlService.nextTurn(this.id_game).subscribe(
       response => {
         console.log('Turn transmitted successfully', response);
@@ -229,8 +229,53 @@ export class GamefieldComponent implements OnInit, OnDestroy {
     );
   }
 
+  handleCombat() {
+    this.game.subscribe(
+      (game: Game) => {
+        this.updateCombatButton(game);
+      });
+    this.gameControlService.moveCombat(this.id_game).subscribe(
+      response => {
+        console.log('Move to combat successfully', response);
+        this.initializeState();
+        this.currentCard = 0;
+      },
+      error => {
+        console.error('Error move to combat', error);
+      }
+    );
+  }
+
+  private updateTurnButton(game: Game): void {
+    if (game.name_turn === this.token.getUsername()) {
+      this.turnTitle = 'End The Turn';
+    } else {
+      this.turnTitle = "Opponent's Turn";
+    }
+  }
+
+  private updateCombatButton(game: Game): void {
+    if (game.name_turn === this.token.getUsername()) {
+      if (game.is_fight_phase) {
+        this.combatTitle = 'Combat Phase';
+        this.isCombat = true;
+      } else {
+        this.combatTitle = 'Move To Combat';
+        this.isCombat = false;
+      }
+    } else {
+      if (game.is_fight_phase) {
+        this.combatTitle = "Opponent's Combat";
+        this.isCombat = false;
+      } else {
+        this.combatTitle = "Opponent's Turn";
+        this.isCombat = false;
+      }
+    }
+  }
+
   handleLibraryChoose(rarity: string): void {
-    this.isShowChooseFraction = false;
+    this.isShowChooseRarity = false;
     this.gameControlService.takeTurn(this.id_game, rarity).subscribe(
       response => {
         console.log('Turn taken successfully', response);
