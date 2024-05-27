@@ -47,6 +47,7 @@ export class GameControlService {
   private takeTurnUrl: string           = hostName + 'takeTurn';
   private moveCombatUrl: string         = hostName + 'moveCombat';
   private getLibrariesUrl: string       = hostName + 'get/libraries';
+  private moveCardUrl: string           = hostName + 'moveCard';
 
   getIdGame() {
     return this.id_game;
@@ -234,6 +235,14 @@ export class GameControlService {
     const body = { gameId: gameId };
 
     return this.http.post(this.moveCombatUrl, body).pipe(
+      catchError(this.errorHandler.bind(this))
+    );
+  }
+
+  moveCard(gameId: string, cellId1: number, cellId2: number): Observable<any> {
+    const body = { gameId: gameId, cellId1: cellId1, cellId2: cellId2 };
+
+    return this.http.post(this.moveCardUrl, body).pipe(
       catchError(this.errorHandler.bind(this))
     );
   }
