@@ -318,8 +318,13 @@ public class GameService {
         Status status = statusR.getStatus(gameId, turnName);
         status.setBabos(status.getBabos() + 2 + status.getCollectors()); // Увеличиваем кол-во денег следующего игрока
 
+
         Hand hand = handR.getHand(gameId, turnName); // Даём в руку карту указанной редкости
-        hand.setCards_cnt(hand.getCards_cnt() + 1);
+        if(!(hand.getCards_cnt() >= 10)){
+            hand.setCards_cnt(hand.getCards_cnt() + 1);
+            getCardToHand(library.getId_library(), hand.getId_hand()); // Даём карту в руку
+        }
+
 
         List<Cell> cells = cellR.getCells(gameId);
         for (Cell c : cells) {
@@ -330,8 +335,6 @@ public class GameService {
             }
 
         }
-
-        getCardToHand(library.getId_library(), hand.getId_hand()); // Даём карту в руку
 
         gameR.save(game);
         statusR.save(status);
@@ -618,7 +621,12 @@ public class GameService {
                 }
                 status.setBabos(babos - (1 + index * 2));
                 l.setLocked(false);
-                getCardToHand(l.getId_library(), handR.getHand(game_id, playerName).getId_hand());
+                Hand hand = handR.getHand(game_id, playerName);
+                if(!(hand.getCards_cnt() >= 10)){
+                    getCardToHand(l.getId_library(), hand.getId_hand());
+                    hand.setCards_cnt(hand.getCards_cnt() + 1);
+                }
+                handR.save(hand);
                 libR.save(l);
                 statusR.save(status);
                 break;
