@@ -282,9 +282,9 @@ $turn-time: 6s;
 }
 
 .deck {
-  //border: 1px solid black;
-  height: 7rem;
-  width: 5.17rem;
+  height: 116px;
+  width: 83px;
+  border-radius: 5px;
 }
 
 .hand {
@@ -401,7 +401,7 @@ $turn-time: 6s;
 .cardField {
   caret-color: transparent;
   border-radius: 5px;
-  width: 4.87rem;
+  width: 4.5rem;
   height: 4.5rem;
   &:hover {
     box-shadow: inset 0 0 0 6px #53ea93;
