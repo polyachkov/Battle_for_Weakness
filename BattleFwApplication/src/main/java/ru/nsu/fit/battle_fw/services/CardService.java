@@ -356,7 +356,7 @@ public class CardService {
             }
             deleteCardInCell(cell2);
         } else {
-            if(!cell2.isRevenged()){
+            if(!cell2.isRevenged() && !(cell2.getSickness() > 0)){
                 cell2.setRevenged(true);
                 int newHp1 = cell1.getHealth();
                 if (DiceRoller.rollDice() >= cell2.getEvasion()) {

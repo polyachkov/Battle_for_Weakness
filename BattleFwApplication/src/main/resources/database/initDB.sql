@@ -39,7 +39,7 @@ DROP SEQUENCE IF EXISTS games_id_seq;
 CREATE SEQUENCE IF NOT EXISTS games_id_seq START WITH 1 INCREMENT BY 1;
 
 DROP TABLE IF EXISTS library;
-CREATE TABLE library
+CREATE TABLE IF NOT EXISTS library
 (
     id_library      INTEGER PRIMARY KEY ,
     game_id         INTEGER  NOT NULL,
@@ -52,7 +52,7 @@ DROP SEQUENCE IF EXISTS libraries_id_seq;
 CREATE SEQUENCE IF NOT EXISTS libraries_id_seq START WITH 1 INCREMENT BY 1;
 
 DROP TABLE IF EXISTS library_composition;
-CREATE TABLE library_composition
+CREATE TABLE IF NOT EXISTS library_composition
 (
     id_card_lib     INTEGER PRIMARY KEY ,
     id_library      INTEGER  NOT NULL,
@@ -62,7 +62,7 @@ DROP SEQUENCE IF EXISTS lib_comp_id_seq;
 CREATE SEQUENCE IF NOT EXISTS lib_comp_id_seq START WITH 1 INCREMENT BY 1;
 
 DROP TABLE IF EXISTS hand;
-CREATE TABLE hand
+CREATE TABLE IF NOT EXISTS hand
 (
     id_hand         INTEGER PRIMARY KEY ,
     name_player     VARCHAR(200)  NOT NULL,
@@ -73,7 +73,7 @@ DROP SEQUENCE IF EXISTS hands_id_seq;
 CREATE SEQUENCE IF NOT EXISTS hands_id_seq START WITH 1 INCREMENT BY 1;
 
 DROP TABLE IF EXISTS hand_composition;
-CREATE TABLE hand_composition
+CREATE TABLE IF NOT EXISTS hand_composition
 (
     id_hand_card    INTEGER PRIMARY KEY ,
     id_hand         INTEGER  NOT NULL,
@@ -83,7 +83,7 @@ DROP SEQUENCE IF EXISTS hand_comp_id_seq;
 CREATE SEQUENCE IF NOT EXISTS hand_comp_id_seq START WITH 1 INCREMENT BY 1;
 
 DROP TABLE IF EXISTS cell;
-CREATE TABLE cell
+CREATE TABLE IF NOT EXISTS cell
 (
     id_cell         INTEGER PRIMARY KEY ,
     id_game         INTEGER NOT NULL,

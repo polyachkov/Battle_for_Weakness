@@ -332,6 +332,7 @@ public class GameService {
                 c.setSickness(0); // Устанавливаем болезнь выхода всех карт в 0
                 c.setRevenged(false); // Все карты не отвечали на атаку
                 c.setMovement_speed(cardR.getCardById(c.getId_card()).getMovement_speed()); // Все карты снова могут ходить (movement speed не 0)
+                c.setAttacked(false);
             }
 
         }
