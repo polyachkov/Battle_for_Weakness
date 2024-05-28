@@ -4,24 +4,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import ru.nsu.fit.battle_fw.configs.jwt.JwtUtils;
 import ru.nsu.fit.battle_fw.database.model.*;
 import ru.nsu.fit.battle_fw.exceptions.*;
-import ru.nsu.fit.battle_fw.requests.get.GameIdRequest;
 import ru.nsu.fit.battle_fw.requests.get.GetGameRequest;
-import ru.nsu.fit.battle_fw.requests.get.GetHandRequest;
 import ru.nsu.fit.battle_fw.requests.post.*;
-import ru.nsu.fit.battle_fw.responses.AllUsersResponse;
-import ru.nsu.fit.battle_fw.responses.info.UserInfo;
 import ru.nsu.fit.battle_fw.services.CardService;
 import ru.nsu.fit.battle_fw.services.GameService;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static ru.nsu.fit.battle_fw.helpers.GetFromHeaders.getUsernameFromJWT;
 
@@ -227,4 +220,12 @@ public class SiteController {
         //где ключ это наименование заголовка, а значение мапы - это значение заголовка
         return ResponseEntity.ok(headers);
     }
+
+    @PostMapping(value = "/openRarity")
+    public void openRarity(@RequestHeader Map<String, String> headers, @RequestBody OpenRarityRequest req){//представляет заголовки ввиде мапы,
+        logger.info("POST /openRarity");
+        String nameOwner = getUsernameFromJWT(headers, jwtUtils);
+        gameService.openRarity(nameOwner, req.getGame_id());
+    }
+
 }
