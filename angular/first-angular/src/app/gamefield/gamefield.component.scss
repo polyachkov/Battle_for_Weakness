@@ -305,17 +305,17 @@ $turn-time: 6s;
   width: 6rem;
   height: 3rem;
   max-width: 13rem;
-  &:hover {
-    z-index: 10;
-    border: none;
-    transform: translate(0px, -150px);
-    width: 100%;
-    margin: 0;
-  }
 }
 
-.image {
+.myCards:hover {
+  z-index: 10;
+  transform: translate(0px, -150px);
   width: 100%;
+  margin: 0;
+}
+
+.myCards:hover .card-container {
+  font-size: 5em; /* Увеличенный размер шрифта при наведении */
 }
 
 .fieldImage {
@@ -444,16 +444,6 @@ $turn-time: 6s;
   }
 }
 
-.statVertical {
-  display: flex;
-  flex-direction: column;
-}
-
-.statHorizontal {
-  display: flex;
-  justify-content: space-around;
-}
-
 @keyframes pulse {
   0% {
     box-shadow: 0 0 10px 2px rgba(0, 0, 255, 0.8);
@@ -496,4 +486,59 @@ $turn-time: 6s;
 .oppOwnCard {
   box-shadow: 0 0 0 3px rgba(255, 0, 0, 1);
   border-radius: 37%;
+}
+
+.card-container {
+  position: relative;
+  width: 100%;
+  height: auto;
+  font-size: 0; /* Базовый размер шрифта */
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.stats {
+  position: absolute;
+  bottom: 0; /* Прижать текст к нижней части контейнера */
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* Выравнивание по нижнему краю */
+  align-items: center;
+  color: white; /* Цвет текста статистики */
+  padding-bottom: 0.75em; /* Добавить отступ снизу для текста */
+  font-size: 0.2em; /* Размер шрифта относительно контейнера */
+}
+
+.statHorizontal {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.statVertical {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.collector {
+  position: relative;
+  display: inline-flex;
+  align-self: center;
+  max-width: 40rem;
+  height: 3rem;
+  max-height: 15rem;
+  border: 1px solid black;
+  margin-left: 50%;
+  &:hover {
+    overflow-y: unset;
+  }
 }

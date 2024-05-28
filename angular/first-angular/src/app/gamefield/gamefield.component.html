@@ -150,21 +150,26 @@
         cdkDrag
         (mousedown)="pickCardByHand(card.id_card)"
       >
-        <img class="image" [src]="idHandPictures[card.id_card]" alt="" />
-        <div
-          class="statHorizontal"
-          *ngFor="let row of [0, 1, 2, 3]; let rowIndex = index"
-        >
-          <div
-            class="statVertical"
-            *ngFor="let column of [0, 1]; let columIndex = index"
-          >
-            {{ determineStat(rowIndex, columIndex, card) }}
+        <div class="card-container">
+          <img class="image" [src]="idHandPictures[card.id_card]" alt="" />
+          <div class="stats">
+            <div
+              class="statHorizontal"
+              *ngFor="let row of [0, 1, 2, 3]; let rowIndex = index"
+            >
+              <div
+                class="statVertical"
+                *ngFor="let column of [0, 1]; let columIndex = index"
+              >
+                {{ determineStat(rowIndex, columIndex, card) }}
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="hand" cdkDropList [cdkDropListData]="">
+
+    <div class="collector" cdkDropList [cdkDropListData]="">
       <div
         class="myCards"
         cdkDrag
@@ -183,5 +188,6 @@
         </div>
       </div>
     </div>
+
   </div>
 </div>
