@@ -37,6 +37,7 @@ import { GameComponent } from './home/game/game.component';
 import { GamefieldComponent } from './gamefield/gamefield.component';
 import { DetailsComponent } from './gamefield/details/details.component';
 import { ChooseRarityComponent } from './gamefield/choose-rarity/choose-rarity.component';
+import {GameOverComponent} from "./gamefield/game-over/game-over.component";
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import { ChooseRarityComponent } from './gamefield/choose-rarity/choose-rarity.c
     GamefieldComponent,
     DetailsComponent,
     ChooseRarityComponent,
+    GameOverComponent,
   ],
   imports: [
     BrowserModule,

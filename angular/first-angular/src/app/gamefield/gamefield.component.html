@@ -1,19 +1,33 @@
 <!--<p>gamefield works! {{gameControlService.getIdGame()}}</p>-->
 
 <div class="background">
-  <app-details *ngIf="this.isShowModal"></app-details>
-  <app-choose-rarity *ngIf="this.isShowChooseRarity"></app-choose-rarity>
-  <div class="container">
-    <div [ngStyle]="{ top: '30px' }" class="opponentsInterface">
-      <div class="fraction-name">
-        {{ gameControlService.opponentSelectedFraction }}
-      </div>
-      <div class="money">
-        <div class="coin">
-          <div class="coin__front"></div>
-          <div class="coin__edge"></div>
-          <div class="coin__back"></div>
-          <div class="coin__shadow"></div>
+  <ng-container *ngIf="(game | async)?.is_ended; else gameField">
+    <app-game-over></app-game-over>
+  </ng-container>
+  <ng-template #gameField>
+    <app-details *ngIf="this.isShowModal"></app-details>
+    <app-choose-rarity *ngIf="this.isShowChooseRarity"></app-choose-rarity>
+    <div class="container">
+      <div [ngStyle]="{ top: '30px' }" class="opponentsInterface">
+        <div class="fraction-name">
+          {{ gameControlService.opponentSelectedFraction }}
+        </div>
+        <div class="money">
+          <div class="coin">
+            <div class="coin__front"></div>
+            <div class="coin__edge"></div>
+            <div class="coin__back"></div>
+            <div class="coin__shadow"></div>
+          </div>
+          <div class="countOfMoney">{{(oppStatus | async)?.babos}}</div>
+        </div>
+        <div class="health">
+          <img
+            class="heart"
+            src="../../assets/Photoes/hearth.png"
+            alt="hearths"
+          />
+          <div class="countOfHeart">{{(oppStatus | async)?.health}}</div>
         </div>
         <div class="countOfMoney">{{ (oppStatus | async)?.babos }}</div>
       </div>
@@ -80,13 +94,29 @@
       <div
         class="opponentsCards"
         *ngFor="let _ of [].constructor(oppHand | async)"
+
       >
-        <img class="image" [src]="idOppHandPictures[1]" alt="" />
-      </div>
+        <span class="circle">
+          <i class="fa-solid fa-film"></i>
+        </span>
+
+        <span class="title">Give up</span>
+        <span class="title title-hover">Оффнуть с позором</span>
+      </a>
     </div>
 
-    <div class="wrapper">
-      <div class="decksBlue" style="flex-wrap: wrap-reverse">
+    <div class="endTurnButtonField">
+      <button (click)="handleTurn()" class="endTurnButton">
+        {{ turnTitle }}
+      </button>
+    </div>
+    <div class="moveCombatButtonField">
+      <button (click)="handleCombat()" class="moveCombatButton">
+        {{ combatTitle }}
+      </button>
+    </div>
+    <div class="map">
+      <div class="oppHand">
         <div
           class="deck"
           style="
@@ -156,20 +186,21 @@
                 "
                 alt=""
               />
+
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="decksRed" style="flex-wrap: wrap">
-        <div
-          class="deck"
-          style="
-            background-image: url('../../assets/Photoes/card/back/deck cover red.png');
-            background-size: cover;
-          "
-          *ngFor="let item of myLibraries"
-        ></div>
+        <div class="decksRed" style="flex-wrap: wrap">
+          <div
+            class="deck"
+            style="
+              background-image: url('../../assets/Photoes/card/back/deck cover red.png');
+              background-size: cover;
+            "
+            *ngFor="let item of myLibraries"
+          ></div>
+        </div>
       </div>
     </div>
 
@@ -202,13 +233,13 @@
                   *ngFor="let column of [0, 1]; let columnIndex = index"
                 >
                   {{ determineStat(rowIndex, columnIndex, card) }}
+
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
       <div class="myHand" cdkDropList [cdkDropListData]="">
         <div class="myCards" cdkDrag (mousedown)="pickCardByHand(collectorId)">
           <img class="image" [src]="idHandPictures[collectorId]" alt="" />
@@ -219,6 +250,7 @@
               Cost: {{ 3 + ((status | async)?.collectors ?? 0) * 2 }}
             </ng-container>
             <ng-template #limit> Collectors Limit </ng-template>
+
           </div>
         </div>
       </div>

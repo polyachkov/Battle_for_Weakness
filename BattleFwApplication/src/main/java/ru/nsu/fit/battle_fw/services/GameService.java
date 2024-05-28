@@ -136,7 +136,7 @@ public class GameService {
         status.setName_player(playerName);
         status.setId_game(gameId);
         status.setCollectors(0);
-        status.setHealth(25); // Начальное здоровье
+        status.setHealth(10); // Начальное здоровье
         if (Objects.equals(turnName, playerName)) { // Если икрок ходит первым, то его кол-во денег 2, иначе 1
             status.setBabos(2);
         }  else  {
@@ -265,10 +265,13 @@ public class GameService {
      * Ничего не возвращает
      */
     public void nextTurn(NextTurnRequest req, String turnName)
-            throws NotYourTurnException, WrongPhaseException {
+            throws NotYourTurnException, WrongPhaseException, GameIsAlreadyEndedException {
         Integer gameId = req.getGameId(); // id игры
 
         Game game = gameR.getReferenceById(gameId);
+        if (game.getIs_ended()) {
+            throw new GameIsAlreadyEndedException("Game is ended");
+        }
         if (game.getTurn_ended()) {
             logger.error("Please, choose a rarity...");
             throw new WrongPhaseException("Please, choose a rarity...");
@@ -291,11 +294,14 @@ public class GameService {
      * Ничего не возвращает
      */
     public void takeTurn(TakeTurnRequest req, String turnName)
-            throws NotYourTurnException, LockedLibraryException {
+            throws NotYourTurnException, LockedLibraryException, GameIsAlreadyEndedException {
         Integer gameId = req.getGameId(); // id игры
         String rarity = req.getRarity(); // редкость колоды, из которой следующий игрок берёт карту
 
         Game game = gameR.getReferenceById(gameId);
+        if (game.getIs_ended()) {
+            throw new GameIsAlreadyEndedException("Game is ended");
+        }
         if (!game.getName_turn().equals(turnName)) {
             throw new NotYourTurnException("You cannot take a turn during an opponent's turn");
         }
@@ -545,9 +551,13 @@ public class GameService {
         return ResponseEntity.ok(librariesResponse);
     }
 
-    public void changePhase(MoveCombatRequest req, String namePlayer) throws AlreadyFightException, NotYourTurnException {
+    public void changePhase(MoveCombatRequest req, String namePlayer)
+            throws AlreadyFightException, NotYourTurnException, GameIsAlreadyEndedException {
         Integer gameId = req.getGameId();
         Game game = gameR.getReferenceById(gameId);
+        if (game.getIs_ended()) {
+            throw new GameIsAlreadyEndedException("Game is ended");
+        }
         if(game.getIs_fight_phase()){
             throw new AlreadyFightException("Вы уже в боевой фазе");
         }

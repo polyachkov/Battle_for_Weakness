@@ -64,7 +64,7 @@ public class SiteController {
     @PostMapping("/putCardInCell")
     public void putCardInCell(@RequestHeader Map<String, String> headers, @RequestBody PutCardInCellRequest req)
             throws NoBabosException, BadCellException,
-            NoHandCompException, NotYourTurnException, PutInFightException {
+            NoHandCompException, NotYourTurnException, PutInFightException, GameIsAlreadyEndedException {
         String nameOwner = getUsernameFromJWT(headers, jwtUtils);
         logger.info("POST /putCardInCell");
         logger.info("GameId " + req.getGameId());
@@ -78,7 +78,8 @@ public class SiteController {
     public void putCollectorInCell(@RequestHeader Map<String, String> headers, @RequestBody PutCollectorInCellRequest req)
             throws NoBabosException, BadCellException,
             NotYourTurnException, CollectorsLimitException,
-            PutInFightException, WrongPhaseException {
+            PutInFightException, WrongPhaseException,
+            GameIsAlreadyEndedException {
         String nameOwner = getUsernameFromJWT(headers, jwtUtils);
         logger.info("POST /putCollectorInCell");
         logger.info("GameId " + req.getGameId());
@@ -90,7 +91,8 @@ public class SiteController {
     @PostMapping("/moveCard")
     public void moveCardRequest(@RequestHeader Map<String, String> headers,
                                 @RequestBody MoveCardRequest req)
-            throws BadCellException, NotYourTurnException, WrongPhaseException {
+            throws BadCellException, NotYourTurnException, WrongPhaseException,
+            GameIsAlreadyEndedException {
         String nameOwner = getUsernameFromJWT(headers, jwtUtils);
         logger.info("POST /moveCard");
         logger.info("GameId " + req.getGameId());
@@ -103,7 +105,8 @@ public class SiteController {
     @PostMapping("/nextTurn")
     public void nextTurn(@RequestHeader Map<String, String> headers,
                          @RequestBody NextTurnRequest req)
-            throws NotYourTurnException, WrongPhaseException {
+            throws NotYourTurnException, WrongPhaseException,
+            GameIsAlreadyEndedException {
         String nameOwner = getUsernameFromJWT(headers, jwtUtils);
         logger.info("POST /nextTurn");
         logger.info("GameId " + req.getGameId());
@@ -114,7 +117,8 @@ public class SiteController {
     @PostMapping("/takeTurn")
     public void takeTurn(@RequestHeader Map<String, String> headers,
                          @RequestBody TakeTurnRequest req)
-            throws NotYourTurnException, LockedLibraryException {
+            throws NotYourTurnException, LockedLibraryException,
+            GameIsAlreadyEndedException {
         String nameOwner = getUsernameFromJWT(headers, jwtUtils);
         logger.info("POST /takeTurn");
         logger.info("GameId " + req.getGameId());
@@ -126,7 +130,8 @@ public class SiteController {
     @PostMapping("/moveCombat")
     public void moveCombat(@RequestHeader Map<String, String> headers,
                          @RequestBody MoveCombatRequest req)
-            throws NotYourTurnException, AlreadyFightException {
+            throws NotYourTurnException, AlreadyFightException,
+            GameIsAlreadyEndedException {
         String nameOwner = getUsernameFromJWT(headers, jwtUtils);
         logger.info("POST /takeTurn");
         logger.info("GameId " + req.getGameId());
