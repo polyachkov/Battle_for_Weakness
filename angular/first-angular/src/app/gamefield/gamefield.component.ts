@@ -1,22 +1,42 @@
-import {booleanAttribute, Component, HostListener, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {
+  booleanAttribute,
+  Component,
+  HostListener,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
-
-import {DynamicObject, field, idHandPictures, idMoneyCollectorPictures, idOppHandPictures, Turn} from './constants';
-import {GameControlService} from "../services/game-control.service";
-import {GamePhases, Pages} from "../constants";
-import {PageContentService} from "../services/page-content.service";
-import {Card} from "../models/card-model";
-import {interval, map, Observable, of, Subscription, switchMap, tap} from "rxjs";
-import {ICell} from "../models/cell-model";
-import {Game, IGame} from "../models/game-model";
-import {TokenStorageService} from "../auth/token-storage.service";
-import {IStatus} from "../models/status-model";
+import {
+  DynamicObject,
+  field,
+  idHandPictures,
+  idMoneyCollectorPictures,
+  idOppHandPictures,
+  Turn,
+} from './constants';
+import { GameControlService } from '../services/game-control.service';
+import { GamePhases, Pages } from '../constants';
+import { PageContentService } from '../services/page-content.service';
+import { Card } from '../models/card-model';
+import {
+  interval,
+  map,
+  Observable,
+  of,
+  Subscription,
+  switchMap,
+  tap,
+} from 'rxjs';
+import { ICell } from '../models/cell-model';
+import { Game, IGame } from '../models/game-model';
+import { TokenStorageService } from '../auth/token-storage.service';
+import { IStatus } from '../models/status-model';
 
 @Component({
   selector: 'app-gamefield',
   templateUrl: './gamefield.component.html',
-  styleUrls: ['./gamefield.component.scss']
+  styleUrls: ['./gamefield.component.scss'],
 })
 export class GamefieldComponent implements OnInit, OnDestroy {
   id_game!: string;
@@ -48,9 +68,9 @@ export class GamefieldComponent implements OnInit, OnDestroy {
     public pageContentService: PageContentService,
     private token: TokenStorageService
   ) {
-    this.route.params.subscribe(params => {
+    this.route.params.subscribe((params) => {
       this.id_game = params['id'];
-      gameControlService.setIdGame(Number(this.id_game))
+      gameControlService.setIdGame(Number(this.id_game));
     });
   }
 
@@ -58,9 +78,8 @@ export class GamefieldComponent implements OnInit, OnDestroy {
     this.game = interval(1000).pipe(
       switchMap(() => this.gameControlService.getGame(this.id_game)),
       tap((game: Game) => {
-        if(game.name_turn == this.token.getUsername()) {
+        if (game.name_turn == this.token.getUsername()) {
           this.isShowChooseRarity = game.turn_ended;
-
         }
         this.updateTurnButton(game);
         this.updateCombatButton(game);
@@ -122,27 +141,31 @@ export class GamefieldComponent implements OnInit, OnDestroy {
     }
 
     if (this.currentCard == 49) {
-      this.gameControlService.putCollectorInCell(Number(this.id_game), cell.cell_num).subscribe(
-        response => {
-          console.log('Card placed successfully', response);
-          this.initializeState();
-          this.currentCard = 0;
-        },
-        error => {
-          console.error('Error placing card', error);
-        }
-      );
+      this.gameControlService
+        .putCollectorInCell(Number(this.id_game), cell.cell_num)
+        .subscribe(
+          (response) => {
+            console.log('Card placed successfully', response);
+            this.initializeState();
+            this.currentCard = 0;
+          },
+          (error) => {
+            console.error('Error placing card', error);
+          }
+        );
     } else {
-      this.gameControlService.putCardInCell(Number(this.id_game), this.currentCard, cell.cell_num).subscribe(
-        response => {
-          console.log('Card placed successfully', response);
-          this.initializeState();
-          this.currentCard = 0;
-        },
-        error => {
-          console.error('Error placing card', error);
-        }
-      );
+      this.gameControlService
+        .putCardInCell(Number(this.id_game), this.currentCard, cell.cell_num)
+        .subscribe(
+          (response) => {
+            console.log('Card placed successfully', response);
+            this.initializeState();
+            this.currentCard = 0;
+          },
+          (error) => {
+            console.error('Error placing card', error);
+          }
+        );
     }
   }
 
@@ -152,10 +175,12 @@ export class GamefieldComponent implements OnInit, OnDestroy {
     this.status = this.gameControlService.getStatus(this.id_game, false);
     this.oppStatus = this.gameControlService.getStatus(this.id_game, true);
     this.field = this.gameControlService.getCells(this.id_game).pipe(
-      map(cells => cells.sort((a, b) => a.cell_num - b.cell_num)), // Сортируем ячейки по cell_num
-      switchMap(cells => this.checkReverse(this.username).pipe(
-        map(isReverse => this.transformField(cells, isReverse))
-      ))
+      map((cells) => cells.sort((a, b) => a.cell_num - b.cell_num)), // Сортируем ячейки по cell_num
+      switchMap((cells) =>
+        this.checkReverse(this.username).pipe(
+          map((isReverse) => this.transformField(cells, isReverse))
+        )
+      )
     );
     this.isMoving = false;
     this.highlightCell = [];
@@ -170,7 +195,7 @@ export class GamefieldComponent implements OnInit, OnDestroy {
     return this.field.pipe(
       map((cells: ICell[][]) => {
         const imgNum = cells[this.cardPos[0]][this.cardPos[1]].id_card;
-        return idMoneyCollectorPictures[imgNum];
+        return idHandPictures[imgNum];
       })
     );
   }
@@ -208,40 +233,36 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   }
 
   checkReverse(username: string): Observable<boolean> {
-    return this.game.pipe(
-      map(game => game.non_reverse !== username)
-    );
+    return this.game.pipe(map((game) => game.non_reverse !== username));
   }
 
   handleTurn() {
-    this.game.subscribe(
-      (game: Game) => {
-        this.updateTurnButton(game);
-      });
+    this.game.subscribe((game: Game) => {
+      this.updateTurnButton(game);
+    });
     this.gameControlService.nextTurn(this.id_game).subscribe(
-      response => {
+      (response) => {
         console.log('Turn transmitted successfully', response);
         this.initializeState();
         this.currentCard = 0;
       },
-      error => {
+      (error) => {
         console.error('Error transmitting turn', error);
       }
     );
   }
 
   handleCombat() {
-    this.game.subscribe(
-      (game: Game) => {
-        this.updateCombatButton(game);
-      });
+    this.game.subscribe((game: Game) => {
+      this.updateCombatButton(game);
+    });
     this.gameControlService.moveCombat(this.id_game).subscribe(
-      response => {
+      (response) => {
         console.log('Move to combat successfully', response);
         this.initializeState();
         this.currentCard = 0;
       },
-      error => {
+      (error) => {
         console.error('Error move to combat', error);
       }
     );
@@ -278,12 +299,12 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   handleLibraryChoose(rarity: string): void {
     this.isShowChooseRarity = false;
     this.gameControlService.takeTurn(this.id_game, rarity).subscribe(
-      response => {
+      (response) => {
         console.log('Turn taken successfully', response);
         this.initializeState();
         this.currentCard = 0;
       },
-      error => {
+      (error) => {
         console.error('Error taking turn', error);
       }
     );
@@ -327,17 +348,21 @@ export class GamefieldComponent implements OnInit, OnDestroy {
     }
   }
 
-  handleCellClick(rowIndex: number, cellIndex: number, isNotOpponent: boolean): void {
+  handleCellClick(
+    rowIndex: number,
+    cellIndex: number,
+    isNotOpponent: boolean
+  ): void {
     if (this.isCombat && isNotOpponent) {
       this.initializeHighlightCell();
       const neighbors = [
-        {row: rowIndex - 1, column: cellIndex}, // Верхняя ячейка
-        {row: rowIndex + 1, column: cellIndex}, // Нижняя ячейка
-        {row: rowIndex, column: cellIndex - 1}, // Левая ячейка
-        {row: rowIndex, column: cellIndex + 1}, // Правая ячейка
+        { row: rowIndex - 1, column: cellIndex }, // Верхняя ячейка
+        { row: rowIndex + 1, column: cellIndex }, // Нижняя ячейка
+        { row: rowIndex, column: cellIndex - 1 }, // Левая ячейка
+        { row: rowIndex, column: cellIndex + 1 }, // Правая ячейка
       ];
 
-      neighbors.forEach(neighbor => {
+      neighbors.forEach((neighbor) => {
         if (this.isValidCell(neighbor.row, neighbor.column)) {
           this.highlightCell[neighbor.row][neighbor.column] = true;
         }
@@ -347,10 +372,14 @@ export class GamefieldComponent implements OnInit, OnDestroy {
 
       console.log('Current Row', this.cardPos[0]);
       console.log('Current Cell:', this.cardPos[1]);
-      this.currentCell().subscribe(cell => {
+      this.currentCell().subscribe((cell) => {
         this.currentCellVal = cell;
       });
-      if (this.isMoving && (cardPosTmp[0] == this.cardPos[0] && cardPosTmp[1] == this.cardPos[1])) {
+      if (
+        this.isMoving &&
+        cardPosTmp[0] == this.cardPos[0] &&
+        cardPosTmp[1] == this.cardPos[1]
+      ) {
         this.determineCard(rowIndex, cellIndex);
       }
       this.isMoving = true;
@@ -360,7 +389,7 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   }
 
   private isValidCell(rowIndex: number, cellIndex: number) {
-      return !(rowIndex < 0 || rowIndex > 6 || cellIndex < 0 || cellIndex > 7);
+    return !(rowIndex < 0 || rowIndex > 6 || cellIndex < 0 || cellIndex > 7);
   }
 
   highlightOff() {
@@ -393,16 +422,18 @@ export class GamefieldComponent implements OnInit, OnDestroy {
     if (this.currentCellVal) {
       console.log('Current Cell Num:', this.currentCellVal.cell_num);
       console.log('Next Cell Num:', nextCell.cell_num);
-      this.gameControlService.moveCard(this.id_game, this.currentCellVal.cell_num, nextCell.cell_num).subscribe(
-        response => {
-          console.log('Card placed successfully', response);
-          this.initializeState();
-          this.currentCard = 0;
-        },
-        error => {
-          console.error('Error placing card', error);
-        }
-      );
+      this.gameControlService
+        .moveCard(this.id_game, this.currentCellVal.cell_num, nextCell.cell_num)
+        .subscribe(
+          (response) => {
+            console.log('Card placed successfully', response);
+            this.initializeState();
+            this.currentCard = 0;
+          },
+          (error) => {
+            console.error('Error placing card', error);
+          }
+        );
     }
   }
 
