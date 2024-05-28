@@ -20,6 +20,7 @@ import ru.nsu.fit.battle_fw.responses.info.StatusInfo;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Данный класс содержит методы для обработки GET И POST запросов
@@ -571,7 +572,7 @@ public class GameService {
         gameR.save(game);
     }
 
-    public void openRarity(String playerName, Integer game_id) {
+    public void openRarity(String playerName, Integer game_id) throws NoBabosException {
         String[] rarityS = new String[] {"common", "uncommon", "rare", "epic", "legendary"};
         List<Library> libs = libR.getLibs(playerName, game_id);
 
@@ -591,6 +592,18 @@ public class GameService {
         // Обход отсортированного списка
         for (Library l : libs) {
             if (l.getLocked().equals(true)) {
+                Status status = statusR.getStatus(game_id, playerName);
+                Integer babos = status.getBabos();
+                int index = IntStream.range(0, rarityS.length)
+                        .filter(i -> rarityS[i].equals(l.getRarity()))
+                        .findFirst()
+                        .orElse(-1);
+                if(babos < (3 + index*2)){
+                    throw new NoBabosException("не хватает денег, милорд");
+                }
+                else {
+                    status.setBabos(babos - (3 + index*2));
+                }
                 l.setLocked(false);
                 getCardToHand(l.getId_library(), handR.getOppHand(game_id, playerName).getId_hand());
                 libR.save(l);
