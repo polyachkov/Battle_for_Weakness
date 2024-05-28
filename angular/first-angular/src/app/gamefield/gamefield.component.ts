@@ -58,6 +58,7 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   private subscription!: Subscription;
   currentCellVal: ICell | null = null;
   reverseField: boolean = false;
+  libCount: number = 1;
 
   handCardId!: number[];
   field!: Observable<ICell[][]>;
@@ -120,6 +121,12 @@ export class GamefieldComponent implements OnInit, OnDestroy {
       rows.push(row);
     }
     return isReverse ? rows.reverse() : rows;
+  }
+
+  setLibCount(num: number): void {
+    if (num > 0) {
+      this.libCount = num;
+    }
   }
 
   myLibraries: number[] = [0, 1, 2, 3, 4];
@@ -306,6 +313,19 @@ export class GamefieldComponent implements OnInit, OnDestroy {
       },
       (error) => {
         console.error('Error taking turn', error);
+      }
+    );
+  }
+
+  handleOpenRarity() {
+    this.gameControlService.openRarity(this.id_game).subscribe(
+      (response) => {
+        console.log('Open rarity successfully', response);
+        this.initializeState();
+        this.currentCard = 0;
+      },
+      (error) => {
+        console.error('Error open rarity', error);
       }
     );
   }

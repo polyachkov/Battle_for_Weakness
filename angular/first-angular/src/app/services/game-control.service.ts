@@ -48,6 +48,7 @@ export class GameControlService {
   private moveCombatUrl: string         = hostName + 'moveCombat';
   private getLibrariesUrl: string       = hostName + 'get/libraries';
   private moveCardUrl: string           = hostName + 'moveCard';
+  private openRarityUrl: string         = hostName + 'openRarity';
 
   getIdGame() {
     return this.id_game;
@@ -235,6 +236,14 @@ export class GameControlService {
     const body = { gameId: gameId };
 
     return this.http.post(this.moveCombatUrl, body).pipe(
+      catchError(this.errorHandler.bind(this))
+    );
+  }
+
+  openRarity(game_id: string): Observable<any> {
+    const body = { game_id: game_id };
+
+    return this.http.post(this.openRarityUrl, body).pipe(
       catchError(this.errorHandler.bind(this))
     );
   }

@@ -572,7 +572,19 @@ public class GameService {
         gameR.save(game);
     }
 
-    public void openRarity(String playerName, Integer game_id) throws NoBabosException {
+    public void openRarity(String playerName, Integer game_id)
+            throws NoBabosException, GameIsAlreadyEndedException,
+            AlreadyFightException, NotYourTurnException {
+        Game game = gameR.getReferenceById(game_id);
+        if (game.getIs_ended()) {
+            throw new GameIsAlreadyEndedException("Game is ended");
+        }
+        if(game.getIs_fight_phase()){
+            throw new AlreadyFightException("Вы уже в боевой фазе");
+        }
+        if(!playerName.equals(game.getName_turn())) {
+            throw new NotYourTurnException("Нет");
+        }
         String[] rarityS = new String[] {"common", "uncommon", "rare", "epic", "legendary"};
         List<Library> libs = libR.getLibs(playerName, game_id);
 
@@ -598,15 +610,18 @@ public class GameService {
                         .filter(i -> rarityS[i].equals(l.getRarity()))
                         .findFirst()
                         .orElse(-1);
-                if(babos < (1 + index*2)){
+                if (babos < (1 + index * 2)){
+                    logger.error("не хватает денег, милорд");
+                    logger.info("index: {}",index);
+                    logger.info("babos: {}",babos);
                     throw new NoBabosException("не хватает денег, милорд");
                 }
-                else {
-                    status.setBabos(babos - (1 + index*2));
-                }
+                status.setBabos(babos - (1 + index * 2));
                 l.setLocked(false);
-                getCardToHand(l.getId_library(), handR.getOppHand(game_id, playerName).getId_hand());
+                getCardToHand(l.getId_library(), handR.getHand(game_id, playerName).getId_hand());
                 libR.save(l);
+                statusR.save(status);
+                break;
             }
         }
     }

@@ -79,6 +79,17 @@
         {{ combatTitle }}
       </button>
     </div>
+    <div class="openRarityButtonField">
+      <button (click)="handleOpenRarity()" class="openRarityButton">
+        <ng-container
+          *ngIf="(libCount < 5); else limit1"
+        >
+          Open New Rarity. Cost: {{ 3 + (libCount - 1) * 2 }}
+        </ng-container>
+        <ng-template #limit1> Libraries Limit </ng-template>
+
+      </button>
+    </div>
     <div class="map">
       <div class="oppHand">
         <div
