@@ -291,6 +291,11 @@ public class CardService {
 
         checkMoveCells(cell1, cell2);
 
+        if (!cell1.getName_owner().equals(playerName)) {
+            logger.error("Not your card, dude...");
+            throw new BadCellException("Not your card, dude...");
+        }
+
         boolean isOpponent = false;
         if (cell2.getCell_num() <= 8 || cell2.getCell_num() >= 57) {
             if (!game.getNon_reverse().equals(playerName)) {
@@ -327,7 +332,6 @@ public class CardService {
             logger.error("Card Has Sickness");
             throw new BadCellException("Card Has Sickness");
         }
-
         if(!areNeighbors(cell1.getCell_num(), cell2.getCell_num())){
             logger.error("Не соседние клетки");
             throw new BadCellException("Не соседние клетки");
