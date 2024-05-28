@@ -598,11 +598,11 @@ public class GameService {
                         .filter(i -> rarityS[i].equals(l.getRarity()))
                         .findFirst()
                         .orElse(-1);
-                if(babos < (3 + index*2)){
+                if(babos < (1 + index*2)){
                     throw new NoBabosException("не хватает денег, милорд");
                 }
                 else {
-                    status.setBabos(babos - (3 + index*2));
+                    status.setBabos(babos - (1 + index*2));
                 }
                 l.setLocked(false);
                 getCardToHand(l.getId_library(), handR.getOppHand(game_id, playerName).getId_hand());
