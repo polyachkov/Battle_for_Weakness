@@ -1,15 +1,55 @@
+<!-- <div id="overlay" (click)="gamefieldComponent.isShowModal = false"></div>
+<div id="container">
+  <img class="picture" [src]="url | async" alt="Loading..." />
+  <div style="position: absolute; bottom: 3%; left: 11%">
+    <div
+      class="statHorizontal"
+      *ngFor="let row of [0, 1, 2, 3]; let rowIndex = index"
+    >
+      <div
+        class="statVertical"
+        *ngFor="let column of [0, 1]; let columIndex = index"
+      >
+        {{ determineStat(rowIndex, columIndex, currentCell | async) }}
+      </div>
+    </div>
+  </div>
+</div> -->
+
 <div id="overlay" (click)="gamefieldComponent.isShowModal = false"></div>
 <div id="container">
   <img class="picture" [src]="url | async" alt="Loading..." />
   <div
-    class="statHorizontal"
-    *ngFor="let row of [0, 1, 2, 3]; let rowIndex = index"
+    style="
+      position: absolute;
+      bottom: 25%;
+      left: 50%;
+      transform: translateX(-45%);
+    "
   >
+    <div class="statHorizontal">
+      <div
+        class="statVertical"
+        *ngFor="let column of [0, 1]; let columnIndex = index"
+      >
+        {{ determineStat(0, columnIndex, currentCell | async) }}
+      </div>
+    </div>
+  </div>
+
+  <div style="position: absolute; bottom: 5%; left: 11%">
     <div
-      class="statVertical"
-      *ngFor="let column of [0, 1]; let columIndex = index"
+      class="statHorizontal"
+      *ngFor="let row of [0, 1, 2, 3]; let rowIndex = index"
     >
-      {{ determineStat(rowIndex, columIndex, currentCell | async) }}
+      <div class="statHorizontal" *ngIf="rowIndex !== 0">
+        <div
+          class="statVertical"
+          *ngFor="let column of [0, 1]; let columnIndex = index"
+        >
+          {{ determineStat(rowIndex, columnIndex, currentCell | async) }}
+        </div>
+      </div>
     </div>
   </div>
 </div>
