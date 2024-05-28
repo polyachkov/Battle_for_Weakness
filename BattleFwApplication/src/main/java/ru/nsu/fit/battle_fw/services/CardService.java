@@ -353,7 +353,7 @@ public class CardService {
             newHp2 -= cell1.getAttack();
         }
         if (newHp2 <= 0) {
-            if(cell2.getId_cell() == 49) {
+            if(cell2.getId_card() == 49) {
                 Status status = statusR.getStatus(cell2.getId_game(), cell2.getName_owner());
                 status.setCollectors(status.getCollectors() - 1);
                 statusR.save(status);
