@@ -1,193 +1,197 @@
 <!--<p>gamefield works! {{gameControlService.getIdGame()}}</p>-->
 
 <div class="background">
-  <app-details *ngIf="this.isShowModal"></app-details>
-  <app-choose-rarity *ngIf="this.isShowChooseRarity"></app-choose-rarity>
-  <div class="container">
-    <div [ngStyle]="{ top: '30px' }" class="opponentsInterface">
-      <div class="fraction-name">
-        {{ gameControlService.opponentSelectedFraction }}
-      </div>
-      <div class="money">
-        <div class="coin">
-          <div class="coin__front"></div>
-          <div class="coin__edge"></div>
-          <div class="coin__back"></div>
-          <div class="coin__shadow"></div>
+  <ng-container *ngIf="(game | async)?.is_ended; else gameField">
+    <app-game-over></app-game-over>
+  </ng-container>
+  <ng-template #gameField>
+    <app-details *ngIf="this.isShowModal"></app-details>
+    <app-choose-rarity *ngIf="this.isShowChooseRarity"></app-choose-rarity>
+    <div class="container">
+      <div [ngStyle]="{ top: '30px' }" class="opponentsInterface">
+        <div class="fraction-name">
+          {{ gameControlService.opponentSelectedFraction }}
         </div>
-        <div class="countOfMoney">{{(oppStatus | async)?.babos}}</div>
-      </div>
-      <div class="health">
-        <img
-          class="heart"
-          src="../../assets/Photoes/hearth.png"
-          alt="hearths"
-        />
-        <div class="countOfHeart">{{(oppStatus | async)?.health}}</div>
+        <div class="money">
+          <div class="coin">
+            <div class="coin__front"></div>
+            <div class="coin__edge"></div>
+            <div class="coin__back"></div>
+            <div class="coin__shadow"></div>
+          </div>
+          <div class="countOfMoney">{{(oppStatus | async)?.babos}}</div>
+        </div>
+        <div class="health">
+          <img
+            class="heart"
+            src="../../assets/Photoes/hearth.png"
+            alt="hearths"
+          />
+          <div class="countOfHeart">{{(oppStatus | async)?.health}}</div>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="container">
-    <div [ngStyle]="{ bottom: '30px' }" class="myInterface">
-      <div class="fraction-name">
-        Mountains
-      </div>
-      <div class="money">
-        <div class="coin">
-          <div class="coin__front"></div>
-          <div class="coin__edge"></div>
-          <div class="coin__back"></div>
-          <div class="coin__shadow"></div>
+    <div class="container">
+      <div [ngStyle]="{ bottom: '30px' }" class="myInterface">
+        <div class="fraction-name">
+          Mountains
         </div>
-        <div class="countOfMoney">{{(status | async)?.babos}}</div>
-      </div>
-      <div class="health">
-        <img
-          class="heart"
-          src="../../assets/Photoes/hearth.png"
-          alt="hearths"
-        />
-        <div class="countOfHeart">{{(status | async)?.health}}</div>
+        <div class="money">
+          <div class="coin">
+            <div class="coin__front"></div>
+            <div class="coin__edge"></div>
+            <div class="coin__back"></div>
+            <div class="coin__shadow"></div>
+          </div>
+          <div class="countOfMoney">{{(status | async)?.babos}}</div>
+        </div>
+        <div class="health">
+          <img
+            class="heart"
+            src="../../assets/Photoes/hearth.png"
+            alt="hearths"
+          />
+          <div class="countOfHeart">{{(status | async)?.health}}</div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="giveUpField">
+    <div class="giveUpField">
 
-    <a
-      (click)="pageContentService.handleChangeContent(Pages.MAIN_PAGE)"
-      class="btn-slide"
-      routerLink=""
-    >
-      <span class="circle">
-        <i class="fa-solid fa-film"></i>
-      </span>
-
-      <span class="title">Give up</span>
-      <span class="title title-hover">Оффнуть с позором</span>
-    </a>
-  </div>
-
-  <div class="endTurnButtonField">
-    <button (click)="handleTurn()" class="endTurnButton">
-      {{ turnTitle }}
-    </button>
-  </div>
-  <div class="moveCombatButtonField">
-    <button (click)="handleCombat()" class="moveCombatButton">
-      {{ combatTitle }}
-    </button>
-  </div>
-  <div class="map">
-    <div class="hand">
-      <div
-        class="opponentsCards"
-        *ngFor="let _ of [].constructor((oppHand | async))"
+      <a
+        (click)="pageContentService.handleChangeContent(Pages.MAIN_PAGE)"
+        class="btn-slide"
+        routerLink=""
       >
-        <img class="image" [src]="idOppHandPictures[1]" alt="" />
-      </div>
+        <span class="circle">
+          <i class="fa-solid fa-film"></i>
+        </span>
+
+        <span class="title">Give up</span>
+        <span class="title title-hover">Оффнуть с позором</span>
+      </a>
     </div>
 
-    <div class="wrapper">
-      <div class="decksBlue" style="flex-wrap: wrap-reverse">
+    <div class="endTurnButtonField">
+      <button (click)="handleTurn()" class="endTurnButton">
+        {{ turnTitle }}
+      </button>
+    </div>
+    <div class="moveCombatButtonField">
+      <button (click)="handleCombat()" class="moveCombatButton">
+        {{ combatTitle }}
+      </button>
+    </div>
+    <div class="map">
+      <div class="hand">
         <div
-          class="deck"
-          style="
-            background-image: url('../../assets/Photoes/deckBlue.png');
-            background-size: cover;
-          "
-          *ngFor="let item of oppsLibraries"
-        ></div>
+          class="opponentsCards"
+          *ngFor="let _ of [].constructor((oppHand | async))"
+        >
+          <img class="image" [src]="idOppHandPictures[1]" alt="" />
+        </div>
       </div>
 
-      <div class="field">
-        <div class="row" *ngFor="let row of field | async; let rowIndex = index">
-          <div [ngClass]="getRowColor(rowIndex)" *ngFor="let cell of row; let cellIndex = index">
-            <div
-              class="cardField"
-              cdkDropList
-              (click)="(cell.id_card && (cell.name_owner == username || !isMoving))
-              ? handleCellClick(rowIndex, cellIndex, cell.name_owner == username)
-              : handleMoveCard(cell)"
-              (mousedown)="!cell.id_card ? pickCard(rowIndex, cellIndex, cell.id_card) : ''"
-              (mouseup)="!cell.id_card ? dropCard(rowIndex, cellIndex, cell) : ''"
+      <div class="wrapper">
+        <div class="decksBlue" style="flex-wrap: wrap-reverse">
+          <div
+            class="deck"
+            style="
+              background-image: url('../../assets/Photoes/deckBlue.png');
+              background-size: cover;
+            "
+            *ngFor="let item of oppsLibraries"
+          ></div>
+        </div>
 
-              [ngClass]="{
-                'highlight':
-                (isCombat && cell.id_card && cell.movement_speed && cell.name_owner == username && !cell.sickness) ||
-                (chechHighlight(rowIndex, cellIndex) && !cell.id_card && !(rowIndex == 0)),
-                'highlight_red': isCombat && cell.id_card && cell.name_owner != username && chechHighlight(rowIndex, cellIndex)
-                || (rowIndex == 0) && chechHighlight(rowIndex, cellIndex) && isCombat,
-                'myOwnCard': cell.name_owner == username,
-                'oppOwnCard': cell.name_owner != username && cell.id_card
-              }"
-            >
-              <img
-                class="fieldImage"
-                [src]="gameControlService.getCardImageUrl(rowIndex, cell.id_card)"
-                alt=""
-              />
+        <div class="field">
+          <div class="row" *ngFor="let row of field | async; let rowIndex = index">
+            <div [ngClass]="getRowColor(rowIndex)" *ngFor="let cell of row; let cellIndex = index">
+              <div
+                class="cardField"
+                cdkDropList
+                (click)="(cell.id_card && (cell.name_owner == username || !isMoving))
+                ? handleCellClick(rowIndex, cellIndex, cell.name_owner == username)
+                : handleMoveCard(cell)"
+                (mousedown)="!cell.id_card ? pickCard(rowIndex, cellIndex, cell.id_card) : ''"
+                (mouseup)="!cell.id_card ? dropCard(rowIndex, cellIndex, cell) : ''"
+
+                [ngClass]="{
+                  'highlight':
+                  (isCombat && cell.id_card && cell.movement_speed && cell.name_owner == username && !cell.sickness) ||
+                  (chechHighlight(rowIndex, cellIndex) && !cell.id_card && !(rowIndex == 0)),
+                  'highlight_red': isCombat && cell.id_card && cell.name_owner != username && chechHighlight(rowIndex, cellIndex)
+                  || (rowIndex == 0) && chechHighlight(rowIndex, cellIndex) && isCombat,
+                  'myOwnCard': cell.name_owner == username,
+                  'oppOwnCard': cell.name_owner != username && cell.id_card
+                }"
+              >
+                <img
+                  class="fieldImage"
+                  [src]="gameControlService.getCardImageUrl(rowIndex, cell.id_card)"
+                  alt=""
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="decksRed" style="flex-wrap: wrap">
-        <div
-          class="deck"
-          style="
-            background-image: url('../../assets/Photoes/card/back/deck cover red.png');
-            background-size: cover;
-          "
-          *ngFor="let item of myLibraries"
-        ></div>
+        <div class="decksRed" style="flex-wrap: wrap">
+          <div
+            class="deck"
+            style="
+              background-image: url('../../assets/Photoes/card/back/deck cover red.png');
+              background-size: cover;
+            "
+            *ngFor="let item of myLibraries"
+          ></div>
+        </div>
       </div>
-    </div>
-    <div class="hand" cdkDropList [cdkDropListData]="">
-      <div
-        class="myCards"
-        *ngFor="let card of hand | async"
-        cdkDrag
-        (mousedown)="pickCardByHand(card.id_card)"
-      >
-        <div class="card-container">
-          <img class="image" [src]="idHandPictures[card.id_card]" alt="" />
-          <div class="stats">
-            <div
-              class="statHorizontal"
-              *ngFor="let row of [0, 1, 2, 3]; let rowIndex = index"
-            >
+      <div class="hand" cdkDropList [cdkDropListData]="">
+        <div
+          class="myCards"
+          *ngFor="let card of hand | async"
+          cdkDrag
+          (mousedown)="pickCardByHand(card.id_card)"
+        >
+          <div class="card-container">
+            <img class="image" [src]="idHandPictures[card.id_card]" alt="" />
+            <div class="stats">
               <div
-                class="statVertical"
-                *ngFor="let column of [0, 1]; let columIndex = index"
+                class="statHorizontal"
+                *ngFor="let row of [0, 1, 2, 3]; let rowIndex = index"
               >
-                {{ determineStat(rowIndex, columIndex, card) }}
+                <div
+                  class="statVertical"
+                  *ngFor="let column of [0, 1]; let columIndex = index"
+                >
+                  {{ determineStat(rowIndex, columIndex, card) }}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="collector" cdkDropList [cdkDropListData]="">
-      <div
-        class="myCards"
-        cdkDrag
-        (mousedown)="pickCardByHand(collectorId)"
-      >
-        <img class="image" [src]="idHandPictures[collectorId]" alt="" />
+      <div class="collector" cdkDropList [cdkDropListData]="">
         <div
-          class="statHorizontal"
+          class="myCards"
+          cdkDrag
+          (mousedown)="pickCardByHand(collectorId)"
         >
-          <ng-container *ngIf="((status | async)?.collectors ?? 0) < 4; else limit">
-            Cost: {{ 3 + (((status | async)?.collectors ?? 0) * 2) }}
-          </ng-container>
-          <ng-template #limit>
-            Collectors Limit
-          </ng-template>
+          <img class="image" [src]="idHandPictures[collectorId]" alt="" />
+          <div
+            class="statHorizontal"
+          >
+            <ng-container *ngIf="((status | async)?.collectors ?? 0) < 4; else limit">
+              Cost: {{ 3 + (((status | async)?.collectors ?? 0) * 2) }}
+            </ng-container>
+            <ng-template #limit>
+              Collectors Limit
+            </ng-template>
+          </div>
         </div>
       </div>
     </div>
-
-  </div>
+  </ng-template>
 </div>

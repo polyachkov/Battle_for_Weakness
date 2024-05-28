@@ -52,4 +52,4 @@ INSERT INTO card VALUES
     (47, 'Creator of golems', 3, 4, 7, 0, 1, 1, 'legendary', 'mountains', 1),
     (48, 'Egondon pah', 6, 40, 27, 0, 1, 1, 'legendary', 'mountains', 1),
 
-    (49, 'Babos$ collector', 0, 0, 3, 0, 0, 0, 'collector', 'collector', 0);
+    (49, 'Babos$ collector', 0, 3, 3, 0, 0, 0, 'collector', 'collector', 0);
