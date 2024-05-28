@@ -40,6 +40,7 @@ public class GameService {
     private final InviteRepo inviteR;
     private final UserRepo userR;
 
+
     private static final Logger logger = LoggerFactory.getLogger(GameService.class);
 
     /**
@@ -570,4 +571,30 @@ public class GameService {
         gameR.save(game);
     }
 
+    public void openRarity(String playerName, Integer game_id) {
+        String[] rarityS = new String[] {"common", "uncommon", "rare", "epic", "legendary"};
+        List<Library> libs = libR.getLibs(playerName, game_id);
+
+        // Создание карты для хранения порядка редкостей
+        Map<String, Integer> rarityOrder = new HashMap<>();
+        for (int i = 0; i < rarityS.length; i++) {
+            rarityOrder.put(rarityS[i], i);
+        }
+
+        // Сортировка списка libs в соответствии с порядком в rarityS
+        libs.sort((l1, l2) -> {
+            Integer order1 = rarityOrder.get(l1.getRarity());
+            Integer order2 = rarityOrder.get(l2.getRarity());
+            return Integer.compare(order1, order2);
+        });
+
+        // Обход отсортированного списка
+        for (Library l : libs) {
+            if (l.getLocked().equals(true)) {
+                l.setLocked(false);
+                getCardToHand(l.getId_library(), handR.getOppHand(game_id, playerName).getId_hand());
+                libR.save(l);
+            }
+        }
+    }
 }
