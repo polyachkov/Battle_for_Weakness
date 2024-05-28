@@ -4,12 +4,13 @@ import { ErrorService } from "./error.service";
 import {catchError, map, Observable, throwError} from "rxjs";
 import {IInvite} from "../models/invite-model";
 import {IGame} from "../models/game-model";
+import { hostName } from '../constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
-  private getAllGamesUrl = 'http://localhost:8081/get/all/games';
+  private getAllGamesUrl = hostName + 'get/all/games';
   private errorService: any;
 
   constructor(

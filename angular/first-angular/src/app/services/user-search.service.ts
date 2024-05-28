@@ -3,12 +3,13 @@ import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
 import {catchError, map, Observable, retry, tap, throwError} from "rxjs";
 import {IUser} from "../models/user-model";
 import {ErrorService} from "./error.service";
+import { hostName } from '../constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserSearchService {
-  private getAllUsersUrl = 'http://localhost:8081/get/all/users';
+  private getAllUsersUrl = hostName + 'get/all/users';
 
   constructor(
     private http: HttpClient,
