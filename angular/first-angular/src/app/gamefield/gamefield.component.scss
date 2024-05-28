@@ -289,6 +289,21 @@ $turn-time: 6s;
 
 .hand {
   position: relative;
+  top: -5%;
+  display: inline-flex;
+  align-self: center;
+  max-width: 40rem;
+  height: 3rem;
+  max-height: 15rem;
+  border: 1px solid black;
+  &:hover {
+    overflow-y: unset;
+  }
+}
+
+.oppHand {
+  position: relative;
+  top: -10%;
   display: inline-flex;
   align-self: center;
   max-width: 40rem;
@@ -531,13 +546,14 @@ $turn-time: 6s;
 
 .collector {
   position: relative;
+  top: -5%;
   display: inline-flex;
   align-self: center;
   max-width: 40rem;
   height: 3rem;
   max-height: 15rem;
   border: 1px solid black;
-  margin-left: 50%;
+  margin-left: 60%;
   &:hover {
     overflow-y: unset;
   }
