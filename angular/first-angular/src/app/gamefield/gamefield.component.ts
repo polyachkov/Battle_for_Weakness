@@ -55,7 +55,7 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   turnTitle = 'End The Turn';
   combatTitle = 'Move To Combat';
   highlightCell: boolean[][] = [];
-  private subscriptions: Subscription[] = [];
+  subscriptions: Subscription[] = [];
   currentCellVal: ICell | null = null;
   reverseField: boolean = false;
   libCount: number = 1;
@@ -108,7 +108,7 @@ export class GamefieldComponent implements OnInit, OnDestroy {
     this.unsubscribeAll();
   }
 
-  private unsubscribeAll(): void {
+  unsubscribeAll(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
     this.subscriptions = [];
   }
@@ -183,6 +183,7 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   }
 
   private initializeState(): void {
+    this.unsubscribeAll();
     this.hand = this.gameControlService.getHand(this.id_game);
     this.oppHand = this.gameControlService.getOppHand(this.id_game);
     this.status = this.gameControlService.getStatus(this.id_game, false);
