@@ -20,8 +20,10 @@ export class ChooseRarityComponent implements OnInit {
 
   ngOnInit(): void {
     this.libraries = this.gameControlService.getLibraries(this.gamefieldComponent.id_game);
-    this.libraries.subscribe((libraries) => {
+    this.gamefieldComponent.unsubscribeAll();
+    const subscription = this.libraries.subscribe((libraries) => {
       this.gamefieldComponent.setLibCount(libraries.length);
     });
+    this.gamefieldComponent.subscriptions.push(subscription);
   }
 }
