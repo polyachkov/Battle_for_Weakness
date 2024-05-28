@@ -55,7 +55,7 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   turnTitle = 'End The Turn';
   combatTitle = 'Move To Combat';
   highlightCell: boolean[][] = [];
-  private subscription!: Subscription;
+  private subscriptions: Subscription[] = [];
   currentCellVal: ICell | null = null;
   reverseField: boolean = false;
   libCount: number = 1;
@@ -86,12 +86,13 @@ export class GamefieldComponent implements OnInit, OnDestroy {
         this.updateCombatButton(game);
       })
     );
-    this.subscription = this.game.subscribe(
+    const gameSubscription = this.game.subscribe(
       () => {},
       (error) => {
         console.error('Error fetching game:', error);
       }
     );
+    this.subscriptions.push(gameSubscription);
 
     this.initializeState();
   }
@@ -104,10 +105,12 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // Отписка от интервала при уничтожении компонента
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.unsubscribeAll();
+  }
+
+  private unsubscribeAll(): void {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.subscriptions = [];
   }
 
   transformField(cells: ICell[], isReverse: boolean): ICell[][] {
@@ -147,8 +150,9 @@ export class GamefieldComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.unsubscribeAll();
     if (this.currentCard == 49) {
-      this.gameControlService
+      const subscription = this.gameControlService
         .putCollectorInCell(Number(this.id_game), cell.cell_num)
         .subscribe(
           (response) => {
@@ -160,8 +164,9 @@ export class GamefieldComponent implements OnInit, OnDestroy {
             console.error('Error placing card', error);
           }
         );
+      this.subscriptions.push(subscription);
     } else {
-      this.gameControlService
+      const subscription = this.gameControlService
         .putCardInCell(Number(this.id_game), this.currentCard, cell.cell_num)
         .subscribe(
           (response) => {
@@ -173,6 +178,7 @@ export class GamefieldComponent implements OnInit, OnDestroy {
             console.error('Error placing card', error);
           }
         );
+      this.subscriptions.push(subscription);
     }
   }
 
@@ -244,10 +250,12 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   }
 
   handleTurn() {
-    this.game.subscribe((game: Game) => {
+    this.unsubscribeAll();
+    const gameSubscription = this.game.subscribe((game: Game) => {
       this.updateTurnButton(game);
     });
-    this.gameControlService.nextTurn(this.id_game).subscribe(
+    this.subscriptions.push(gameSubscription);
+    const subscription = this.gameControlService.nextTurn(this.id_game).subscribe(
       (response) => {
         console.log('Turn transmitted successfully', response);
         this.initializeState();
@@ -257,13 +265,16 @@ export class GamefieldComponent implements OnInit, OnDestroy {
         console.error('Error transmitting turn', error);
       }
     );
+    this.subscriptions.push(subscription);
   }
 
   handleCombat() {
-    this.game.subscribe((game: Game) => {
+    this.unsubscribeAll();
+    const gameSubscription = this.game.subscribe((game: Game) => {
       this.updateCombatButton(game);
     });
-    this.gameControlService.moveCombat(this.id_game).subscribe(
+    this.subscriptions.push(gameSubscription);
+    const subscription = this.gameControlService.moveCombat(this.id_game).subscribe(
       (response) => {
         console.log('Move to combat successfully', response);
         this.initializeState();
@@ -273,6 +284,7 @@ export class GamefieldComponent implements OnInit, OnDestroy {
         console.error('Error move to combat', error);
       }
     );
+    this.subscriptions.push(subscription);
   }
 
   private updateTurnButton(game: Game): void {
@@ -304,8 +316,9 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   }
 
   handleLibraryChoose(rarity: string): void {
+    this.unsubscribeAll();
     this.isShowChooseRarity = false;
-    this.gameControlService.takeTurn(this.id_game, rarity).subscribe(
+    const subscription = this.gameControlService.takeTurn(this.id_game, rarity).subscribe(
       (response) => {
         console.log('Turn taken successfully', response);
         this.initializeState();
@@ -315,10 +328,12 @@ export class GamefieldComponent implements OnInit, OnDestroy {
         console.error('Error taking turn', error);
       }
     );
+    this.subscriptions.push(subscription);
   }
 
   handleOpenRarity() {
-    this.gameControlService.openRarity(this.id_game).subscribe(
+    this.unsubscribeAll();
+    const subscription = this.gameControlService.openRarity(this.id_game).subscribe(
       (response) => {
         console.log('Open rarity successfully', response);
         this.initializeState();
@@ -328,6 +343,7 @@ export class GamefieldComponent implements OnInit, OnDestroy {
         console.error('Error open rarity', error);
       }
     );
+    this.subscriptions.push(subscription);
   }
 
   determineStat(row: number, cell: number, card: Card | null) {
@@ -392,9 +408,11 @@ export class GamefieldComponent implements OnInit, OnDestroy {
 
       console.log('Current Row', this.cardPos[0]);
       console.log('Current Cell:', this.cardPos[1]);
-      this.currentCell().subscribe((cell) => {
+      this.unsubscribeAll();
+      const subscription = this.currentCell().subscribe((cell) => {
         this.currentCellVal = cell;
       });
+      this.subscriptions.push(subscription);
       if (
         this.isMoving &&
         cardPosTmp[0] == this.cardPos[0] &&
@@ -442,7 +460,8 @@ export class GamefieldComponent implements OnInit, OnDestroy {
     if (this.currentCellVal) {
       console.log('Current Cell Num:', this.currentCellVal.cell_num);
       console.log('Next Cell Num:', nextCell.cell_num);
-      this.gameControlService
+      this.unsubscribeAll();
+      const subscription = this.gameControlService
         .moveCard(this.id_game, this.currentCellVal.cell_num, nextCell.cell_num)
         .subscribe(
           (response) => {
@@ -454,6 +473,7 @@ export class GamefieldComponent implements OnInit, OnDestroy {
             console.error('Error placing card', error);
           }
         );
+      this.subscriptions.push(subscription);
     }
   }
 
