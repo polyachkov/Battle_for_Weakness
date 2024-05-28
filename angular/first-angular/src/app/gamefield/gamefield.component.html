@@ -187,7 +187,7 @@
         >
           <img class="image" [src]="idHandPictures[card.id_card]" alt="" />
           <div class="box">
-            <div class="statHorizontal">
+            <div class="statVerticalBlack">
               <div
                 class="statVerticalBlack"
                 *ngFor="let column of [0, 1]; let columnIndex = index"
@@ -218,7 +218,7 @@
       <div class="collector" cdkDropList [cdkDropListData]="">
         <div class="myCards" cdkDrag (mousedown)="pickCardByHand(collectorId)">
           <img class="image" [src]="idHandPictures[collectorId]" alt="" />
-          <div class="statHorizontal">
+          <div class="statHorizontalBlack">
             <ng-container
               *ngIf="((status | async)?.collectors ?? 0) < 4; else limit"
             >

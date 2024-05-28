@@ -559,7 +559,14 @@ $turn-time: 6s;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  padding-left: 15px;
+}
+
+.statHorizontalBlack {
+  color: black;
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  flex-grow: 1;
 }
 
 .collector {
@@ -570,7 +577,6 @@ $turn-time: 6s;
   max-width: 40rem;
   height: 3rem;
   max-height: 15rem;
-  border: 1px solid black;
   margin-left: 60%;
   &:hover {
     overflow-y: unset;
