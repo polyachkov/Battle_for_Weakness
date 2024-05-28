@@ -297,17 +297,17 @@ export class GamefieldComponent implements OnInit, OnDestroy {
       case row == 0 && cell == 1:
         return;
       case row == 1 && cell == 0:
-        return 'Attack: ' + card.attack;
+        return 'Atk: ' + card.attack;
       case row == 1 && cell == 1:
-        return 'Health: ' + card.health;
+        return 'HP: ' + card.health;
       case row == 2 && cell == 0:
-        return 'Cost: ' + card.cost;
+        return '$: ' + card.cost;
       case row == 2 && cell == 1:
-        return 'Evasion: ' + card.evasion;
+        return 'Evs: ' + card.evasion;
       case row == 3 && cell == 0:
-        return 'Attack_speed: ' + this.attackSpeedToString(card.attack_speed);
+        return 'A_sp: ' + this.attackSpeedToString(card.attack_speed);
       case row == 3 && cell == 1:
-        return 'Movement_speed: ' + card.movement_speed;
+        return 'M_sp: ' + card.movement_speed;
 
       default:
         return undefined;

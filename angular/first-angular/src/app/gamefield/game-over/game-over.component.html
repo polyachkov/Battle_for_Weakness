@@ -1,0 +1,21 @@
+<div class="statistics">
+  <div class="header">
+    <div><strong>Statistics </strong></div>
+  </div>
+
+  <!-- (click)="gameControlService.handleGameEnded()"
+  (click)="gameControlService.handleChangeContent(GamePhases.PREPARING)" -->
+
+  <div class="closeButton">
+    <div
+      class="close"
+      (click)="pageContentService.handleChangeContent(Pages.MAIN_PAGE)"
+    >
+      +
+    </div>
+  </div>
+  <ul class="list">
+    <li class="elementOfList">The result of the game:
+      {{(this.gamefieldComponent.game | async)?.name_turn == this.gamefieldComponent.username ? 'You win!' : 'You lose, dude...'}}</li>
+  </ul>
+</div>

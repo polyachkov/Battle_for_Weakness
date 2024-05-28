@@ -64,7 +64,8 @@ public class CardService {
      * Ничего не возвращает
      */
     public void putCardInCell(PutCardInCellRequest req, String playerName)
-            throws NoBabosException, BadCellException, NoHandCompException, NotYourTurnException, PutInFightException {
+            throws NoBabosException, BadCellException, NoHandCompException,
+            NotYourTurnException, PutInFightException, GameIsAlreadyEndedException {
         Integer gameId = req.getGameId();
         Integer cardId = req.getCardId();
         Integer cellId = req.getCellId(); // cellId - это cellNum
@@ -72,7 +73,9 @@ public class CardService {
         Card card = cardR.getReferenceById(cardId);
         Status status = statusR.getStatus(gameId, playerName);
         Game game = gameR.getReferenceById(gameId);
-
+        if (game.getIs_ended()) {
+            throw new GameIsAlreadyEndedException("Game is ended");
+        }
         if (!game.getName_turn().equals(playerName)) {
             throw new NotYourTurnException("Not your turn, dude...");
         }
@@ -123,7 +126,8 @@ public class CardService {
     public void putCollectorInCell(PutCollectorInCellRequest req, String playerName)
             throws NoBabosException, BadCellException,
             NotYourTurnException, CollectorsLimitException,
-            PutInFightException, WrongPhaseException {
+            PutInFightException, WrongPhaseException,
+            GameIsAlreadyEndedException {
         Integer gameId = req.getGameId();
         Integer cellId = req.getCellId(); // cellId - это cellNum
         Integer collectorId = 49;
@@ -132,7 +136,9 @@ public class CardService {
         Card collector = cardR.getReferenceById(collectorId);
         Status status = statusR.getStatus(gameId, playerName);
         Game game = gameR.getReferenceById(gameId);
-
+        if (game.getIs_ended()) {
+            throw new GameIsAlreadyEndedException("Game is ended");
+        }
         if (game.getTurn_ended()) {
             logger.error("Please, choose a rarity...");
             throw new WrongPhaseException("Please, choose a rarity...");
@@ -258,12 +264,15 @@ public class CardService {
      * Ничего не возвращает
      */
     public void moveCard(MoveCardRequest req, String playerName)
-            throws BadCellException, WrongPhaseException, NotYourTurnException {
+            throws BadCellException, WrongPhaseException,
+            NotYourTurnException, GameIsAlreadyEndedException {
         Integer gameId = req.getGameId(); // Начальные данные
         Integer cellId1 = req.getCellId1();
         Integer cellId2 = req.getCellId2();
         Game game = gameR.getReferenceById(gameId);
-
+        if (game.getIs_ended()) {
+            throw new GameIsAlreadyEndedException("Game is ended");
+        }
         if (game.getTurn_ended()) {
             logger.error("Please, choose a rarity...");
             throw new WrongPhaseException("Please, choose a rarity...");
@@ -340,11 +349,19 @@ public class CardService {
             newHp2 -= cell1.getAttack();
         }
         if (newHp2 <= 0) {
+            if(cell2.getId_cell() == 49) {
+                Status status = statusR.getStatus(cell2.getId_game(), cell2.getName_owner());
+                status.setCollectors(status.getCollectors() - 1);
+                statusR.save(status);
+            }
             deleteCardInCell(cell2);
         } else {
             if(!cell2.isRevenged()){
                 cell2.setRevenged(true);
-                int newHp1 = cell1.getHealth() - cell2.getAttack();
+                int newHp1 = cell1.getHealth();
+                if (DiceRoller.rollDice() >= cell2.getEvasion()) {
+                    newHp1 -= cell2.getAttack();
+                }
                 if (newHp1 <= 0) {
                     deleteCardInCell(cell1);
                 } else {
@@ -359,6 +376,8 @@ public class CardService {
         if (cell.isAttacked()) {
             return;
         }
+        cell.setMovement_speed(0);
+        cell.setAttacked(true);
         Status status = statusR.getOppStatus(game.getId_game(), playerName);
         int newOppHp = status.getHealth() - cell.getAttack();
         if (newOppHp <= 0) {
