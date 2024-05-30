@@ -25,7 +25,7 @@ import {
   Observable,
   of,
   Subscription,
-  switchMap,
+  switchMap, take,
   tap,
 } from 'rxjs';
 import { ICell } from '../models/cell-model';
@@ -60,6 +60,10 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   reverseField: boolean = false;
   libCount: number = 1;
 
+  /**
+   * Subscription:
+   */
+
   handCardId!: number[];
   field!: Observable<ICell[][]>;
 
@@ -86,13 +90,13 @@ export class GamefieldComponent implements OnInit, OnDestroy {
         this.updateCombatButton(game);
       })
     );
-    const gameSubscription = this.game.subscribe(
+    const subscriptionGame = this.game.subscribe(
       () => {},
       (error) => {
         console.error('Error fetching game:', error);
       }
     );
-    this.subscriptions.push(gameSubscription);
+    this.subscriptions.push(subscriptionGame);
 
     this.initializeState();
   }
@@ -214,7 +218,7 @@ export class GamefieldComponent implements OnInit, OnDestroy {
     );
   }
 
-  currentCell(): Observable<ICell> {
+  getCurrentCell(): Observable<ICell> {
     return this.field.pipe(
       map((cells: ICell[][]) => {
         return cells[this.cardPos[0]][this.cardPos[1]];
@@ -386,11 +390,15 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   }
 
   handleCellClick(
+    cell: ICell,
     rowIndex: number,
     cellIndex: number,
     isNotOpponent: boolean
   ): void {
     if (this.isCombat && isNotOpponent) {
+      console.log('Is combat and is not opponent:', rowIndex);
+      console.log('Current Row', rowIndex);
+      console.log('Current Cell:', cellIndex);
       this.initializeHighlightCell();
       const neighbors = [
         { row: rowIndex - 1, column: cellIndex }, // Верхняя ячейка
@@ -409,11 +417,8 @@ export class GamefieldComponent implements OnInit, OnDestroy {
 
       console.log('Current Row', this.cardPos[0]);
       console.log('Current Cell:', this.cardPos[1]);
-      this.unsubscribeAll();
-      const subscription = this.currentCell().subscribe((cell) => {
-        this.currentCellVal = cell;
-      });
-      this.subscriptions.push(subscription);
+
+      this.currentCellVal = cell;
       if (
         this.isMoving &&
         cardPosTmp[0] == this.cardPos[0] &&
@@ -423,6 +428,9 @@ export class GamefieldComponent implements OnInit, OnDestroy {
       }
       this.isMoving = true;
     } else {
+      console.log('Is not combat or is opponent:', rowIndex);
+      console.log('Current Row', rowIndex);
+      console.log('Current Cell:', cellIndex);
       this.determineCard(rowIndex, cellIndex);
     }
   }
@@ -458,6 +466,7 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   }
 
   handleMoveCard(nextCell: ICell) {
+    console.log('Move Card method');
     if (this.currentCellVal) {
       console.log('Current Cell Num:', this.currentCellVal.cell_num);
       console.log('Next Cell Num:', nextCell.cell_num);

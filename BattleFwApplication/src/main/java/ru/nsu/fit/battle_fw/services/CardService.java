@@ -266,6 +266,7 @@ public class CardService {
     public void moveCard(MoveCardRequest req, String playerName)
             throws BadCellException, WrongPhaseException,
             NotYourTurnException, GameIsAlreadyEndedException {
+        logger.info("Перемещаемся...");
         Integer gameId = req.getGameId(); // Начальные данные
         Integer cellId1 = req.getCellId1();
         Integer cellId2 = req.getCellId2();
@@ -343,43 +344,75 @@ public class CardService {
     }
 
     private void attack(Cell cell1, Cell cell2) {
-        if (cell1.isAttacked()) {
+        logger.info("Пытаемся атаковать...");
+        if (cell1.isAttacked() || cell1.getSickness() > 0 || cell1.getAttack_speed() == 0) {
             return;
         }
+        logger.info("Атакуем...");
         cell1.setMovement_speed(0);
         cell1.setAttacked(true);
-        int newHp2 = cell2.getHealth();
-        if (DiceRoller.rollDice() >= cell2.getEvasion()) {
-            newHp2 -= cell1.getAttack();
-        }
-        if (newHp2 <= 0) {
-            if(cell2.getId_card() == 49) {
-                Status status = statusR.getStatus(cell2.getId_game(), cell2.getName_owner());
-                status.setCollectors(status.getCollectors() - 1);
-                statusR.save(status);
+        if (cell1.getAttack_speed() >= cell2.getAttack_speed()) {
+            logger.info("Атакуем первыми...");
+            int newHp2 = cell2.getHealth();
+            if (DiceRoller.rollDice() > cell2.getEvasion()) {
+                newHp2 -= cell1.getAttack();
             }
-            deleteCardInCell(cell2);
+            if (newHp2 <= 0) {
+                if (cell2.getId_card() == 49) {
+                    Status status = statusR.getStatus(cell2.getId_game(), cell2.getName_owner());
+                    status.setCollectors(status.getCollectors() - 1);
+                    statusR.save(status);
+                }
+                deleteCardInCell(cell2);
+            } else {
+                if (!cell2.isRevenged() && !(cell2.getSickness() > 0)) {
+                    cell2.setRevenged(true);
+                    int newHp1 = cell1.getHealth();
+                    if (DiceRoller.rollDice() > cell1.getEvasion()) {
+                        newHp1 -= cell2.getAttack();
+                    }
+                    if (newHp1 <= 0) {
+                        deleteCardInCell(cell1);
+                    } else {
+                        cell1.setHealth(newHp1);
+                    }
+                }
+                cell2.setHealth(newHp2);
+            }
         } else {
-            if(!cell2.isRevenged() && !(cell2.getSickness() > 0)){
+            logger.info("Атакуем вторыми...");
+            if (!cell2.isRevenged() && !(cell2.getSickness() > 0)) {
                 cell2.setRevenged(true);
                 int newHp1 = cell1.getHealth();
-                if (DiceRoller.rollDice() >= cell2.getEvasion()) {
+                if (DiceRoller.rollDice() > cell1.getEvasion()) {
                     newHp1 -= cell2.getAttack();
                 }
                 if (newHp1 <= 0) {
                     deleteCardInCell(cell1);
+                    return;
                 } else {
                     cell1.setHealth(newHp1);
                 }
             }
-            cell2.setHealth(newHp2);
+
+            int newHp2 = cell2.getHealth();
+            if (DiceRoller.rollDice() > cell2.getEvasion()) {
+                newHp2 -= cell1.getAttack();
+            }
+            if (newHp2 <= 0) {
+                deleteCardInCell(cell2);
+            } else {
+                cell2.setHealth(newHp2);
+            }
         }
     }
 
     private void attackOpponent(Cell cell, Game game, String playerName) {
+        logger.info("Пытаемся атаковать оппонента...");
         if (cell.isAttacked()) {
             return;
         }
+        logger.info("Атакуем оппонента...");
         cell.setMovement_speed(0);
         cell.setAttacked(true);
         Status status = statusR.getOppStatus(game.getId_game(), playerName);

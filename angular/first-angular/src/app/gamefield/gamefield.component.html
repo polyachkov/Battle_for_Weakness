@@ -127,6 +127,7 @@
                 (click)="
                   cell.id_card && (cell.name_owner == username || !isMoving)
                     ? handleCellClick(
+                        cell,
                         rowIndex,
                         cellIndex,
                         cell.name_owner == username

@@ -22,7 +22,7 @@ export class DetailsComponent {
     this.pickedCard[0] = this.gamefieldComponent.cardPos[0];
     this.pickedCard[1] = this.gamefieldComponent.cardPos[1];
     this.url = this.gamefieldComponent.showModal();
-    this.currentCell = this.gamefieldComponent.currentCell();
+    this.currentCell = this.gamefieldComponent.getCurrentCell();
   }
 
   determineStat(row: number, cell: number, cellObj: ICell | null) {

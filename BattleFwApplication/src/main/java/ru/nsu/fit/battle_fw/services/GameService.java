@@ -307,10 +307,12 @@ public class GameService {
         if (!game.getName_turn().equals(turnName)) {
             throw new NotYourTurnException("You cannot take a turn during an opponent's turn");
         }
-
         Library library = libR.getLib(turnName, gameId, rarity);
         if (library.getLocked()) {
             throw new LockedLibraryException("You cannot take a card from a locked library");
+        }
+        if (!game.getTurn_ended()) {
+            throw new NotYourTurnException("You can not...");
         }
 
         game.setTurn_ended(false);
