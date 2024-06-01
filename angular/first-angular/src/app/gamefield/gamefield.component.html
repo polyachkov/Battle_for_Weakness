@@ -1,6 +1,9 @@
 <!--<p>gamefield works! {{gameControlService.getIdGame()}}</p>-->
 
 <div class="background">
+  <div>
+<!--    {{(game | async)?.id_game}}-->
+  </div>
   <ng-container *ngIf="(game | async)?.is_ended; else gameField">
     <app-game-over></app-game-over>
   </ng-container>

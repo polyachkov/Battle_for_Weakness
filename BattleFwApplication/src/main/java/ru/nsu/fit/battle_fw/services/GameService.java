@@ -4,11 +4,15 @@ package ru.nsu.fit.battle_fw.services;
 import org.aspectj.weaver.ast.Not;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.stereotype.Component;
 import ru.nsu.fit.battle_fw.database.model.*;
 import ru.nsu.fit.battle_fw.database.repo.*;
+import ru.nsu.fit.battle_fw.dto.game.GameDto;
+import ru.nsu.fit.battle_fw.dto.game.GameMapper;
 import ru.nsu.fit.battle_fw.exceptions.*;
 import ru.nsu.fit.battle_fw.requests.get.GetGameRequest;
 import ru.nsu.fit.battle_fw.requests.post.*;
@@ -17,6 +21,7 @@ import ru.nsu.fit.battle_fw.responses.info.CellInfo;
 import ru.nsu.fit.battle_fw.responses.info.GameInfo;
 import ru.nsu.fit.battle_fw.responses.info.LibraryInfo;
 import ru.nsu.fit.battle_fw.responses.info.StatusInfo;
+import ru.nsu.fit.battle_fw.services.cardService.DiceRoller;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -41,6 +46,9 @@ public class GameService {
     private final InviteRepo inviteR;
     private final UserRepo userR;
 
+    @Autowired
+    private final SimpMessagingTemplate messagingTemplate;
+
 
     private static final Logger logger = LoggerFactory.getLogger(GameService.class);
 
@@ -58,7 +66,8 @@ public class GameService {
      * @param inviteR - Приглашения в игры
      */
     public GameService(PersonRepo personR, CardRepo cardR, GameRepo gameR, LibraryRepo libR, LibraryCompRepo libCompR,
-                       HandRepo handR, HandCompRepo handCompR, CellRepo cellR, StatusRepo statusR, InviteRepo inviteR, UserRepo userR) {
+                       HandRepo handR, HandCompRepo handCompR, CellRepo cellR, StatusRepo statusR, InviteRepo inviteR, UserRepo userR,
+                       SimpMessagingTemplate messagingTemplate) {
         this.personR = personR;
         this.cardR = cardR;
         this.gameR = gameR;
@@ -70,6 +79,7 @@ public class GameService {
         this.statusR = statusR;
         this.inviteR = inviteR;
         this.userR = userR;
+        this.messagingTemplate = messagingTemplate;
     }
 
     /**
@@ -287,6 +297,11 @@ public class GameService {
         game.setTurn_ended(true);
         game.setIs_fight_phase(false);
         gameR.save(game);
+
+        GameDto gameDto = GameMapper.toDTO(game);
+        logger.info("Sending game update to topic /topic/" + gameId);
+        messagingTemplate.convertAndSend("/topic/" + gameId, gameDto);
+        logger.info("Sent game update to topic /topic/" + gameId);
     }
 
     /**
@@ -386,6 +401,16 @@ public class GameService {
      */
     public ResponseEntity<?> getGameById(Integer gameId) {
         return ResponseEntity.ok(gameR.findById(gameId));
+    }
+
+    public GameDto getGameById1(Integer gameId) {
+        Game game = gameR.findById(gameId).orElse(null); // или использовать другую логику получения объекта Game
+        if (game == null) {
+            // Обработка случая, когда игра не найдена
+            return null;
+        }
+        GameDto gameDto = GameMapper.toDTO(game);
+        return gameDto;
     }
 
     /**

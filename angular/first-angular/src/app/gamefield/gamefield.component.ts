@@ -20,6 +20,7 @@ import { GamePhases, Pages } from '../constants';
 import { PageContentService } from '../services/page-content.service';
 import { Card } from '../models/card-model';
 import {
+  BehaviorSubject, filter,
   interval,
   map,
   Observable,
@@ -43,7 +44,7 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   hand!: Observable<Card[]>;
   collectorId: number = 49;
   oppHand!: Observable<number>;
-  game!: Observable<Game>;
+  game!: Observable<Game | null>;
   status!: Observable<IStatus>;
   oppStatus!: Observable<IStatus>;
   username: string = this.token.getUsername();
@@ -80,7 +81,7 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.game = interval(1000).pipe(
+    this.game = this.gameControlService.getGame(this.id_game).pipe(
       switchMap(() => this.gameControlService.getGame(this.id_game)),
       tap((game: Game) => {
         if (game.name_turn == this.token.getUsername()) {
@@ -90,15 +91,40 @@ export class GamefieldComponent implements OnInit, OnDestroy {
         this.updateCombatButton(game);
       })
     );
-    const subscriptionGame = this.game.subscribe(
-      () => {},
-      (error) => {
-        console.error('Error fetching game:', error);
-      }
-    );
-    this.subscriptions.push(subscriptionGame);
+    this.gameListener();
+    this.gameControlService.subscribeToGameUpdates(this.id_game);
+    this.sendGame();
+
+
+    // this.getGameById(this.id_game);
+    // this.gameControlService.joinGame(this.id_game);
 
     this.initializeState();
+  }
+
+  sendGame() {
+    this.gameControlService.sendGame(this.id_game, this.id_game);
+  }
+
+  gameListener() {
+    this.game = this.gameControlService.getGameSubject();
+
+    this.game.subscribe((game: Game | null) => {
+      console.log('Game obj', game);
+      if (game != null) {
+        console.log('Updating...', game);
+        if (game.name_turn == this.token.getUsername()) {
+          this.isShowChooseRarity = game.turn_ended;
+        }
+        this.updateTurnButton(game);
+        this.updateCombatButton(game);
+        console.log('Updated', game);
+      }
+    })
+  }
+
+  getGameById(id_game: string) {
+    this.gameControlService.sendGetGameByIdMessage(id_game);
   }
 
   @HostListener('document:click', ['$event'])
@@ -251,13 +277,18 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   }
 
   checkReverse(username: string): Observable<boolean> {
-    return this.game.pipe(map((game) => game.non_reverse !== username));
+    return this.game.pipe(
+      filter(game => game !== null), // Фильтруем ненулевые значения
+      map((game) => game!.non_reverse !== username) // Добавляем оператор !, чтобы обойти TS18047
+    );
   }
 
   handleTurn() {
     this.unsubscribeAll();
-    const gameSubscription = this.game.subscribe((game: Game) => {
-      this.updateTurnButton(game);
+    const gameSubscription = this.game.subscribe((game: Game | null) => {
+      if (game !== null) {
+        this.updateTurnButton(game);
+      }
     });
     this.subscriptions.push(gameSubscription);
     const subscription = this.gameControlService.nextTurn(this.id_game).subscribe(
@@ -275,8 +306,10 @@ export class GamefieldComponent implements OnInit, OnDestroy {
 
   handleCombat() {
     this.unsubscribeAll();
-    const gameSubscription = this.game.subscribe((game: Game) => {
-      this.updateCombatButton(game);
+    const gameSubscription = this.game.subscribe((game: Game | null) => {
+      if (game !== null) {
+        this.updateCombatButton(game);
+      }
     });
     this.subscriptions.push(gameSubscription);
     const subscription = this.gameControlService.moveCombat(this.id_game).subscribe(
