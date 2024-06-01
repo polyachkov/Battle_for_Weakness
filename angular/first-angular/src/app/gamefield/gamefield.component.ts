@@ -20,6 +20,7 @@ import { GamePhases, Pages } from '../constants';
 import { PageContentService } from '../services/page-content.service';
 import { Card } from '../models/card-model';
 import {
+  BehaviorSubject, filter,
   interval,
   map,
   Observable,
@@ -43,7 +44,7 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   hand!: Observable<Card[]>;
   collectorId: number = 49;
   oppHand!: Observable<number>;
-  game!: Observable<Game>;
+  game!: Observable<Game | null>;
   status!: Observable<IStatus>;
   oppStatus!: Observable<IStatus>;
   username: string = this.token.getUsername();
@@ -60,11 +61,6 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   reverseField: boolean = false;
   libCount: number = 1;
 
-  /**
-   * Subscription:
-   */
-
-  handCardId!: number[];
   field!: Observable<ICell[][]>;
 
   constructor(
@@ -75,31 +71,72 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   ) {
     this.route.params.subscribe((params) => {
       this.id_game = params['id'];
-      gameControlService.setIdGame(Number(this.id_game));
     });
   }
 
   ngOnInit(): void {
-    this.game = interval(1000).pipe(
-      switchMap(() => this.gameControlService.getGame(this.id_game)),
-      tap((game: Game) => {
+    this.gameControlService.subscribeToGameUpdates(this.id_game);
+    this.gameListener();
+    this.sendGame();
+
+    // this.gameControlService.subscribeToHandUpdates(this.id_game);
+    // this.handListener();
+    // this.sendHand();
+
+    this.initializeState();
+  }
+
+  private initializeState(): void {
+    this.unsubscribeAll()
+    this.hand = this.gameControlService.getHand(this.id_game);
+    this.oppHand = this.gameControlService.getOppHand(this.id_game);
+    this.status = this.gameControlService.getStatus(this.id_game, false);
+    this.oppStatus = this.gameControlService.getStatus(this.id_game, true);
+    this.field = this.gameControlService.getCells(this.id_game).pipe(
+      map((cells) => cells.sort((a, b) => a.cell_num - b.cell_num)), // Сортируем ячейки по cell_num
+      switchMap((cells) =>
+        this.checkReverse(this.username).pipe(
+          map((isReverse) => this.transformField(cells, isReverse))
+        )
+      )
+    );
+    this.isMoving = false;
+    this.highlightCell = [];
+  }
+
+  /**
+   * Game Listener.
+   */
+  gameListener() {
+    this.game = this.gameControlService.getGameSubject();
+
+    this.game.subscribe((game: Game | null) => {
+      if (game != null) {
+        console.log('Updating...', game);
         if (game.name_turn == this.token.getUsername()) {
           this.isShowChooseRarity = game.turn_ended;
         }
         this.updateTurnButton(game);
         this.updateCombatButton(game);
-      })
-    );
-    const subscriptionGame = this.game.subscribe(
-      () => {},
-      (error) => {
-        console.error('Error fetching game:', error);
+        console.log('Updated', game);
       }
-    );
-    this.subscriptions.push(subscriptionGame);
-
-    this.initializeState();
+    })
   }
+
+  sendGame() {
+    this.gameControlService.sendGame(this.id_game);
+  }
+  /**
+   * Hand Listener.
+   */
+  // handListener() {
+  //   this.hand = this.gameControlService.getHandSubject();
+  //   this.hand.subscribe();
+  // }
+  //
+  // sendHand() {
+  //   this.gameControlService.sendHand(this.id_game);
+  // }
 
   @HostListener('document:click', ['$event'])
   handleClickOutside(event: Event) {
@@ -186,24 +223,6 @@ export class GamefieldComponent implements OnInit, OnDestroy {
     }
   }
 
-  private initializeState(): void {
-    this.unsubscribeAll();
-    this.hand = this.gameControlService.getHand(this.id_game);
-    this.oppHand = this.gameControlService.getOppHand(this.id_game);
-    this.status = this.gameControlService.getStatus(this.id_game, false);
-    this.oppStatus = this.gameControlService.getStatus(this.id_game, true);
-    this.field = this.gameControlService.getCells(this.id_game).pipe(
-      map((cells) => cells.sort((a, b) => a.cell_num - b.cell_num)), // Сортируем ячейки по cell_num
-      switchMap((cells) =>
-        this.checkReverse(this.username).pipe(
-          map((isReverse) => this.transformField(cells, isReverse))
-        )
-      )
-    );
-    this.isMoving = false;
-    this.highlightCell = [];
-  }
-
   determineCard(row: number, cell: number) {
     this.cardPos = [row, cell];
     this.isShowModal = true;
@@ -251,13 +270,18 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   }
 
   checkReverse(username: string): Observable<boolean> {
-    return this.game.pipe(map((game) => game.non_reverse !== username));
+    return this.game.pipe(
+      filter(game => game !== null), // Фильтруем ненулевые значения
+      map((game) => game!.non_reverse !== username) // Добавляем оператор !, чтобы обойти TS18047
+    );
   }
 
   handleTurn() {
     this.unsubscribeAll();
-    const gameSubscription = this.game.subscribe((game: Game) => {
-      this.updateTurnButton(game);
+    const gameSubscription = this.game.subscribe((game: Game | null) => {
+      if (game !== null) {
+        this.updateTurnButton(game);
+      }
     });
     this.subscriptions.push(gameSubscription);
     const subscription = this.gameControlService.nextTurn(this.id_game).subscribe(
@@ -275,8 +299,10 @@ export class GamefieldComponent implements OnInit, OnDestroy {
 
   handleCombat() {
     this.unsubscribeAll();
-    const gameSubscription = this.game.subscribe((game: Game) => {
-      this.updateCombatButton(game);
+    const gameSubscription = this.game.subscribe((game: Game | null) => {
+      if (game !== null) {
+        this.updateCombatButton(game);
+      }
     });
     this.subscriptions.push(gameSubscription);
     const subscription = this.gameControlService.moveCombat(this.id_game).subscribe(

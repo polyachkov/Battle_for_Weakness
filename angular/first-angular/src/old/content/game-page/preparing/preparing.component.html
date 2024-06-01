@@ -1,78 +1,78 @@
-<div class="playAndInviteButtons">
-  <div class="loadCircle" id="loadCircle">
-    <img
-      class="loadImg"
-      src="../../../../assets/Photoes/loadArrow.png"
-      alt="arrow"
-    />
-  </div>
+<!--<div class="playAndInviteButtons">-->
+<!--  <div class="loadCircle" id="loadCircle">-->
+<!--    <img-->
+<!--      class="loadImg"-->
+<!--      src="../../../../assets/Photoes/loadArrow.png"-->
+<!--      alt="arrow"-->
+<!--    />-->
+<!--  </div>-->
 
-  <button
-    (click)="gameControlService.changeColor()"
-    (click)="gameControlService.changeSecondPlayerState()"
-    class="exampleButton"
-    id="exampleButton"
-  >
-    {{ gameControlService.opponentsState }}
-  </button>
+<!--  <button-->
+<!--    (click)="gameControlService.changeColor()"-->
+<!--    (click)="gameControlService.changeSecondPlayerState()"-->
+<!--    class="exampleButton"-->
+<!--    id="exampleButton"-->
+<!--  >-->
+<!--    {{ gameControlService.opponentsState }}-->
+<!--  </button>-->
 
-  <button
-    (click)="gameControlService.searchGame()"
-    (click)="gameControlService.handleGameStarted()"
-    (click)="gameControlService.handleChangeContent(GamePhases.START_GAME)"
-    class="playButtons"
-  >
-    <div class="buttonText">{{ gameControlService.playButton }}</div>
-    <img
-      class="buttonImg"
-      src="../../../../assets/Photoes/preparingButton.jpg"
-      alt="Play"
-    />
-  </button>
-    <button
-      (click)="pageContentService.handleChangeContent(Pages.AUTHORIZATION_PAGE)"
-      class="menuBtn"
-      routerLink="invite"
-    >
-      <div class="buttonText">Invite friend</div>
+<!--  <button-->
+<!--    (click)="gameControlService.searchGame()"-->
+<!--    (click)="gameControlService.handleGameStarted()"-->
+<!--    (click)="gameControlService.handleChangeContent(GamePhases.START_GAME)"-->
+<!--    class="playButtons"-->
+<!--  >-->
+<!--    <div class="buttonText">{{ gameControlService.playButton }}</div>-->
+<!--    <img-->
+<!--      class="buttonImg"-->
+<!--      src="../../../../assets/Photoes/preparingButton.jpg"-->
+<!--      alt="Play"-->
+<!--    />-->
+<!--  </button>-->
+<!--    <button-->
+<!--      (click)="pageContentService.handleChangeContent(Pages.AUTHORIZATION_PAGE)"-->
+<!--      class="menuBtn"-->
+<!--      routerLink="invite"-->
+<!--    >-->
+<!--      <div class="buttonText">Invite friend</div>-->
 
-      <img
-        class="buttonImg"
-        src="../../../../assets/Photoes/preparingButton.jpg"
-        alt="InviteFriend"
-      />
-    </button>
-</div>
+<!--      <img-->
+<!--        class="buttonImg"-->
+<!--        src="../../../../assets/Photoes/preparingButton.jpg"-->
+<!--        alt="InviteFriend"-->
+<!--      />-->
+<!--    </button>-->
+<!--</div>-->
 
-<div class="choice">
-  <div
-    [ngClass]="{
-      activeFraction: gameControlService.mySelectedFraction === Fraction.SWAMP
-    }"
-    (click)="gameControlService.handleFractionChoice(Fraction.SWAMP)"
-    class="fractionCard"
-  >
-    <span class="fractionName">Swamp</span>
-    <img
-      class="fractionImg"
-      src="../../../../assets/Photoes/FractionImg/swamp.jpg"
-      alt="Swamp"
-    />
-  </div>
+<!--<div class="choice">-->
+<!--  <div-->
+<!--    [ngClass]="{-->
+<!--      activeFraction: gameControlService.mySelectedFraction === Fraction.SWAMP-->
+<!--    }"-->
+<!--    (click)="gameControlService.handleFractionChoice(Fraction.SWAMP)"-->
+<!--    class="fractionCard"-->
+<!--  >-->
+<!--    <span class="fractionName">Swamp</span>-->
+<!--    <img-->
+<!--      class="fractionImg"-->
+<!--      src="../../../../assets/Photoes/FractionImg/swamp.jpg"-->
+<!--      alt="Swamp"-->
+<!--    />-->
+<!--  </div>-->
 
-  <div
-    [ngClass]="{
-      activeFraction:
-        gameControlService.mySelectedFraction === Fraction.MOUNTAIN
-    }"
-    (click)="gameControlService.handleFractionChoice(Fraction.MOUNTAIN)"
-    class="fractionCard"
-  >
-    <span class="fractionName">Mountain</span>
-    <img
-      class="fractionImg"
-      src="../../../../assets/Photoes/FractionImg/mountain.jpg"
-      alt="mountain"
-    />
-  </div>
-</div>
+<!--  <div-->
+<!--    [ngClass]="{-->
+<!--      activeFraction:-->
+<!--        gameControlService.mySelectedFraction === Fraction.MOUNTAIN-->
+<!--    }"-->
+<!--    (click)="gameControlService.handleFractionChoice(Fraction.MOUNTAIN)"-->
+<!--    class="fractionCard"-->
+<!--  >-->
+<!--    <span class="fractionName">Mountain</span>-->
+<!--    <img-->
+<!--      class="fractionImg"-->
+<!--      src="../../../../assets/Photoes/FractionImg/mountain.jpg"-->
+<!--      alt="mountain"-->
+<!--    />-->
+<!--  </div>-->
+<!--</div>-->

@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.*;
 import ru.nsu.fit.battle_fw.configs.jwt.JwtUtils;
 import ru.nsu.fit.battle_fw.database.model.*;
@@ -150,6 +151,7 @@ public class SiteController {
 
     @GetMapping("/get/game/byid")
     public ResponseEntity<?> getGameById(@RequestParam("id_game") Integer value) {
+        logger.info("GET getGameById");
         return gameService.getGameById(value);
     }
 
