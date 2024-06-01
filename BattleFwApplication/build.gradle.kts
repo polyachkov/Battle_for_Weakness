@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "ru.nsu.fit.battle_fw"
-version = "0.1.0-SNAPSHOT"
+version = "0.1.4-SNAPSHOT"
 
 tasks.jar {
 	manifest {
