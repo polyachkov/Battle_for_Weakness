@@ -1,5 +1,6 @@
 package ru.nsu.fit.battle_fw.helpers;
 
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.util.StringUtils;
 import ru.nsu.fit.battle_fw.configs.jwt.JwtUtils;
 
@@ -16,6 +17,19 @@ public class GetFromHeaders {
         else{
             return null;
         }
+        return jwtUtils.getUserNameFromJwtToken(jwt);
+    }
+
+    public static String getUsernameFromJWTWebsocket(SimpMessageHeaderAccessor headerAccessor, JwtUtils jwtUtils){
+        String headerAuth = headerAccessor.getFirstNativeHeader("authorization");
+        String jwt;
+
+        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
+            jwt = headerAuth.substring(7);
+        } else {
+            return null;
+        }
+
         return jwtUtils.getUserNameFromJwtToken(jwt);
     }
 }

@@ -61,11 +61,6 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   reverseField: boolean = false;
   libCount: number = 1;
 
-  /**
-   * Subscription:
-   */
-
-  handCardId!: number[];
   field!: Observable<ICell[][]>;
 
   constructor(
@@ -76,41 +71,46 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   ) {
     this.route.params.subscribe((params) => {
       this.id_game = params['id'];
-      gameControlService.setIdGame(Number(this.id_game));
     });
   }
 
   ngOnInit(): void {
-    this.game = this.gameControlService.getGame(this.id_game).pipe(
-      switchMap(() => this.gameControlService.getGame(this.id_game)),
-      tap((game: Game) => {
-        if (game.name_turn == this.token.getUsername()) {
-          this.isShowChooseRarity = game.turn_ended;
-        }
-        this.updateTurnButton(game);
-        this.updateCombatButton(game);
-      })
-    );
-    this.gameListener();
     this.gameControlService.subscribeToGameUpdates(this.id_game);
+    this.gameListener();
     this.sendGame();
 
-
-    // this.getGameById(this.id_game);
-    // this.gameControlService.joinGame(this.id_game);
+    // this.gameControlService.subscribeToHandUpdates(this.id_game);
+    // this.handListener();
+    // this.sendHand();
 
     this.initializeState();
   }
 
-  sendGame() {
-    this.gameControlService.sendGame(this.id_game, this.id_game);
+  private initializeState(): void {
+    this.unsubscribeAll()
+    this.hand = this.gameControlService.getHand(this.id_game);
+    this.oppHand = this.gameControlService.getOppHand(this.id_game);
+    this.status = this.gameControlService.getStatus(this.id_game, false);
+    this.oppStatus = this.gameControlService.getStatus(this.id_game, true);
+    this.field = this.gameControlService.getCells(this.id_game).pipe(
+      map((cells) => cells.sort((a, b) => a.cell_num - b.cell_num)), // Сортируем ячейки по cell_num
+      switchMap((cells) =>
+        this.checkReverse(this.username).pipe(
+          map((isReverse) => this.transformField(cells, isReverse))
+        )
+      )
+    );
+    this.isMoving = false;
+    this.highlightCell = [];
   }
 
+  /**
+   * Game Listener.
+   */
   gameListener() {
     this.game = this.gameControlService.getGameSubject();
 
     this.game.subscribe((game: Game | null) => {
-      console.log('Game obj', game);
       if (game != null) {
         console.log('Updating...', game);
         if (game.name_turn == this.token.getUsername()) {
@@ -123,9 +123,20 @@ export class GamefieldComponent implements OnInit, OnDestroy {
     })
   }
 
-  getGameById(id_game: string) {
-    this.gameControlService.sendGetGameByIdMessage(id_game);
+  sendGame() {
+    this.gameControlService.sendGame(this.id_game);
   }
+  /**
+   * Hand Listener.
+   */
+  // handListener() {
+  //   this.hand = this.gameControlService.getHandSubject();
+  //   this.hand.subscribe();
+  // }
+  //
+  // sendHand() {
+  //   this.gameControlService.sendHand(this.id_game);
+  // }
 
   @HostListener('document:click', ['$event'])
   handleClickOutside(event: Event) {
@@ -210,24 +221,6 @@ export class GamefieldComponent implements OnInit, OnDestroy {
         );
       this.subscriptions.push(subscription);
     }
-  }
-
-  private initializeState(): void {
-    this.unsubscribeAll();
-    this.hand = this.gameControlService.getHand(this.id_game);
-    this.oppHand = this.gameControlService.getOppHand(this.id_game);
-    this.status = this.gameControlService.getStatus(this.id_game, false);
-    this.oppStatus = this.gameControlService.getStatus(this.id_game, true);
-    this.field = this.gameControlService.getCells(this.id_game).pipe(
-      map((cells) => cells.sort((a, b) => a.cell_num - b.cell_num)), // Сортируем ячейки по cell_num
-      switchMap((cells) =>
-        this.checkReverse(this.username).pipe(
-          map((isReverse) => this.transformField(cells, isReverse))
-        )
-      )
-    );
-    this.isMoving = false;
-    this.highlightCell = [];
   }
 
   determineCard(row: number, cell: number) {

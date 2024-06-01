@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import {GamePhases, GameState, hostName} from '../constants';
 import {
-  Turn,
   idMoneyCollectorPictures,
 } from '../gamefield/constants';
-import {BehaviorSubject, catchError, map, Observable, throwError} from "rxjs";
+import {BehaviorSubject, catchError, map, Observable, switchMap, throwError} from "rxjs";
 import {Card} from "../models/card-model";
 import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
 import {ErrorService} from "./error.service";
@@ -12,33 +11,20 @@ import {ICell} from "../models/cell-model";
 import {Game} from "../models/game-model";
 import {IStatus} from "../models/status-model";
 import {ILibrary} from "../models/library-model";
-import {WebSocketSubject} from "rxjs/internal/observable/dom/WebSocketSubject";
-import {webSocket} from "rxjs/webSocket";
 import { Stomp } from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
+import {TokenStorageService} from "../auth/token-storage.service";
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class GameControlService {
-  currentPhase: GamePhases = GamePhases.PREPARING;
   isShowModal: boolean = false;
   cardPos: number[] = [-1, -1];
-
-  // mySelectedFraction: Fractions | null = null;
   opponentSelectedFraction: string = 'Mountains';
-
   gameState: GameState = 0;
-
-  secondPlayerIsReady: boolean = false;
-
   playButton: string = 'Play';
-  opponentsState: string = 'Opponent is not ready';
-
-  idMoneyCollectorPictures = idMoneyCollectorPictures;
-
-  private id_game!: number;
 
   private getGameUrl: string            = hostName + 'get/game/byid';
   private getHandUrl: string            = hostName + 'get/hand';
@@ -54,174 +40,58 @@ export class GameControlService {
   private getLibrariesUrl: string       = hostName + 'get/libraries';
   private moveCardUrl: string           = hostName + 'moveCard';
   private openRarityUrl: string         = hostName + 'openRarity';
-  private socketUrl: string             = '//localhost:8081/websocket';
+  private socketUrl: string             = hostName + 'websocket';
 
   private gameSubject: BehaviorSubject<Game | null> = new BehaviorSubject<Game | null>(null);
+  private handSubject: BehaviorSubject<Card[]> = new BehaviorSubject<Card[]>([]);
 
-
-  getIdGame() {
-    return this.id_game;
-  }
-
-  setIdGame(id_game: number) {
-    this.id_game = id_game;
-  }
-
+  private connected: boolean = false;
   private stompClient: any
+
+  private token!: string;
+
 
   constructor(
     private http: HttpClient,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private tokenStorageService: TokenStorageService
   ) {
     this.initConnectionSocket();
   }
 
   initConnectionSocket() {
+    this.token = this.tokenStorageService.getToken();
+
+    if (!this.token) {
+      console.log('Token not found...');
+      return;
+    }
     const socket = new SockJS(this.socketUrl);
     this.stompClient = Stomp.over(socket);
-    // this.stompClient.connect({}, () => {
-    //   console.log('Connected to WebSocket');
-    // });
+
+    console.log('Connecting to WebSocket...');
     this.stompClient.connect({}, (frame: any) => {
       console.log('Connected to WebSocket:', frame);
-      const topic = `/topic/1`;
-      console.log(`Subscribing to ${topic}`);
-      this.stompClient.subscribe(topic, (messages: any) => {
-        console.log('Received message:', messages);
-        const gameContent = JSON.parse(messages.body);
-        console.log('Parsed game content:', gameContent);
-        this.gameSubject.next(gameContent);
-      });
+      this.connected = true;
     }, (error: any) => {
       console.error('WebSocket connection error:', error);
     });
   }
 
-  sendGetGameByIdMessage(id_game: string) {
-    const message = { id_game };
-    this.stompClient.publish({
-      destination: `/app/get/game/byId/${id_game}`,
-      body: JSON.stringify(message)
-    });
-  }
-
-  sendGame(id_game: string, gameId: string) {
-    this.stompClient.send(`/app/get/game/byId/${id_game}`, {}, JSON.stringify(gameId))
-  }
-
-  // subscribeToGameUpdates(id_game: string, callback: (message: any) => void) {
-  //   this.stompClient.subscribe(`/topic/${id_game}`, (message: any) => {
-  //     callback(JSON.parse(message.body));
-  //   });
-  // }
-
-  subscribeToGameUpdates(id_game: string) {
-    this.stompClient.connect({}, (frame: any) => {
-      console.log('Connected to WebSocket:', frame);
-      const topic = `/topic/${id_game}`;
-      console.log(`Subscribing to ${topic}`);
-      this.stompClient.subscribe(topic, (messages: any) => {
-        console.log('Received message:', messages);
-        const gameContent = JSON.parse(messages.body);
-        console.log('Parsed game content:', gameContent);
-        this.gameSubject.next(gameContent);
-      });
-    }, (error: any) => {
-      console.error('WebSocket connection error:', error);
-    });
-  }
-
-  // joinRoom(roomId: string) {
-  //   this.stompClient.connect({}, ()=>{
-  //     this.stompClient.subscribe(`/topic/${roomId}`, (messages: any) => {
-  //       const messageContent = JSON.parse(messages.body);
-  //       const currentMessage = this.messageSubject.getValue();
-  //       currentMessage.push(messageContent);
-  //
-  //       this.messageSubject.next(currentMessage);
-  //
-  //     })
-  //   })
-  // }
-
-  getGameSubject(): Observable<Game | null> {
-      return this.gameSubject.asObservable();
-  }
-  //
-  // getGameById(id_game: number) {
-  //   this.stompClient.send(`/app/get/game/byId/${id_game}`);
-  // }
-
-  changeColor() {
-    const colorForButton = document.getElementById('exampleButton');
-
-    if (colorForButton != null) {
-      this.opponentsState = 'Now opponent is ready';
-      colorForButton.style.backgroundColor = 'green';
-      this.playButton = 'Play';
-      const loadCircle = document.getElementById('loadCircle');
-      if (loadCircle != null) {
-        loadCircle.style.visibility = 'hidden';
-      }
-    }
-  }
-
-  searchGame() {
-    const loadCircle = document.getElementById('loadCircle');
-
-    if (this.playButton == 'Play') {
-      this.playButton = 'Find Game';
-
-      if (loadCircle != null) {
-        loadCircle.style.visibility = 'visible';
-      }
-    } else {
-      this.playButton = 'Play';
-
-      if (loadCircle != null) {
-        loadCircle.style.visibility = 'hidden';
-      }
-    }
-  }
-
-
-  // handleFractionChoice(fractionName: Fractions) {
-  //   this.mySelectedFraction = fractionName;
-  // }
-
-  changeSecondPlayerState() {
-    this.secondPlayerIsReady = true;
-  }
-
-  handleChangeContent(current: GamePhases) {
-    if (this.secondPlayerIsReady == true) {
-      this.currentPhase = current;
-      if (current == 'PREPARING') this.secondPlayerIsReady = false;
-    } else {
-    }
-  }
-
-  handleGameStarted() {
-    if (this.secondPlayerIsReady == true) {
-      this.gameState = 1;
-    }
-  }
-
-  handleGameEnded() {
-    this.opponentsState = 'Opponent is not ready';
-    this.playButton = 'Play';
-    this.gameState = 0;
-  }
-
-  // determineCard(row: number, cell: number) {
-  //   if (field[row][cell].name === 0) {
-  //     return;
-  //   }
-  //   this.cardPos = [row, cell];
-  //   this.isShowModal = true;
-  // }
-
-
+  // this.hand = this.gameControlService.getHand(this.id_game);
+  // this.oppHand = this.gameControlService.getOppHand(this.id_game);
+  // this.status = this.gameControlService.getStatus(this.id_game, false);
+  // this.oppStatus = this.gameControlService.getStatus(this.id_game, true);
+  // this.field = this.gameControlService.getCells(this.id_game).pipe(
+  //   map((cells) => cells.sort((a, b) => a.cell_num - b.cell_num)), // Сортируем ячейки по cell_num
+  //   switchMap((cells) =>
+  //     this.checkReverse(this.username).pipe(
+  //       map((isReverse) => this.transformField(cells, isReverse))
+  //     )
+  //   )
+  // );
+  // this.isMoving = false;
+  // this.highlightCell = [];
 
   getCardImageUrl(row: number, cell: number) {
     let url = '';
@@ -359,4 +229,52 @@ export class GameControlService {
   }
 
 
+  /**
+   * Game
+   * @param id_game
+   */
+  subscribeToGameUpdates(id_game: string) {
+    if (!this.connected) {
+      console.warn('WebSocket is not connected yet');
+      return;
+    }
+    const topic = `/topic/${id_game}`;
+    console.log(`Subscribing to ${topic}`);
+    this.stompClient.subscribe(topic, (messages: any) => {
+      console.log('Received message:', messages);
+      const gameContent = JSON.parse(messages.body);
+      console.log('Parsed game content:', gameContent);
+      this.gameSubject.next(gameContent);
+    });
+  }
+
+  sendGame(id_game: string) {
+    this.stompClient.send(`/app/get/game/byId/${id_game}`, {});
+  }
+
+  getGameSubject(): Observable<Game | null> {
+    return this.gameSubject.asObservable();
+  }
+
+  /**
+   * Hand
+   * @param id_game
+   */
+  // public subscribeToHandUpdates(id_game: string): void {
+  //   const topic = `/topic/hand/${id_game}`;
+  //   this.stompClient.subscribe(topic, (messages: any) => {
+  //     console.log('Received message:', messages);
+  //     const handContent = JSON.parse(messages.body);
+  //     console.log('Parsed hand content:', handContent);
+  //     this.handSubject.next(handContent);
+  //   });
+  // }
+  //
+  // sendHand(id_game: string) {
+  //   this.stompClient.send(`/app/get/hand/${id_game}`, {});
+  // }
+  //
+  // public getHandSubject(): Observable<Card[]> {
+  //   return this.handSubject.asObservable();
+  // }
 }

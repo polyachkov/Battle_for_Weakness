@@ -13,6 +13,8 @@ import ru.nsu.fit.battle_fw.database.model.*;
 import ru.nsu.fit.battle_fw.database.repo.*;
 import ru.nsu.fit.battle_fw.dto.game.GameDto;
 import ru.nsu.fit.battle_fw.dto.game.GameMapper;
+import ru.nsu.fit.battle_fw.dto.hand.HandDto;
+import ru.nsu.fit.battle_fw.dto.hand.HandMapper;
 import ru.nsu.fit.battle_fw.exceptions.*;
 import ru.nsu.fit.battle_fw.requests.get.GetGameRequest;
 import ru.nsu.fit.battle_fw.requests.post.*;
@@ -132,6 +134,10 @@ public class GameService {
         }
         game.setIs_fight_phase(false);
         gameR.save(game); // Сохранение записи в базу данных
+        GameDto gameDto = GameMapper.toDTO(game);
+        logger.info("Initialize Game: Sending game update to topic /topic/" + game.getId_game());
+        messagingTemplate.convertAndSend("/topic/" + game.getId_game(), gameDto);
+        logger.info("Initialize Game: Sent game update to topic /topic/" + game.getId_game());
         return game;
     }
 
@@ -231,7 +237,7 @@ public class GameService {
         hand.setName_player(player_name);
         handR.save(hand);
         for (int i = 0; i < 7; i++) { // Взятие карт из библиотеки
-            getCardToHand(lib_id, hand.getId_hand());
+            getCardToHand(id_game, lib_id, hand.getId_hand());
             hand.setCards_cnt(hand.getCards_cnt() + 1);
         }
     }
@@ -243,7 +249,7 @@ public class GameService {
      * @param id_hand - id руки куда класть
      * Ничего не возвращает
      */
-    private void getCardToHand(Integer lib_id, Integer id_hand) {
+    private void getCardToHand(Integer id_game, Integer lib_id, Integer id_hand) {
         LibraryComp libComp = libCompR.getMinCard(lib_id); // Получить верхнюю карту библиотеки
         HandComp handComp = new HandComp(); // Создать запись о карте в руке
         handComp.setId_hand(id_hand);
@@ -253,6 +259,19 @@ public class GameService {
         lib.setCards_cnt(lib.getCards_cnt() - 1); // Изменение кол-ва карт в билиотеке
         libR.save(lib);
         handCompR.save(handComp);
+
+        List<HandComp> handCompCards= handCompR.getCardsId(id_hand);
+
+        List<Card> cards = new ArrayList<>();
+        for (HandComp handCompTmp : handCompCards) {
+            Card card = cardR.getCardById(handCompTmp.getId_card());
+            cards.add(card);
+        }
+
+//        HandDto handDto = HandMapper.toDTO(cards);
+//        logger.info("Get Card To Hand: Sending game update to topic /topic/hand/" + id_game);
+//        messagingTemplate.convertAndSend("/topic/hand/" + id_game, handDto);
+//        logger.info("Get Card To Hand: Sent game update to topic /topic/hand/" + id_game);
     }
 
     /**
@@ -299,9 +318,9 @@ public class GameService {
         gameR.save(game);
 
         GameDto gameDto = GameMapper.toDTO(game);
-        logger.info("Sending game update to topic /topic/" + gameId);
-        messagingTemplate.convertAndSend("/topic/" + gameId, gameDto);
-        logger.info("Sent game update to topic /topic/" + gameId);
+        logger.info("Initialize Game: Sending game update to topic /topic/" + game.getId_game());
+        messagingTemplate.convertAndSend("/topic/" + game.getId_game(), gameDto);
+        logger.info("Initialize Game: Sent game update to topic /topic/" + game.getId_game());
     }
 
     /**
@@ -339,7 +358,7 @@ public class GameService {
         Hand hand = handR.getHand(gameId, turnName); // Даём в руку карту указанной редкости
         if(!(hand.getCards_cnt() >= 10)){
             hand.setCards_cnt(hand.getCards_cnt() + 1);
-            getCardToHand(library.getId_library(), hand.getId_hand()); // Даём карту в руку
+            getCardToHand(gameId, library.getId_library(), hand.getId_hand()); // Даём карту в руку
         }
 
 
@@ -360,6 +379,11 @@ public class GameService {
         statusR.save(status);
         handR.save(hand);
         cellR.saveAll(cells);
+
+        GameDto gameDto = GameMapper.toDTO(game);
+        logger.info("Initialize Game: Sending game update to topic /topic/" + game.getId_game());
+        messagingTemplate.convertAndSend("/topic/" + game.getId_game(), gameDto);
+        logger.info("Initialize Game: Sent game update to topic /topic/" + game.getId_game());
     }
 
 
@@ -409,8 +433,7 @@ public class GameService {
             // Обработка случая, когда игра не найдена
             return null;
         }
-        GameDto gameDto = GameMapper.toDTO(game);
-        return gameDto;
+        return GameMapper.toDTO(game);
     }
 
     /**
@@ -532,6 +555,19 @@ public class GameService {
         return ResponseEntity.ok(gamesResponse);
     }
 
+//    public HandDto getCardsInHand(Integer id_game, String namePlayer) {
+//        Hand hand = handR.getHand(id_game, namePlayer);
+//        List<HandComp> handCompCards= handCompR.getCardsId(hand.getId_hand());
+//
+//        List<Card> cards = new ArrayList<>();
+//        for (HandComp handComp : handCompCards) {
+//            Card card = cardR.getCardById(handComp.getId_card());
+//            cards.add(card);
+//        }
+//
+//        return new HandDto(cards);
+//    }
+
     public ResponseEntity<?> getCardsInHand(Integer id_game, String namePlayer) {
         Hand hand = handR.getHand(id_game, namePlayer);
         List<HandComp> handCompCards= handCompR.getCardsId(hand.getId_hand());
@@ -603,6 +639,11 @@ public class GameService {
             throw new NotYourTurnException("Нельзя перейти в боевую фазу в чужой ход");
         }
         gameR.save(game);
+
+        GameDto gameDto = GameMapper.toDTO(game);
+        logger.info("Initialize Game: Sending game update to topic /topic/" + game.getId_game());
+        messagingTemplate.convertAndSend("/topic/" + game.getId_game(), gameDto);
+        logger.info("Initialize Game: Sent game update to topic /topic/" + game.getId_game());
     }
 
     public void openRarity(String playerName, Integer game_id)
@@ -653,7 +694,7 @@ public class GameService {
                 l.setLocked(false);
                 Hand hand = handR.getHand(game_id, playerName);
                 if(!(hand.getCards_cnt() >= 10)){
-                    getCardToHand(l.getId_library(), hand.getId_hand());
+                    getCardToHand(game_id, l.getId_library(), hand.getId_hand());
                     hand.setCards_cnt(hand.getCards_cnt() + 1);
                 }
                 handR.save(hand);
