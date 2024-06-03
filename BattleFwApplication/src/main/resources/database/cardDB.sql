@@ -53,3 +53,11 @@ INSERT INTO card VALUES
     (48, 'Egondon pah', 6, 40, 27, 0, 1, 1, 'legendary', 'mountains', 1),
 
     (49, 'Babos$ collector', 0, 3, 3, 0, 0, 0, 'collector', 'collector', 0);
+INSERT INTO users VALUES
+    (1, 'Zimbel',   'zimbel@ratzel',    '$2a$10$eQ5RWk60MCjiML2lvULjrO5vLVauqqz5UutmV5BJ7x6peFh.YGC2G'),
+    (2, 'Cruiser',  'cruiser@cruiser',  '$2a$10$r.mY2gmGZh8KCxegAuuXm.Ajsuu2EjWrVOn7mzk0S6aujKDMy/fQ6'),
+    (3, 'Krokik',   'Krokik@Krokik',    '$2a$10$3PDa1a90Y.lc/4UlOz8UIO8MDJ.ONxvI8f6tACifEOO2sWXxLulAe');
+INSERT INTO user_roles VALUES
+    (1,3),
+    (2,3),
+    (3,3);
