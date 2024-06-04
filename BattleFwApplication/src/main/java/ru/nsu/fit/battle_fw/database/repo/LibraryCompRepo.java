@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-import ru.nsu.fit.battle_fw.database.model.Card;
 import ru.nsu.fit.battle_fw.database.model.LibraryComp;
 
 import java.util.List;
@@ -18,4 +17,8 @@ public interface LibraryCompRepo extends JpaRepository<LibraryComp, Integer> {
                 "LibraryComp c1 " +
             "where c1.id_card_lib = i.id")
     LibraryComp getMinCard(@Param("id_library") Integer id_library);
+
+    @Query("select lc from LibraryComp lc where lc.id_library = :id_library")
+    List<LibraryComp> getLibCompByIdLibrary(@Param("id_library") Integer id_library);
+
 }

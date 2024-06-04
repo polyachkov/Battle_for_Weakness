@@ -16,4 +16,8 @@ public interface LibraryRepo extends JpaRepository<Library, Integer> {
 
     @Query("select c from Library c where c.game_id = :game_id and c.player_name = :player_name")
     List<Library> getLibs(@Param("player_name") String player_name, @Param("game_id") Integer game_id);
+
+    @Query("select c from Library c where c.game_id = :game_id")
+    List<Library> getLibsByGame(@Param("game_id") Integer game_id);
+
 }
