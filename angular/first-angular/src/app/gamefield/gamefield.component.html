@@ -1,9 +1,9 @@
 <!--<p>gamefield works! {{gameControlService.getIdGame()}}</p>-->
 
 <div class="background">
-  <div>
-<!--    {{(game | async)?.id_game}}-->
-  </div>
+  <!-- <div> -->
+  <!--    {{(game | async)?.id_game}}-->
+  <!-- </div> -->
   <ng-container *ngIf="(game | async)?.is_ended; else gameField">
     <app-game-over></app-game-over>
   </ng-container>
@@ -57,12 +57,23 @@
       </div>
     </div>
 
-    <div class="giveUpField">
-      <a
-        (click)="pageContentService.handleChangeContent(Pages.MAIN_PAGE)"
-        class="btn-slide"
-        routerLink=""
-      >
+    <!-- <div class="giveUpField"> -->
+    <!-- <a -->
+    <!-- (click)="pageContentService.handleChangeContent(Pages.MAIN_PAGE)" -->
+    <!-- class="btn-slide" -->
+    <!-- routerLink="" -->
+    <!-- > -->
+    <!-- <span class="circle"> -->
+    <!-- <i class="fa-solid fa-film"></i> -->
+    <!-- </span> -->
+
+    <!-- <span class="title">Give up</span> -->
+    <!-- <span class="title title-hover">Оффнуть с позором</span> -->
+    <!-- </a> -->
+    <!-- </div> -->
+
+    <div class="giveUpBtn">
+      <a (click)="handleEndGame()" class="btn-giveUp">
         <span class="circle">
           <i class="fa-solid fa-film"></i>
         </span>
@@ -70,6 +81,21 @@
         <span class="title">Give up</span>
         <span class="title title-hover">Оффнуть с позором</span>
       </a>
+    </div>
+
+    <div class="containerTool">
+      <button
+        (click)="pageContentService.handleChangeContent(Pages.MAIN_PAGE)"
+        class="menuBtn"
+        routerLink=""
+      >
+        <span class="toolbarButtonText">Main Page</span>
+        <img
+          class="toolbarImg"
+          src="../../assets/Photoes/toolbarButton.jpg"
+          alt="Account"
+        />
+      </button>
     </div>
 
     <div class="endTurnButtonField">
@@ -84,13 +110,10 @@
     </div>
     <div class="openRarityButtonField">
       <button (click)="handleOpenRarity()" class="openRarityButton">
-        <ng-container
-          *ngIf="(libCount < 5); else limit1"
-        >
+        <ng-container *ngIf="libCount < 5; else limit1">
           Open New Rarity. Cost: {{ 3 + (libCount - 1) * 2 }}
         </ng-container>
         <ng-template #limit1> Libraries Limit </ng-template>
-
       </button>
     </div>
     <div class="map">

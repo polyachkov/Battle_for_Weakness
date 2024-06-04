@@ -1,20 +1,28 @@
 import { Injectable } from '@angular/core';
-import {GamePhases, GameState, hostName} from '../constants';
+import { GamePhases, GameState, hostName } from '../constants';
+import { idMoneyCollectorPictures } from '../gamefield/constants';
 import {
-  idMoneyCollectorPictures,
-} from '../gamefield/constants';
-import {BehaviorSubject, catchError, map, Observable, switchMap, throwError} from "rxjs";
-import {Card} from "../models/card-model";
-import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
-import {ErrorService} from "./error.service";
-import {ICell} from "../models/cell-model";
-import {Game} from "../models/game-model";
-import {IStatus} from "../models/status-model";
-import {ILibrary} from "../models/library-model";
-import { Stomp } from "@stomp/stompjs";
-import * as SockJS from "sockjs-client";
-import {TokenStorageService} from "../auth/token-storage.service";
-
+  BehaviorSubject,
+  catchError,
+  map,
+  Observable,
+  switchMap,
+  throwError,
+} from 'rxjs';
+import { Card } from '../models/card-model';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpParams,
+} from '@angular/common/http';
+import { ErrorService } from './error.service';
+import { ICell } from '../models/cell-model';
+import { Game } from '../models/game-model';
+import { IStatus } from '../models/status-model';
+import { ILibrary } from '../models/library-model';
+import { Stomp } from '@stomp/stompjs';
+import * as SockJS from 'sockjs-client';
+import { TokenStorageService } from '../auth/token-storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -26,30 +34,33 @@ export class GameControlService {
   gameState: GameState = 0;
   playButton: string = 'Play';
 
-  private getGameUrl: string            = hostName + 'get/game/byid';
-  private getHandUrl: string            = hostName + 'get/hand';
-  private getOppHandUrl: string         = hostName + 'get/opp/hand';
-  private getFieldUrl: string           = hostName + 'get/field';
-  private getStatusUrl: string          = hostName + 'get/status';
-  private getOppStatusUrl: string       = hostName + 'get/opp/status';
-  private putCardInCellUrl: string      = hostName + 'putCardInCell';
+  private getGameUrl: string = hostName + 'get/game/byid';
+  private getHandUrl: string = hostName + 'get/hand';
+  private getOppHandUrl: string = hostName + 'get/opp/hand';
+  private getFieldUrl: string = hostName + 'get/field';
+  private getStatusUrl: string = hostName + 'get/status';
+  private getOppStatusUrl: string = hostName + 'get/opp/status';
+  private putCardInCellUrl: string = hostName + 'putCardInCell';
   private putCollectorInCellUrl: string = hostName + 'putCollectorInCell';
-  private nextTurnUrl: string           = hostName + 'nextTurn';
-  private takeTurnUrl: string           = hostName + 'takeTurn';
-  private moveCombatUrl: string         = hostName + 'moveCombat';
-  private getLibrariesUrl: string       = hostName + 'get/libraries';
-  private moveCardUrl: string           = hostName + 'moveCard';
-  private openRarityUrl: string         = hostName + 'openRarity';
-  private socketUrl: string             = hostName + 'websocket';
+  private nextTurnUrl: string = hostName + 'nextTurn';
+  private endGameUrl: string = hostName + 'endGame';
+  private takeTurnUrl: string = hostName + 'takeTurn';
+  private moveCombatUrl: string = hostName + 'moveCombat';
+  private getLibrariesUrl: string = hostName + 'get/libraries';
+  private moveCardUrl: string = hostName + 'moveCard';
+  private openRarityUrl: string = hostName + 'openRarity';
+  private socketUrl: string = hostName + 'websocket';
 
-  private gameSubject: BehaviorSubject<Game | null> = new BehaviorSubject<Game | null>(null);
-  private handSubject: BehaviorSubject<Card[]> = new BehaviorSubject<Card[]>([]);
+  private gameSubject: BehaviorSubject<Game | null> =
+    new BehaviorSubject<Game | null>(null);
+  private handSubject: BehaviorSubject<Card[]> = new BehaviorSubject<Card[]>(
+    []
+  );
 
   private connected: boolean = false;
-  private stompClient: any
+  private stompClient: any;
 
   private token!: string;
-
 
   constructor(
     private http: HttpClient,
@@ -70,12 +81,16 @@ export class GameControlService {
     this.stompClient = Stomp.over(socket);
 
     console.log('Connecting to WebSocket...');
-    this.stompClient.connect({}, (frame: any) => {
-      console.log('Connected to WebSocket:', frame);
-      this.connected = true;
-    }, (error: any) => {
-      console.error('WebSocket connection error:', error);
-    });
+    this.stompClient.connect(
+      {},
+      (frame: any) => {
+        console.log('Connected to WebSocket:', frame);
+        this.connected = true;
+      },
+      (error: any) => {
+        console.error('WebSocket connection error:', error);
+      }
+    );
   }
 
   // this.hand = this.gameControlService.getHand(this.id_game);
@@ -119,115 +134,132 @@ export class GameControlService {
   getHand(id_game: string): Observable<Card[]> {
     const params = new HttpParams().set('id_game', id_game);
     return this.http.get<{ cards: Card[] }>(this.getHandUrl, { params }).pipe(
-      map(response => response.cards),
+      map((response) => response.cards),
       catchError(this.errorHandler.bind(this))
     );
   }
 
   getOppHand(id_game: string): Observable<number> {
     const params = new HttpParams().set('id_game', id_game);
-    return this.http.get<{ cards_cnt: number}>(this.getOppHandUrl, { params }).pipe(
-      map(response => response.cards_cnt),
-      catchError(this.errorHandler.bind(this))
-    );
+    return this.http
+      .get<{ cards_cnt: number }>(this.getOppHandUrl, { params })
+      .pipe(
+        map((response) => response.cards_cnt),
+        catchError(this.errorHandler.bind(this))
+      );
   }
 
   getCells(id_game: string): Observable<ICell[]> {
     const params = new HttpParams().set('id_game', id_game);
-    return this.http.get<{ cells: ICell[]}>(this.getFieldUrl, { params }).pipe(
-      map(response => response.cells),
+    return this.http.get<{ cells: ICell[] }>(this.getFieldUrl, { params }).pipe(
+      map((response) => response.cells),
       catchError(this.errorHandler.bind(this))
     );
   }
 
   getGame(id_game: string): Observable<Game> {
     const params = new HttpParams().set('id_game', id_game);
-    return this.http.get<Game>(this.getGameUrl, { params }).pipe(
-      catchError(this.errorHandler.bind(this))
-    );
+    return this.http
+      .get<Game>(this.getGameUrl, { params })
+      .pipe(catchError(this.errorHandler.bind(this)));
   }
 
-
-  putCardInCell(gameId: number, cardId: number, cellId: number): Observable<any> {
+  putCardInCell(
+    gameId: number,
+    cardId: number,
+    cellId: number
+  ): Observable<any> {
     const body = { gameId: gameId, cardId: cardId, cellId: cellId };
 
-    return this.http.post(this.putCardInCellUrl, body).pipe(
-      catchError(this.errorHandler.bind(this))
-    );
+    return this.http
+      .post(this.putCardInCellUrl, body)
+      .pipe(catchError(this.errorHandler.bind(this)));
   }
 
   putCollectorInCell(gameId: number, cellId: number): Observable<any> {
     const body = { gameId: gameId, cellId: cellId };
 
-    return this.http.post(this.putCollectorInCellUrl, body).pipe(
-      catchError(this.errorHandler.bind(this))
-    );
+    return this.http
+      .post(this.putCollectorInCellUrl, body)
+      .pipe(catchError(this.errorHandler.bind(this)));
   }
 
   getStatus(id_game: string, isOpponent: boolean): Observable<IStatus> {
     const params = new HttpParams().set('id_game', id_game);
-    return this.http.get<{ status: IStatus }>(
-      isOpponent ? this.getOppStatusUrl : this.getStatusUrl, { params }
-    ).pipe(
-      map(response => response.status),
-      catchError(this.errorHandler.bind(this))
-    );
+    return this.http
+      .get<{ status: IStatus }>(
+        isOpponent ? this.getOppStatusUrl : this.getStatusUrl,
+        { params }
+      )
+      .pipe(
+        map((response) => response.status),
+        catchError(this.errorHandler.bind(this))
+      );
   }
 
   nextTurn(gameId: string): Observable<any> {
     const body = { gameId: gameId };
 
-    return this.http.post(this.nextTurnUrl, body).pipe(
-      catchError(this.errorHandler.bind(this))
-    );
+    return this.http
+      .post(this.nextTurnUrl, body)
+      .pipe(catchError(this.errorHandler.bind(this)));
+  }
+
+  endGame(gameId: string): Observable<any> {
+    const body = { gameId: gameId };
+
+    return this.http
+      .post(this.endGameUrl, body)
+      .pipe(catchError(this.errorHandler.bind(this)));
   }
 
   takeTurn(gameId: string, rarity: string): Observable<any> {
     const body = { gameId: gameId, rarity: rarity };
 
-    return this.http.post(this.takeTurnUrl, body).pipe(
-      catchError(this.errorHandler.bind(this))
-    );
+    return this.http
+      .post(this.takeTurnUrl, body)
+      .pipe(catchError(this.errorHandler.bind(this)));
   }
 
   moveCombat(gameId: string): Observable<any> {
     const body = { gameId: gameId };
 
-    return this.http.post(this.moveCombatUrl, body).pipe(
-      catchError(this.errorHandler.bind(this))
-    );
+    return this.http
+      .post(this.moveCombatUrl, body)
+      .pipe(catchError(this.errorHandler.bind(this)));
   }
 
   openRarity(game_id: string): Observable<any> {
     const body = { game_id: game_id };
 
-    return this.http.post(this.openRarityUrl, body).pipe(
-      catchError(this.errorHandler.bind(this))
-    );
+    return this.http
+      .post(this.openRarityUrl, body)
+      .pipe(catchError(this.errorHandler.bind(this)));
   }
 
   moveCard(gameId: string, cellId1: number, cellId2: number): Observable<any> {
     const body = { gameId: gameId, cellId1: cellId1, cellId2: cellId2 };
 
-    return this.http.post(this.moveCardUrl, body).pipe(
-      catchError(this.errorHandler.bind(this))
-    );
+    return this.http
+      .post(this.moveCardUrl, body)
+      .pipe(catchError(this.errorHandler.bind(this)));
   }
 
   getLibraries(id_game: string): Observable<ILibrary[]> {
     const params = new HttpParams().set('id_game', id_game);
-    return this.http.get<{ libraries: ILibrary[]}>(this.getLibrariesUrl, { params }).pipe(
-      map(response => response.libraries),
-      catchError(this.errorHandler.bind(this))
-    );
+    return this.http
+      .get<{ libraries: ILibrary[] }>(this.getLibrariesUrl, { params })
+      .pipe(
+        map((response) => response.libraries),
+        catchError(this.errorHandler.bind(this))
+      );
   }
 
   private errorHandler(error: HttpErrorResponse) {
     console.error('An error occurred while getting invites:', error.message);
-    this.errorService.handle(error.message)
-    return throwError(() => error.message)
+    this.errorService.handle(error.message);
+    return throwError(() => error.message);
   }
-
 
   /**
    * Game

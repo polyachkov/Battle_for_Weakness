@@ -20,7 +20,17 @@
   background-color: rgba(0, 0, 0, 0);
 }
 
-.giveUpField {
+// .giveUpField {
+//   z-index: 20;
+//   position: absolute;
+//   top: 2rem;
+//   right: 1rem;
+//   display: flex;
+//   align-items: center;
+//   padding-right: 3rem;
+// }
+
+.giveUpBtn {
   z-index: 20;
   position: absolute;
   top: 2rem;
@@ -28,6 +38,64 @@
   display: flex;
   align-items: center;
   padding-right: 3rem;
+}
+
+.backBtn {
+  z-index: 20;
+  position: absolute;
+  top: 6rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  padding-right: 3rem;
+}
+
+.containerTool {
+  // position: absolute;
+  flex-grow: 1;
+  margin-left: 30px;
+  height: auto;
+  gap: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.menuBtn {
+  position: absolute;
+  padding: 0;
+  right: 7%;
+  top: 12%;
+  border-radius: 55px;
+  display: flex;
+  color: #fff;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0);
+  border: 3px solid black;
+  &:hover {
+    color: #f40c0c;
+  }
+}
+
+.toolbarButtonText {
+  font-size: 30px;
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+.toolbarImg {
+  border-radius: 55px;
+  display: block;
+  object-fit: cover;
+  width: 100%;
+}
+
+.btn-back {
+  border-radius: 55px;
+  display: block;
+  object-fit: cover;
+  width: 100%;
 }
 
 .fraction-name {
@@ -166,7 +234,9 @@ $turn-time: 6s;
   width: 20px;
 }
 
-.btn-slide {
+// ----------------------
+
+.btn-giveUp {
   position: relative;
   display: inline-block;
   text-align: center;
@@ -180,17 +250,17 @@ $turn-time: 6s;
   background: linear-gradient(135deg, #e570e7 0%, #79f1fc 100%);
 }
 
-.btn-slide:active {
+.btn-giveUp:active {
   box-shadow: 0 8px 16px -8px rgba(0, 0, 0, 0.7);
   -webkit-transform: scale(0.98);
   transform: scale(0.96);
 }
 
-.btn-slide:hover {
+.btn-giveUp:hover {
   background: linear-gradient(-135deg, #e570e7 0%, #79f1fc 100%);
 }
 
-.btn-slide span.circle {
+.btn-giveUp span.circle {
   display: block;
   background-color: #fff;
   color: #e570e7;
@@ -204,14 +274,14 @@ $turn-time: 6s;
   transition: all 1.5s ease;
 }
 
-.btn-slide:hover span.circle {
+.btn-giveUp:hover span.circle {
   left: 100%;
   margin-left: -45px;
   background-color: #fff;
   color: #79f1fc;
 }
 
-.btn-slide span.title {
+.btn-giveUp span.title {
   font-family: "Nunito Sans";
   caret-color: transparent;
   position: absolute;
@@ -222,13 +292,13 @@ $turn-time: 6s;
   transition: all 1.5s linear;
 }
 
-.btn-slide span.title-hover {
+.btn-giveUp span.title-hover {
   opacity: 0;
 }
-.btn-slide:hover span.title {
+.btn-giveUp:hover span.title {
   opacity: 0;
 }
-.btn-slide:hover span.title-hover {
+.btn-giveUp:hover span.title-hover {
   opacity: 1;
   left: 20px;
 }
@@ -241,10 +311,91 @@ $turn-time: 6s;
     font-size: 20px;
   }
 
-  .btn-slide {
+  .btn-giveUp {
     width: 240px;
   }
 }
+
+// .btn-slide {
+//   position: relative;
+//   display: inline-block;
+//   text-align: center;
+//   caret-color: transparent;
+//   height: 50px;
+//   width: 260px;
+//   line-height: 50px;
+//   padding: 0px;
+//   border-radius: 25px;
+//   box-shadow: 0 10px 20px -8px rgba(0, 0, 0, 0.7);
+//   background: linear-gradient(135deg, #e570e7 0%, #79f1fc 100%);
+// }
+
+// .btn-slide:active {
+//   box-shadow: 0 8px 16px -8px rgba(0, 0, 0, 0.7);
+//   -webkit-transform: scale(0.98);
+//   transform: scale(0.96);
+// }
+
+// .btn-slide:hover {
+//   background: linear-gradient(-135deg, #e570e7 0%, #79f1fc 100%);
+// }
+
+// .btn-slide span.circle {
+//   display: block;
+//   background-color: #fff;
+//   color: #e570e7;
+//   position: absolute;
+//   margin: 5px;
+//   height: 40px;
+//   width: 40px;
+//   top: 0;
+//   left: 0;
+//   border-radius: 50%;
+//   transition: all 1.5s ease;
+// }
+
+// .btn-slide:hover span.circle {
+//   left: 100%;
+//   margin-left: -45px;
+//   background-color: #fff;
+//   color: #79f1fc;
+// }
+
+// .btn-slide span.title {
+//   font-family: "Nunito Sans";
+//   caret-color: transparent;
+//   position: absolute;
+//   left: 85px;
+//   font-size: 20px;
+//   letter-spacing: 1px;
+//   color: #fff;
+//   transition: all 1.5s linear;
+// }
+
+// .btn-slide span.title-hover {
+//   opacity: 0;
+// }
+// .btn-slide:hover span.title {
+//   opacity: 0;
+// }
+// .btn-slide:hover span.title-hover {
+//   opacity: 1;
+//   left: 20px;
+// }
+
+// @media (max-width: 540px) {
+//   h1 {
+//     font-size: 36px;
+//   }
+//   p {
+//     font-size: 20px;
+//   }
+
+//   .btn-slide {
+//     width: 240px;
+//   }
+// }
+//
 
 .map {
   height: 100%;

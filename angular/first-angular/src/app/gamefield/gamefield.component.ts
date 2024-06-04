@@ -20,13 +20,15 @@ import { GamePhases, Pages } from '../constants';
 import { PageContentService } from '../services/page-content.service';
 import { Card } from '../models/card-model';
 import {
-  BehaviorSubject, filter,
+  BehaviorSubject,
+  filter,
   interval,
   map,
   Observable,
   of,
   Subscription,
-  switchMap, take,
+  switchMap,
+  take,
   tap,
 } from 'rxjs';
 import { ICell } from '../models/cell-model';
@@ -87,7 +89,7 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   }
 
   private initializeState(): void {
-    this.unsubscribeAll()
+    this.unsubscribeAll();
     this.hand = this.gameControlService.getHand(this.id_game);
     this.oppHand = this.gameControlService.getOppHand(this.id_game);
     this.status = this.gameControlService.getStatus(this.id_game, false);
@@ -120,7 +122,7 @@ export class GamefieldComponent implements OnInit, OnDestroy {
         this.updateCombatButton(game);
         console.log('Updated', game);
       }
-    })
+    });
   }
 
   sendGame() {
@@ -150,7 +152,7 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   }
 
   unsubscribeAll(): void {
-    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
     this.subscriptions = [];
   }
 
@@ -271,7 +273,7 @@ export class GamefieldComponent implements OnInit, OnDestroy {
 
   checkReverse(username: string): Observable<boolean> {
     return this.game.pipe(
-      filter(game => game !== null), // Фильтруем ненулевые значения
+      filter((game) => game !== null), // Фильтруем ненулевые значения
       map((game) => game!.non_reverse !== username) // Добавляем оператор !, чтобы обойти TS18047
     );
   }
@@ -284,16 +286,35 @@ export class GamefieldComponent implements OnInit, OnDestroy {
       }
     });
     this.subscriptions.push(gameSubscription);
-    const subscription = this.gameControlService.nextTurn(this.id_game).subscribe(
-      (response) => {
-        console.log('Turn transmitted successfully', response);
-        this.initializeState();
-        this.currentCard = 0;
-      },
-      (error) => {
-        console.error('Error transmitting turn', error);
-      }
-    );
+    const subscription = this.gameControlService
+      .nextTurn(this.id_game)
+      .subscribe(
+        (response) => {
+          console.log('Turn transmitted successfully', response);
+          this.initializeState();
+          this.currentCard = 0;
+        },
+        (error) => {
+          console.error('Error transmitting turn', error);
+        }
+      );
+    this.subscriptions.push(subscription);
+  }
+
+  handleEndGame() {
+    this.unsubscribeAll();
+    const subscription = this.gameControlService
+      .endGame(this.id_game)
+      .subscribe(
+        (response) => {
+          console.log('Game ended successfully', response);
+          this.initializeState();
+          this.currentCard = 0;
+        },
+        (error) => {
+          console.error('Error ending game', error);
+        }
+      );
     this.subscriptions.push(subscription);
   }
 
@@ -305,16 +326,18 @@ export class GamefieldComponent implements OnInit, OnDestroy {
       }
     });
     this.subscriptions.push(gameSubscription);
-    const subscription = this.gameControlService.moveCombat(this.id_game).subscribe(
-      (response) => {
-        console.log('Move to combat successfully', response);
-        this.initializeState();
-        this.currentCard = 0;
-      },
-      (error) => {
-        console.error('Error move to combat', error);
-      }
-    );
+    const subscription = this.gameControlService
+      .moveCombat(this.id_game)
+      .subscribe(
+        (response) => {
+          console.log('Move to combat successfully', response);
+          this.initializeState();
+          this.currentCard = 0;
+        },
+        (error) => {
+          console.error('Error move to combat', error);
+        }
+      );
     this.subscriptions.push(subscription);
   }
 
@@ -349,31 +372,35 @@ export class GamefieldComponent implements OnInit, OnDestroy {
   handleLibraryChoose(rarity: string): void {
     this.unsubscribeAll();
     this.isShowChooseRarity = false;
-    const subscription = this.gameControlService.takeTurn(this.id_game, rarity).subscribe(
-      (response) => {
-        console.log('Turn taken successfully', response);
-        this.initializeState();
-        this.currentCard = 0;
-      },
-      (error) => {
-        console.error('Error taking turn', error);
-      }
-    );
+    const subscription = this.gameControlService
+      .takeTurn(this.id_game, rarity)
+      .subscribe(
+        (response) => {
+          console.log('Turn taken successfully', response);
+          this.initializeState();
+          this.currentCard = 0;
+        },
+        (error) => {
+          console.error('Error taking turn', error);
+        }
+      );
     this.subscriptions.push(subscription);
   }
 
   handleOpenRarity() {
     this.unsubscribeAll();
-    const subscription = this.gameControlService.openRarity(this.id_game).subscribe(
-      (response) => {
-        console.log('Open rarity successfully', response);
-        this.initializeState();
-        this.currentCard = 0;
-      },
-      (error) => {
-        console.error('Error open rarity', error);
-      }
-    );
+    const subscription = this.gameControlService
+      .openRarity(this.id_game)
+      .subscribe(
+        (response) => {
+          console.log('Open rarity successfully', response);
+          this.initializeState();
+          this.currentCard = 0;
+        },
+        (error) => {
+          console.error('Error open rarity', error);
+        }
+      );
     this.subscriptions.push(subscription);
   }
 
