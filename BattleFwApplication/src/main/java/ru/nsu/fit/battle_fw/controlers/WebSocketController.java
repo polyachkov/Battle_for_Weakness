@@ -10,10 +10,12 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.socket.config.WebSocketMessageBrokerStats;
 import ru.nsu.fit.battle_fw.configs.jwt.JwtUtils;
 import ru.nsu.fit.battle_fw.database.model.Game;
 import ru.nsu.fit.battle_fw.dto.game.GameDto;
@@ -42,13 +44,31 @@ public class WebSocketController {
         this.cardService = cardService;
     }
 
+    @Autowired
+    private WebSocketMessageBrokerStats webSocketMessageBrokerStats;
+
+    @GetMapping("/api/websocket-sessions")
+    public ResponseEntity<?> getCurrentWebSocketSessions() {
+        String statsInfo = webSocketMessageBrokerStats.getWebSocketSessionStatsInfo();
+        // Извлечение количества сессий из строки
+        return ResponseEntity.ok(extractCurrentWebSocketSessionCount(statsInfo));
+    }
+
+    private int extractCurrentWebSocketSessionCount(String statsInfo) {
+        logger.info("Trying to extract current websocket session count...");
+        String searchString = "current WS(";
+        int startIndex = statsInfo.indexOf(searchString) + searchString.length();
+        int endIndex = statsInfo.indexOf(")", startIndex);
+        String sessionCountString = statsInfo.substring(startIndex, endIndex);
+        return Integer.parseInt(sessionCountString);
+    }
+
     @MessageMapping("/get/game/byId/{id_game}")
     @SendTo("/topic/{id_game}")
     public GameDto getGameById(@DestinationVariable Integer id_game) {
         logger.info("WEBSOCKET: /get/game/byId/{id_game}");
         return gameService.getGameById1(id_game);
     }
-
 //    @MessageMapping("/get/hand/{id_game}")
 //    @SendTo("/topic/hand/{id_game}")
 //    public HandDto getHand(

@@ -16,4 +16,7 @@ public interface GameRepo extends JpaRepository<Game, Integer> {
 
     @Query("select g from Game g where g.name_player1 = :name_player1 or g.name_player2 = :name_player1")
     List<Game> getAllGames(@Param("name_player1") String name_player1);
+
+    @Query("select count(g) from Game g")
+    long countGames();
 }

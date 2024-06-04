@@ -1,1 +1,13 @@
-<p>user works!</p>
+<!--<p>user works!</p>-->
+<div>
+  <ng-container
+    *ngIf="authority === 'admin'"
+  >
+    <div>
+      Active Users: {{ activeUsers | async }}
+    </div>
+    <div>
+      Active Games: {{ activeGames | async }}
+    </div>
+  </ng-container>
+</div>

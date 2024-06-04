@@ -4,12 +4,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import ru.nsu.fit.battle_fw.configs.jwt.JwtUtils;
+import ru.nsu.fit.battle_fw.database.model.Game;
 import ru.nsu.fit.battle_fw.database.model.User;
+import ru.nsu.fit.battle_fw.database.repo.GameRepo;
 import ru.nsu.fit.battle_fw.database.repo.UserRepo;
 import ru.nsu.fit.battle_fw.responses.AllUsersResponse;
 import ru.nsu.fit.battle_fw.responses.info.UserInfo;
@@ -29,7 +32,13 @@ public class UserController {
     UserRepo userRepo;
 
     @Autowired
+    GameRepo gameRepo;
+
+    @Autowired
     private JwtUtils jwtUtils;
+
+    @Autowired
+    private SimpUserRegistry simpUserRegistry;
 
     /**
      * Вернёт всех, кроме самого пользователя
@@ -52,5 +61,17 @@ public class UserController {
 
         AllUsersResponse userResponse = new AllUsersResponse(userInfoList);
         return ResponseEntity.ok(userResponse);
+    }
+
+    @GetMapping("/get/number/activeUsers")
+    public ResponseEntity<?> getNumberOfSessions() {
+        logger.info("GET /get/number/activeUsers");
+        return ResponseEntity.ok(simpUserRegistry.getUserCount());
+    }
+
+    @GetMapping("/get/number/activeGames")
+    public ResponseEntity<?> getInfoGameNumber(@RequestHeader Map<String, String> headers) {
+        logger.info("GET /get/number/activeGames");
+        return ResponseEntity.ok(gameRepo.countGames());
     }
 }
