@@ -1,5 +1,5 @@
 <!--<p>user works!</p>-->
-<div>
+<!-- <div>
   <ng-container
     *ngIf="authority === 'admin'"
   >
@@ -9,5 +9,12 @@
     <div>
       Active Games: {{ activeGames | async }}
     </div>
+  </ng-container>
+</div> -->
+
+<div class="board">
+  <ng-container *ngIf="authority === 'admin'">
+    <div class="info-count">Active Users: {{ activeUsers | async }}</div>
+    <div class="info-count">Active Games: {{ activeGames | async }}</div>
   </ng-container>
 </div>
