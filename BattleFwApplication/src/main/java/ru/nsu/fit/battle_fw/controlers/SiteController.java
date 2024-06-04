@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.*;
 import ru.nsu.fit.battle_fw.configs.jwt.JwtUtils;
 import ru.nsu.fit.battle_fw.database.model.*;
@@ -236,7 +235,7 @@ public class SiteController {
     public void openRarity(@RequestHeader Map<String, String> headers, @RequestBody EndGameRequest req){
         logger.info("POST /endGame");
         String nameOwner = getUsernameFromJWT(headers, jwtUtils);
-        gameService.endGame(nameOwner, req.getGame_id());
+        gameService.endGame(nameOwner, req.getGameId());
     }
 
 }

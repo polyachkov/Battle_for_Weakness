@@ -487,10 +487,11 @@ public class GameService {
             throw new JustNoPersonException("Одного из игрков (приглашённого или приглашающего) не существует");
         }
 
-        Invite check = inviteR.getInvite(inviter_name, invited_name);
+        Invite check1 = inviteR.getInvite(inviter_name, invited_name);
+        Invite check2 = inviteR.getInvite(invited_name, inviter_name);
         Game g1 = gameR.getGame(inviter_name, invited_name);
         Game g2 = gameR.getGame(invited_name, inviter_name);
-        if(check == null && (g1 == null || g1.getIs_ended()) && (g2 == null || g2.getIs_ended()) ) {
+        if(check2 == null &&check1 == null && (g1 == null || g1.getIs_ended()) && (g2 == null || g2.getIs_ended()) ) {
             inviteR.save(inv);
         }
     }
