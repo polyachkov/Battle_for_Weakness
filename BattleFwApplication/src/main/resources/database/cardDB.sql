@@ -1,5 +1,5 @@
 INSERT INTO card VALUES
-    (1, 'Kobold', 1, 2, 1, 1, 3, 1, 'common', 'mountains', 8),
+    (1, 'Kobold', 1, 2, 1, 0, 3, 1, 'common', 'mountains', 8),
     (2, 'The Bald Mountain Sectarian', 1, 2, 1, 2, 2, 1, 'common', 'mountains', 8),
     (3, 'Dwarf', 2, 3, 2, 0, 1, 1, 'common', 'mountains', 4),
     (4, 'Rat', 2, 1, 1, 0, 1, 1, 'common', 'mountains', 4),

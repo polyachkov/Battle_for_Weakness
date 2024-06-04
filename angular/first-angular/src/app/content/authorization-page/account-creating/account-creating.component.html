@@ -1,28 +1,3 @@
-<!--<div class="wrapper">-->
-
-<!--  <ng-container [ngSwitch]="true">-->
-<!--    <div *ngSwitchCase="pageContentService.currentMenu === chapterMenu.SIGNIN">-->
-<!--      <app-signin></app-signin>-->
-<!--    </div>-->
-<!--    <div *ngSwitchCase="pageContentService.currentMenu === chapterMenu.SIGNUP">-->
-<!--      <app-signup></app-signup>-->
-<!--    </div>-->
-<!--  </ng-container>-->
-
-<!--</div>-->
-<!--<button-->
-<!--  (click)="pageContentService.handleChangeContent(pages.MAIN_PAGE)"-->
-<!--  class="backButton"-->
-<!--&gt;-->
-<!--  <img class="backImg" src="../../../../assets/Photoes/backButton.jpg" alt="" />-->
-<!--</button>-->
-
-<!--<div class="aboveCenter">-->
-<!--  User name: <input type="text" [(ngModel)]="value" />-->
-<!--  <button (click)="search()">Search</button>-->
-<!--  <div *ngIf="answer">{{ answer }}</div>-->
-<!--</div>-->
-
 <nav class="navbar navbar-inverse">
   <div class="navbar-header">
     <button
@@ -97,7 +72,7 @@
         />
       </a>
       <a routerLink="user" class="menuBtn">
-        <span class="toolbarButtonText2">User Board</span>
+        <span class="toolbarButtonText2">{{ getUserButtonText() }}</span>
         <img
           class="toolbarImg"
           src="../../assets/Photoes/toolbarButton.jpg"

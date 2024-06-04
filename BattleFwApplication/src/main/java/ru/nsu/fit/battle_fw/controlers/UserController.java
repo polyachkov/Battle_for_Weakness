@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import ru.nsu.fit.battle_fw.configs.jwt.JwtUtils;
+import ru.nsu.fit.battle_fw.database.model.Game;
 import ru.nsu.fit.battle_fw.database.model.User;
+import ru.nsu.fit.battle_fw.database.repo.GameRepo;
 import ru.nsu.fit.battle_fw.database.repo.UserRepo;
 import ru.nsu.fit.battle_fw.responses.AllUsersResponse;
 import ru.nsu.fit.battle_fw.responses.info.UserInfo;
@@ -27,6 +29,9 @@ public class UserController {
 
     @Autowired
     UserRepo userRepo;
+
+    @Autowired
+    GameRepo gameRepo;
 
     @Autowired
     private JwtUtils jwtUtils;
@@ -52,5 +57,11 @@ public class UserController {
 
         AllUsersResponse userResponse = new AllUsersResponse(userInfoList);
         return ResponseEntity.ok(userResponse);
+    }
+
+    @GetMapping("/get/info/gameNumber")
+    public ResponseEntity<?> getInfoGameNumber(@RequestHeader Map<String, String> headers) {
+        logger.info("GET /get/info/gameNumber");
+        return ResponseEntity.ok(gameRepo.countGames());
     }
 }
