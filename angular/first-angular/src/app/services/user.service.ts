@@ -14,7 +14,7 @@ export class UserService {
   private modUrl              = hostName + 'api/test/mod';
   private adminUrl            = hostName + 'api/test/admin';
   private getActiveUsersUrl   = hostName + 'api/websocket-sessions';
-  private getActiveGamesUrl   = hostName + 'api/test/admin';
+  private getActiveGamesUrl   = hostName + 'get/number/activeGames';
 
   constructor(
     private http: HttpClient,

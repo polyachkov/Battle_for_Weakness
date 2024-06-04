@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -36,6 +37,9 @@ public class UserController {
     @Autowired
     private JwtUtils jwtUtils;
 
+    @Autowired
+    private SimpUserRegistry simpUserRegistry;
+
     /**
      * Вернёт всех, кроме самого пользователя
      * @param headers - получает header
@@ -59,9 +63,15 @@ public class UserController {
         return ResponseEntity.ok(userResponse);
     }
 
-    @GetMapping("/get/info/gameNumber")
+    @GetMapping("/get/number/activeUsers")
+    public ResponseEntity<?> getNumberOfSessions() {
+        logger.info("GET /get/number/activeUsers");
+        return ResponseEntity.ok(simpUserRegistry.getUserCount());
+    }
+
+    @GetMapping("/get/number/activeGames")
     public ResponseEntity<?> getInfoGameNumber(@RequestHeader Map<String, String> headers) {
-        logger.info("GET /get/info/gameNumber");
+        logger.info("GET /get/number/activeGames");
         return ResponseEntity.ok(gameRepo.countGames());
     }
 }
