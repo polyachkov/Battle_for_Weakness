@@ -1,20 +1,16 @@
 // GameService.java
 package ru.nsu.fit.battle_fw.services;
 
-import org.aspectj.weaver.ast.Not;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.security.authentication.LockedException;
 import org.springframework.stereotype.Component;
 import ru.nsu.fit.battle_fw.database.model.*;
 import ru.nsu.fit.battle_fw.database.repo.*;
 import ru.nsu.fit.battle_fw.dto.game.GameDto;
 import ru.nsu.fit.battle_fw.dto.game.GameMapper;
-import ru.nsu.fit.battle_fw.dto.hand.HandDto;
-import ru.nsu.fit.battle_fw.dto.hand.HandMapper;
 import ru.nsu.fit.battle_fw.exceptions.*;
 import ru.nsu.fit.battle_fw.requests.get.GetGameRequest;
 import ru.nsu.fit.battle_fw.requests.post.*;
@@ -23,7 +19,6 @@ import ru.nsu.fit.battle_fw.responses.info.CellInfo;
 import ru.nsu.fit.battle_fw.responses.info.GameInfo;
 import ru.nsu.fit.battle_fw.responses.info.LibraryInfo;
 import ru.nsu.fit.battle_fw.responses.info.StatusInfo;
-import ru.nsu.fit.battle_fw.services.cardService.DiceRoller;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -47,6 +42,7 @@ public class GameService {
     private final StatusRepo statusR;
     private final InviteRepo inviteR;
     private final UserRepo userR;
+    private final UserRoleRepo userRoleR;
 
     @Autowired
     private final SimpMessagingTemplate messagingTemplate;
@@ -68,7 +64,7 @@ public class GameService {
      * @param inviteR - Приглашения в игры
      */
     public GameService(PersonRepo personR, CardRepo cardR, GameRepo gameR, LibraryRepo libR, LibraryCompRepo libCompR,
-                       HandRepo handR, HandCompRepo handCompR, CellRepo cellR, StatusRepo statusR, InviteRepo inviteR, UserRepo userR,
+                       HandRepo handR, HandCompRepo handCompR, CellRepo cellR, StatusRepo statusR, InviteRepo inviteR, UserRepo userR, UserRoleRepo userRoleR,
                        SimpMessagingTemplate messagingTemplate) {
         this.personR = personR;
         this.cardR = cardR;
@@ -81,6 +77,7 @@ public class GameService {
         this.statusR = statusR;
         this.inviteR = inviteR;
         this.userR = userR;
+        this.userRoleR = userRoleR;
         this.messagingTemplate = messagingTemplate;
     }
 
@@ -493,7 +490,7 @@ public class GameService {
         Invite check = inviteR.getInvite(inviter_name, invited_name);
         Game g1 = gameR.getGame(inviter_name, invited_name);
         Game g2 = gameR.getGame(invited_name, inviter_name);
-        if(check == null && g1 == null && g2 == null) {
+        if(check == null && (g1 == null || g1.getIs_ended()) && (g2 == null || g2.getIs_ended()) ) {
             inviteR.save(inv);
         }
     }
@@ -704,4 +701,27 @@ public class GameService {
             }
         }
     }
+
+    public void endGame(String playerName, Integer game_id){
+        Game game = gameR.getReferenceById(game_id);
+        User user = userR.getUserByName(playerName);
+        long user_id = user.getId();
+        game.setIs_ended(true);
+        if (gameR.getAllGames(playerName).contains(game) || userRoleR.getRoleByID((int) user_id) == 3){
+            cellR.deleteAll(cellR.getCells(game_id));
+            statusR.deleteAll(statusR.getStatuses(game_id));
+            List<Hand> hands = handR.getHandsById_game(game_id);
+            for (Hand h : hands){
+                handCompR.deleteAll(handCompR.getCardsId(h.getId_hand()));
+            }
+            handR.deleteAll(hands);
+            List<Library> libs = libR.getLibsByGame(game_id);
+            for(Library l : libs){
+                libCompR.deleteAll(libCompR.getLibCompByIdLibrary(l.getId_library()));
+            }
+            libR.deleteAll(libs);
+        }
+        gameR.save(game);
+    }
+
 }

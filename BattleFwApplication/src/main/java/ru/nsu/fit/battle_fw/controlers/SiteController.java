@@ -226,10 +226,17 @@ public class SiteController {
     @PostMapping(value = "/openRarity")
     public void openRarity(@RequestHeader Map<String, String> headers, @RequestBody OpenRarityRequest req)
             throws NoBabosException, GameIsAlreadyEndedException,
-            AlreadyFightException, NotYourTurnException {//представляет заголовки ввиде мапы,
+            AlreadyFightException, NotYourTurnException {
         logger.info("POST /openRarity");
         String nameOwner = getUsernameFromJWT(headers, jwtUtils);
         gameService.openRarity(nameOwner, req.getGame_id());
+    }
+
+    @PostMapping(value = "/endGame")
+    public void openRarity(@RequestHeader Map<String, String> headers, @RequestBody EndGameRequest req){
+        logger.info("POST /endGame");
+        String nameOwner = getUsernameFromJWT(headers, jwtUtils);
+        gameService.endGame(nameOwner, req.getGame_id());
     }
 
 }

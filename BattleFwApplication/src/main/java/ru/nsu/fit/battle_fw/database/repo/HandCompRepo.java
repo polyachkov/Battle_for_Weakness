@@ -17,4 +17,6 @@ public interface HandCompRepo extends JpaRepository<HandComp, Integer> {
 
     @Query("select h from HandComp h where h.id_hand = :id_hand")
     List<HandComp> getCardsId(@Param("id_hand") Integer id_hand);
+
+
 }
