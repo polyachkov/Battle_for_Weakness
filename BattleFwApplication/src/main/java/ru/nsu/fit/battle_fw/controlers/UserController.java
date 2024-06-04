@@ -72,6 +72,6 @@ public class UserController {
     @GetMapping("/get/number/activeGames")
     public ResponseEntity<?> getInfoGameNumber(@RequestHeader Map<String, String> headers) {
         logger.info("GET /get/number/activeGames");
-        return ResponseEntity.ok(gameRepo.countGames());
+        return ResponseEntity.ok(gameRepo.countActiveGames());
     }
 }

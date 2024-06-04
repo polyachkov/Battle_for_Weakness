@@ -705,10 +705,17 @@ public class GameService {
 
     public void endGame(String playerName, Integer game_id){
         Game game = gameR.getReferenceById(game_id);
-        User user = userR.getUserByName(playerName);
-        long user_id = user.getId();
+        String name1 = game.getName_player1();
+        String name2 = game.getName_player1();
+
+        if(name1.equals(playerName)){
+            game.setName_turn(name2);
+        } else {
+            game.setName_turn(name1);
+        }
+
         game.setIs_ended(true);
-        if (gameR.getAllGames(playerName).contains(game) || userRoleR.getRoleByID((int) user_id) == 3){
+        if (gameR.getAllGames(playerName).contains(game)){
             cellR.deleteAll(cellR.getCells(game_id));
             statusR.deleteAll(statusR.getStatuses(game_id));
             List<Hand> hands = handR.getHandsById_game(game_id);

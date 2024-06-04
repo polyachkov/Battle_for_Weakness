@@ -19,4 +19,7 @@ public interface GameRepo extends JpaRepository<Game, Integer> {
 
     @Query("select count(g) from Game g")
     long countGames();
+
+    @Query("select count(g) from Game g where g.is_ended = false")
+    long countActiveGames();
 }
